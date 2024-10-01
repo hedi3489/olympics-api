@@ -5,12 +5,13 @@ config/env.php
 vendor/
 build/
 node_modules/
+composer.phar
 
 # VisualStudioCode
 # Local History for Visual Studio Code
 .history/
 *.code-workspace
-#.vscode
+.vscode/
 
 # Directories holding app-generated files.
 # Keep the logs/ directory
