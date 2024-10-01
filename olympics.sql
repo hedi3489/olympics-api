@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 25, 2024 at 08:04 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Generation Time: Oct 01, 2024 at 02:39 AM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `olympics`
+-- Database: `olympics2`
 --
 
 -- --------------------------------------------------------
@@ -102,6 +102,40 @@ CREATE TABLE `events` (
   `is_paralympic` tinyint(1) NOT NULL,
   `venue_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `events`
+--
+
+INSERT INTO `events` (`event_id`, `event_name`, `event_sport`, `start_date`, `end_date`, `number_of_participants`, `is_paralympic`, `venue_id`) VALUES
+(1, 'Athletics', 1, '2024-07-27', '2024-08-09', 3000, 0, 1),
+(2, 'Opening Ceremony', 2, '2024-07-26', '2024-07-26', 10000, 0, 1),
+(3, 'Closing Ceremony', 3, '2024-08-11', '2024-08-11', 10000, 0, 1),
+(4, 'Tennis', 4, '2024-07-27', '2024-08-11', 128, 0, 2),
+(5, '3x3 Basketball', 5, '2024-07-25', '2024-08-09', 24, 0, 3),
+(6, 'BMX Freestyle', 6, '2024-08-08', '2024-08-10', 24, 0, 4),
+(7, 'Skateboarding', 7, '2024-08-02', '2024-08-09', 24, 0, 4),
+(8, 'Football', 8, '2024-07-24', '2024-08-10', 768, 0, 5),
+(9, 'Equestrian - Dressage', 9, '2024-07-25', '2024-08-02', 60, 0, 6),
+(10, 'Equestrian - Eventing', 10, '2024-08-01', '2024-08-05', 60, 0, 6),
+(11, 'Fencing', 11, '2024-08-05', '2024-08-10', 200, 0, 7),
+(12, 'Taekwondo', 12, '2024-08-08', '2024-08-10', 128, 0, 7),
+(13, 'Gymnastics - Artistic', 13, '2024-08-03', '2024-08-09', 300, 0, 8),
+(14, 'Gymnastics - Rhythmic', 14, '2024-08-12', '2024-08-15', 100, 0, 8),
+(15, 'Basketball', 15, '2024-07-25', '2024-08-10', 350, 0, 8),
+(16, 'Swimming', 16, '2024-07-27', '2024-08-04', 1000, 0, 9),
+(17, 'Diving', 17, '2024-08-05', '2024-08-10', 200, 0, 9),
+(18, 'Water Polo', 18, '2024-08-01', '2024-08-09', 200, 0, 9),
+(19, 'Artistic Swimming', 19, '2024-08-08', '2024-08-12', 100, 0, 9),
+(20, 'Modern Pentathlon - Fencing', 20, '2024-08-11', '2024-08-11', 150, 0, 10),
+(21, 'Modern Pentathlon - Riding', 21, '2024-08-12', '2024-08-12', 150, 0, 10),
+(22, 'Archery', 22, '2024-07-26', '2024-08-01', 128, 0, 11),
+(23, 'Rugby Sevens', 23, '2024-07-24', '2024-08-10', 240, 0, 14),
+(24, 'Rugby Union', 24, '2024-07-25', '2024-08-01', 200, 0, 15),
+(25, 'Gymnastics - Trampoline', 25, '2024-08-08', '2024-08-09', 60, 0, 15),
+(26, 'Basketball', 26, '2024-07-25', '2024-08-10', 350, 0, 16),
+(27, 'Handball', 27, '2024-07-25', '2024-08-11', 192, 0, 17),
+(28, 'Sailing', 28, '2024-07-29', '2024-08-03', 400, 0, 18);
 
 -- --------------------------------------------------------
 
@@ -236,7 +270,7 @@ ALTER TABLE `countries`
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `event_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `event_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `venues`
