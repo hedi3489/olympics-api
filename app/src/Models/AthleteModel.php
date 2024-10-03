@@ -15,10 +15,10 @@ class AthleteModel extends BaseModel
     {
         $athletes = [];
         $query_args = [];
-        $sql = "SELECT * FROM athlete WHERE 1";
+        $sql = "SELECT * FROM athletes WHERE 1";
 
         if (isset($req_params["athlete_name"])) {
-            $sql .= "  AND given_name LIKE
+            $sql .= "  AND given_name LIKE]
             CONCAT('%', :athlete_name, '%') ";
             $query_args['athlete_name'] = $req_params["athlete_name"];
         }
