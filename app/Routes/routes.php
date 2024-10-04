@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Controllers\EventController;
 use App\Controllers\VenueController;
 use App\Controllers\AboutController;
 use App\Controllers\AthleteController;
@@ -20,9 +21,15 @@ return static function (Slim\App $app): void {
     //* ROUTE: GET /athletes
     $app->get('/athletes', [AthleteController::class, 'handleGetAthletes']);
 
+    //TODO:_GET /athlete/{athlete_id}
 
     //* ROUTE: GET /venues
     $app->get('/venues', [VenueController::class, 'handleGetVenues']);
+
+    //TODO:_GET /venue/{venue_id}
+
+    //* ROUTE: GET /events
+    $app->get( '/events', [EventController::class, 'handleGetEvents']);
 
     //* ROUTE: GET /ping
     $app->get('/ping', function (Request $request, Response $response, $args) {
