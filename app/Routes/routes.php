@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Controllers\VenueController;
 use App\Controllers\AboutController;
 use App\Controllers\AthleteController;
 use App\Helpers\DateTimeHelper;
@@ -18,6 +19,10 @@ return static function (Slim\App $app): void {
 
     //* ROUTE: GET /athletes
     $app->get('/athletes', [AthleteController::class, 'handleGetAthletes']);
+
+
+    //* ROUTE: GET /venues
+    $app->get('/venues', [VenueController::class, 'handleGetVenues']);
 
     //* ROUTE: GET /ping
     $app->get('/ping', function (Request $request, Response $response, $args) {
