@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Core\PDOService;
 use PDO;
 use Exception;
+use App\Helpers\PaginationHelper;
 
 /**
  * A wrapper class for interacting with a MySQL DB using the PDO API.
@@ -223,5 +224,30 @@ abstract class BaseModel
     {
         $this->current_page = $current_page;
         $this->records_per_page = $records_per_page;
+    }
+
+    protected function paginate($sql, $args = [], $fetchMode = PDO::FETCH_ASSOC): array
+    {
+        // 1) Count: Determine how many rows will be returned by the SELECT_SQL query.
+        $current_page = $this->current_page;
+        $records_per_page = $this->records_per_page;
+        $count = $this->count($sql, $args);
+
+        // 2) Instantiate the PaginationHelper and pass to it current page size AND the count produced in 1)
+        $paginationHelper = new PaginationHelper($current_page, $records_per_page, $count);
+
+        // 3) Get the offset from the pagination helper instance
+        $offset = $paginationHelper->getOffset();
+
+        // 4) Append the LIMIT and OFFSET keywords to the $sql
+        $sql .= " LIMIT $records_per_page OFFSET $offset";
+
+        // 4.1) Execute the SELECT $sql statement that contains the limit and offset
+        $pagination_data = $this->fetchAll($sql, $args);
+
+        // 5) Get the pagination metadata and combine them with paged data.
+        $results["meta"] = $paginationHelper->getPaginationInfo();
+        $results["data"] = $pagination_data;
+        return $results;
     }
 }

@@ -25,29 +25,26 @@ class EventModel extends BaseModel
     }
 
     /**
-     * Gets all players with a certain given_name or family_name
-     * @return array - The resulting array of players
+     * Gets all events with an event_name
+     * @return array - The resulting array of events
      */
-    /*public function getEventsByName(array $req_params): array
+    public function getEventsByName(array $req_params): array
     {
         $events = [];
         $query_args = [];
         $sql = "SELECT * FROM events WHERE 1";
-        //! Add to the query
-        //! the given name if it's set and not empty
-        if (isset($req_params["given_name"])) {
-            $sql .= " AND given_name LIKE CONCAT('%', :given_name, '%')";
-            $query_args["given_name"] = $req_params['given_name'];
-        }
-        if (isset($req_params["family_name"])) {
-            $sql .= " AND given_name LIKE CONCAT('%', :family_name, '%')";
-            $query_args["family_name"] = $req_params['family_name'];
+
+        //* Add to the query
+        //? the given name if it's set and not empty
+        if (isset($req_params["venue_name"])) {
+            $sql .= " AND venue_name LIKE CONCAT('%', :venue_name, '%')";
+            $query_args["venue_name"] = $req_params['venue_name'];
         }
         // Instead of using fetchAll(), we use our new more specific method paginate()
         // $players = $this->fetchAll($sql, $query_args);
-        $players = $this->paginate($sql, $query_args);
-        return $players;
-    }*/
+        $events = $this->paginate($sql, $query_args);
+        return $events;
+    }
 
     //TODO How to do array | bool in php
     /*public function getPlayerById(string $player_id): mixed
