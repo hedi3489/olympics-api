@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 06, 2024 at 06:48 PM
+-- Generation Time: Oct 07, 2024 at 01:50 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -44,6 +44,67 @@ CREATE TABLE `athletes` (
   `total_medals` int(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Dumping data for table `athletes`
+--
+
+INSERT INTO `athletes` (`athlete_id`, `athlete_name`, `country_id`, `gender`, `sport`, `date_of_birth`, `height`, `weight`, `ethnicity`, `is_paralymic`, `gold_medals`, `silver_medals`, `bronze_medals`, `total_medals`) VALUES
+(41, 'ALEKSANYAN Artur', 86, 'Male', 'Wrestling', '1991-10-21', 0, 0, 'Armenian', 0, 0, 0, 0, 0),
+(42, 'AMOYAN Malkhas', 86, 'Male', 'Wrestling', '1999-01-22', 0, 0, 'Armenian', 0, 0, 0, 0, 0),
+(43, 'GALSTYAN Slavik', 86, 'Male', 'Wrestling', '1996-12-21', 0, 0, 'Armenian', 0, 0, 0, 0, 0),
+(44, 'HARUTYUNYAN Arsen', 86, 'Male', 'Wrestling', '1999-11-22', 0, 0, 'Armenian', 0, 0, 0, 0, 0),
+(45, 'TEVANYAN Vazgen', 86, 'Male', 'Wrestling', '1999-10-27', 0, 0, 'Armenian', 0, 0, 0, 0, 0),
+(46, 'ARENAS Lorena', 87, 'Female', 'Athletics', '1993-09-17', 162, 0, 'Spanish', 0, 0, 0, 0, 0),
+(47, 'RUEDA SANTOS Lizeth', 85, 'Female', 'Triathlon', '1994-03-07', 0, 0, 'Spanish', 0, 0, 0, 0, 0),
+(48, 'BRUNO Fratus', 39, 'Male', 'Swimming', '1989-06-30', 188, 80, 'Brazilian', 0, 1, 0, 0, 1),
+(49, 'KATIE Ledecky', 20, 'Female', 'Swimming', '1997-03-17', 183, 70, 'Caucasian', 0, 7, 3, 3, 13),
+(50, 'NADINE Debois', 31, 'Female', 'Athletics', '2001-08-15', 176, 68, 'French Canadian', 0, 0, 0, 0, 0),
+(51, 'FELIPE Aguilar', 76, 'Male', 'Golf', '1974-11-07', 178, 75, 'Chilean', 0, 0, 0, 0, 0),
+(52, 'YULIMAR Rojas', 106, 'Female', 'Athletics', '1995-10-21', 192, 72, 'Afro-Venezuelan', 0, 1, 1, 0, 2),
+(53, 'WAYDE van Niekerk', 64, 'Male', 'Athletics', '1992-07-15', 183, 74, 'South African', 0, 1, 1, 0, 2),
+(54, 'CHEDDY El Haddad', 81, 'Male', 'Judo', '1998-04-22', 171, 68, 'Arab Moroccan', 0, 0, 0, 0, 0),
+(55, 'COTE D’IVOIRE Mariama', 105, 'Female', 'Taekwondo', '2000-09-10', 165, 55, 'Ivorian', 0, 1, 0, 1, 2),
+(56, 'ESMAIL Halima', 73, 'Female', 'Athletics', '2003-02-28', 177, 62, 'Egyptian', 0, 0, 0, 0, 0),
+(57, 'NAITO Shigeru', 22, 'Male', 'Judo', '1999-05-06', 172, 70, 'Japanese', 0, 0, 1, 0, 1),
+(58, 'AN San', 64, 'Female', 'Archery', '2001-02-27', 167, 58, 'Korean', 0, 3, 0, 1, 4),
+(59, 'XU Jiayu', 21, 'Male', 'Swimming', '1995-08-19', 180, 73, 'Chinese', 0, 1, 1, 1, 3),
+(60, 'SINDHU P.V.', 91, 'Female', 'Badminton', '1995-07-05', 179, 65, 'Indian', 0, 1, 2, 0, 3),
+(61, 'TOMASSEVIC Jelena', 46, 'Female', 'Tennis', '1998-01-04', 175, 60, 'Serbian', 0, 0, 1, 0, 1),
+(62, 'DA SILVA Tiago', 70, 'Male', 'Athletics', '1994-03-25', 185, 72, 'Portuguese', 0, 0, 0, 0, 0),
+(63, 'BEATA Bajic', 33, 'Female', 'Shooting', '1996-06-12', 162, 58, 'Hungarian', 0, 0, 0, 0, 0),
+(64, 'JANIS Krams', 90, 'Male', 'Basketball', '1992-09-29', 201, 90, 'Latvian', 0, 0, 1, 0, 1),
+(65, 'NINA Jovic', 53, 'Female', 'Cycling', '2000-11-07', 168, 59, 'Slovenian', 0, 0, 0, 0, 0),
+(85, 'Miller-Uibo Shauna', 52, 'Female', 'Athletics', '1993-04-15', 178, 68, 'Bahamian', 0, 0, 0, 0, 0),
+(86, 'Lyles Noah', 20, 'Male', 'Athletics', '1997-07-18', 180, 77, 'American', 0, 0, 0, 0, 0),
+(87, 'Schippers Dafne', 25, 'Female', 'Athletics', '1992-06-15', 179, 70, 'Dutch', 0, 0, 0, 0, 0),
+(88, 'De Grasse Andre', 31, 'Male', 'Athletics', '1994-11-10', 180, 75, 'Canadian', 0, 0, 0, 0, 0),
+(89, 'Semenya Caster', 64, 'Female', 'Athletics', '1991-01-07', 175, 68, 'South African', 0, 0, 0, 0, 0),
+(90, 'Bolt Usain', 63, 'Male', 'Athletics', '1986-08-21', 195, 94, 'Jamaican', 0, 0, 0, 0, 0),
+(91, 'Phelps Michael', 20, 'Male', 'Swimming', '1985-06-30', 193, 88, 'American', 0, 0, 0, 0, 0),
+(92, 'Ledecky Katie', 20, 'Female', 'Swimming', '1997-03-17', 180, 70, 'American', 0, 0, 0, 0, 0),
+(93, 'Dressel Caeleb', 20, 'Male', 'Swimming', '1996-08-16', 183, 77, 'American', 0, 0, 0, 0, 0),
+(94, 'Woods Ben', 26, 'Male', 'Cycling', '1990-02-24', 180, 70, 'British', 0, 0, 0, 0, 0),
+(95, 'Van Vleuten Annemiek', 25, 'Female', 'Cycling', '1982-10-08', 165, 54, 'Dutch', 0, 0, 0, 0, 0),
+(96, 'Margarita Cifuentes', 87, 'Female', 'Cycling', '1995-07-12', 168, 58, 'Colombian', 0, 0, 0, 0, 0),
+(97, 'Ticona Rosales, Joselyn', 107, 'Female', 'Athletics', '2003-11-17', 164, 55, 'Peruvian', 0, 0, 0, 0, 0),
+(98, 'Gomez Juan', 34, 'Male', 'Athletics', '1996-02-23', 182, 73, 'Spanish', 0, 0, 0, 0, 0),
+(99, 'Hernandez, Gabriela', 85, 'Female', 'Athletics', '1998-06-30', 165, 60, 'Mexican', 0, 0, 0, 0, 0),
+(100, 'Vega, Julián', 72, 'Male', 'Athletics', '1995-12-01', 176, 68, 'Argentinian', 0, 0, 0, 0, 0),
+(101, 'Zhang, Wei', 21, 'Male', 'Badminton', '1992-05-12', 178, 70, 'Chinese', 0, 0, 0, 0, 0),
+(102, 'Fujimoto, Haruka', 22, 'Female', 'Judo', '2000-03-10', 160, 50, 'Japanese', 0, 0, 0, 0, 0),
+(103, 'Yamamoto, Shun', 22, 'Male', 'Judo', '1995-09-21', 175, 73, 'Japanese', 0, 0, 0, 0, 0),
+(104, 'TAPIA VIDAL Rosa Maria', 85, 'Female', 'Triathlon', '1997-08-27', 0, 0, 'Mexican', 0, 0, 0, 0, 0),
+(105, 'GRAJALES Crisanto', 85, 'Male', 'Triathlon', '1987-05-06', 0, 0, 'Mexican', 0, 0, 0, 0, 0),
+(106, 'DIOSDADO Nuria', 85, 'Female', 'Artistic Swimming', '1990-08-22', 0, 0, 'Mexican', 0, 0, 0, 0, 0),
+(107, 'JIMENEZ Joana', 85, 'Female', 'Artistic Swimming', '1993-08-19', 0, 0, 'Mexican', 0, 0, 0, 0, 0),
+(108, 'SOBRINO Jessica', 85, 'Female', 'Artistic Swimming', '1994-05-26', 0, 0, 'Mexican', 0, 0, 0, 0, 0),
+(109, 'ALFEREZ Regina', 85, 'Female', 'Artistic Swimming', '1997-12-01', 0, 0, 'Mexican', 0, 0, 0, 0, 0),
+(110, 'ARELLANO Fernanda', 85, 'Female', 'Artistic Swimming', '2002-02-28', 0, 0, 'Mexican', 0, 0, 0, 0, 0),
+(111, 'TOSCANO Pamela', 85, 'Female', 'Artistic Swimming', '2000-01-13', 0, 0, 'Mexican', 0, 0, 0, 0, 0),
+(112, 'GONZALEZ Itzamary', 85, 'Female', 'Artistic Swimming', '2003-11-14', 0, 0, 'Mexican', 0, 0, 0, 0, 0),
+(113, 'RODRIGUEZ Samanta', 85, 'Female', 'Artistic Swimming', '1994-12-05', 0, 0, 'Mexican', 0, 0, 0, 0, 0),
+(114, 'INZUNZA Glenda', 85, 'Female', 'Alternate Athlete', '2000-03-12', 0, 0, 'Mexican', 0, 0, 0, 0, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -65,10 +126,41 @@ CREATE TABLE `coaches` (
   `coach_id` int(11) NOT NULL,
   `coach_name` varchar(64) NOT NULL,
   `gender` varchar(11) NOT NULL,
-  `date_of_birth` date NOT NULL,
+  `date_of_birth` date DEFAULT NULL,
   `been_in_olympics` tinyint(1) NOT NULL,
   `sport` varchar(64) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `coaches`
+--
+
+INSERT INTO `coaches` (`coach_id`, `coach_name`, `gender`, `date_of_birth`, `been_in_olympics`, `sport`) VALUES
+(1, 'Gevorg Aleksanyan', 'Male', NULL, 0, 'Wrestling'),
+(2, 'Roman Amoyan', 'Male', NULL, 0, 'Wrestling'),
+(3, 'Martin Alekhanyan', 'Male', NULL, 0, 'Wrestling'),
+(4, 'Armen Babalaryan', 'Male', NULL, 0, 'Wrestling'),
+(5, 'Habetnak Kurghinyan', 'Male', NULL, 0, 'Wrestling'),
+(6, 'Brent Vallance', 'Male', NULL, 0, 'Athletics'),
+(7, 'Luke Preston', 'Male', NULL, 0, 'Judo'),
+(8, 'Christophe Belliard', 'Male', NULL, 1, 'Athletics'),
+(9, 'Eugenio Chimal', 'Male', NULL, 1, 'Triathlon'),
+(10, 'Luis Miguel Chávez Rincón', 'Male', NULL, 0, 'Triathlon'),
+(11, 'Adriana Loftus', 'Female', NULL, 1, 'Artistic Swimming'),
+(12, 'Marc-Olivier Froger', 'Male', NULL, 0, 'Swimming'),
+(13, 'Franck Ne', 'Male', NULL, 0, 'Athletics'),
+(15, 'Manuel Verde', 'Male', NULL, 1, 'Boxing'),
+(16, 'Raul Gonzalez', 'Male', NULL, 1, 'Athletics'),
+(17, 'Jose Luis Doctor', 'Male', NULL, 1, 'Athletics'),
+(18, 'Alejandro Laberdesque', 'Male', NULL, 1, 'Athletics'),
+(19, 'Manuel Verde', 'Male', NULL, 1, 'Boxing'),
+(20, 'Raul Gonzalez', 'Male', NULL, 1, 'Athletics'),
+(21, 'Ignacio Zamudio', 'Male', NULL, 1, 'Athletics'),
+(22, 'Alejandro Laberdesque', 'Male', NULL, 1, 'Athletics'),
+(23, 'Fernando Infante', 'Male', NULL, 0, 'Race Walking'),
+(24, 'Jacek Kruszewski', 'Male', NULL, 0, 'Athletics'),
+(25, 'Kenny McDonald', 'Male', NULL, 0, 'Athletics'),
+(26, 'Andrew Mullen', 'Male', NULL, 0, 'Athletics');
 
 -- --------------------------------------------------------
 
@@ -301,6 +393,7 @@ INSERT INTO `venues` (`venue_id`, `venue_name`, `address`, `capacity`, `type`, `
 --
 ALTER TABLE `athletes`
   ADD PRIMARY KEY (`athlete_id`),
+  ADD UNIQUE KEY `athlete_name` (`athlete_name`),
   ADD KEY `Countries_Athletes_FK` (`country_id`);
 
 --
@@ -350,13 +443,13 @@ ALTER TABLE `venues`
 -- AUTO_INCREMENT for table `athletes`
 --
 ALTER TABLE `athletes`
-  MODIFY `athlete_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `athlete_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=115;
 
 --
 -- AUTO_INCREMENT for table `coaches`
 --
 ALTER TABLE `coaches`
-  MODIFY `coach_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `coach_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `countries`
