@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 01, 2024 at 02:39 AM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Generation Time: Oct 06, 2024 at 06:48 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `olympics2`
+-- Database: `olympics-api`
 --
 
 -- --------------------------------------------------------
@@ -85,6 +85,104 @@ CREATE TABLE `countries` (
   `bronze_medals` int(11) NOT NULL,
   `total_medals` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `countries`
+--
+
+INSERT INTO `countries` (`country_id`, `country_name`, `country_code`, `gold_medals`, `silver_medals`, `bronze_medals`, `total_medals`) VALUES
+(20, 'United States of America', 'USA', 40, 44, 42, 126),
+(21, 'People\'s Republic of China', 'CHN', 40, 27, 24, 91),
+(22, 'Japan', 'JPN', 20, 12, 13, 45),
+(23, 'Australia', 'AUS', 18, 19, 16, 53),
+(24, 'France', 'FRA', 16, 26, 22, 64),
+(25, 'Netherlands', 'NED', 15, 7, 12, 34),
+(26, 'Great Britain', 'GBR', 14, 22, 29, 65),
+(27, 'Republic of Korea', 'KOR', 13, 9, 10, 32),
+(28, 'Italy', 'ITA', 12, 13, 15, 40),
+(29, 'Germany', 'GER', 12, 13, 8, 33),
+(30, 'New Zealand', 'NZL', 10, 7, 3, 20),
+(31, 'Canada', 'CAN', 9, 7, 11, 27),
+(32, 'Uzbekistan', 'UZB', 8, 2, 3, 13),
+(33, 'Hungary', 'HUN', 6, 7, 6, 19),
+(34, 'Spain', 'ESP', 5, 4, 9, 18),
+(35, 'Sweden', 'SWE', 4, 4, 3, 11),
+(36, 'Kenya', 'KEN', 4, 2, 5, 11),
+(37, 'Norway', 'NOR', 4, 1, 3, 8),
+(38, 'Ireland', 'IRL', 4, 0, 3, 7),
+(39, 'Brazil', 'BRA', 3, 7, 10, 20),
+(40, 'Islamic Republic of Iran', 'IRI', 3, 6, 3, 12),
+(41, 'Ukraine', 'UKR', 3, 5, 4, 12),
+(42, 'Romania', 'ROU', 3, 4, 2, 9),
+(43, 'Georgia', 'GEO', 3, 3, 1, 7),
+(44, 'Belgium', 'BEL', 3, 1, 6, 10),
+(45, 'Bulgaria', 'BUL', 3, 1, 3, 7),
+(46, 'Serbia', 'SRB', 3, 1, 1, 5),
+(47, 'Czechia', 'CZE', 3, 0, 2, 5),
+(48, 'Denmark', 'DEN', 2, 2, 5, 9),
+(49, 'Azerbaijan', 'AZE', 2, 2, 3, 7),
+(50, 'Croatia', 'CRO', 2, 2, 3, 7),
+(51, 'Cuba', 'CUB', 2, 1, 6, 9),
+(52, 'Bahrain', 'BRN', 2, 1, 1, 4),
+(53, 'Slovenia', 'SLO', 2, 1, 0, 3),
+(54, 'Chinese Taipei', 'TPE', 2, 0, 5, 7),
+(55, 'Austria', 'AUT', 2, 0, 3, 5),
+(56, 'Hong Kong, China', 'HKG', 2, 0, 2, 4),
+(57, 'Philippines', 'PHI', 2, 0, 2, 4),
+(58, 'Algeria', 'ALG', 2, 0, 1, 3),
+(59, 'Indonesia', 'INA', 2, 0, 0, 2),
+(60, 'Israel', 'ISR', 1, 5, 1, 7),
+(61, 'Poland', 'POL', 1, 4, 5, 10),
+(62, 'Kazakhstan', 'KAZ', 1, 3, 3, 7),
+(63, 'Jamaica', 'JAM', 1, 3, 2, 6),
+(64, 'South Africa', 'RSA', 1, 3, 2, 6),
+(65, 'Thailand', 'THA', 1, 3, 2, 6),
+(66, 'AIN', 'AIN', 1, 3, 1, 5),
+(67, 'Ethiopia', 'ETH', 1, 3, 0, 4),
+(68, 'Switzerland', 'SUI', 1, 2, 5, 8),
+(69, 'Ecuador', 'ECU', 1, 2, 2, 5),
+(70, 'Portugal', 'POR', 1, 2, 1, 4),
+(71, 'Greece', 'GRE', 1, 1, 6, 8),
+(72, 'Argentina', 'ARG', 1, 1, 1, 3),
+(73, 'Egypt', 'EGY', 1, 1, 1, 3),
+(74, 'Tunisia', 'TUN', 1, 1, 1, 3),
+(75, 'Botswana', 'BOT', 1, 1, 0, 2),
+(76, 'Chile', 'CHI', 1, 1, 0, 2),
+(77, 'Saint Lucia', 'LCA', 1, 1, 0, 2),
+(78, 'Uganda', 'UGA', 1, 1, 0, 2),
+(79, 'Dominican Republic', 'DOM', 1, 0, 2, 3),
+(80, 'Guatemala', 'GUA', 1, 0, 1, 2),
+(81, 'Morocco', 'MAR', 1, 0, 1, 2),
+(82, 'Dominica', 'DMA', 1, 0, 0, 1),
+(83, 'Pakistan', 'PAK', 1, 0, 0, 1),
+(84, 'Türkiye', 'TUR', 0, 3, 5, 8),
+(85, 'Mexico', 'MEX', 0, 3, 2, 5),
+(86, 'Armenia', 'ARM', 0, 3, 1, 4),
+(87, 'Colombia', 'COL', 0, 3, 1, 4),
+(88, 'Democratic People\'s Republic of Korea', 'PRK', 0, 2, 4, 6),
+(89, 'Kyrgyzstan', 'KGZ', 0, 2, 4, 6),
+(90, 'Lithuania', 'LTU', 0, 2, 2, 4),
+(91, 'India', 'IND', 0, 1, 5, 6),
+(92, 'Republic of Moldova', 'MDA', 0, 1, 3, 4),
+(93, 'Kosovo', 'KOS', 0, 1, 1, 2),
+(94, 'Cyprus', 'CYP', 0, 1, 0, 1),
+(95, 'Fiji', 'FIJ', 0, 1, 0, 1),
+(96, 'Jordan', 'JOR', 0, 1, 0, 1),
+(97, 'Mongolia', 'MGL', 0, 1, 0, 1),
+(98, 'Panama', 'PAN', 0, 1, 0, 1),
+(99, 'Tajikistan', 'TJK', 0, 0, 3, 3),
+(100, 'Albania', 'ALB', 0, 0, 2, 2),
+(101, 'Grenada', 'GRN', 0, 0, 2, 2),
+(102, 'Malaysia', 'MAS', 0, 0, 2, 2),
+(103, 'Puerto Rico', 'PUR', 0, 0, 2, 2),
+(104, 'Cabo Verde', 'CPV', 0, 0, 1, 1),
+(105, 'Côte d\'Ivoire', 'CIV', 0, 0, 1, 1),
+(106, 'Refugee Olympic Team', 'EOR', 0, 0, 1, 1),
+(107, 'Peru', 'PER', 0, 0, 1, 1),
+(108, 'Qatar', 'QAT', 0, 0, 1, 1),
+(109, 'Singapore', 'SGP', 0, 0, 1, 1),
+(110, 'Slovakia', 'SVK', 0, 0, 1, 1),
+(111, 'Zambia', 'ZAM', 0, 0, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -264,7 +362,7 @@ ALTER TABLE `coaches`
 -- AUTO_INCREMENT for table `countries`
 --
 ALTER TABLE `countries`
-  MODIFY `country_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `country_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
 
 --
 -- AUTO_INCREMENT for table `events`
