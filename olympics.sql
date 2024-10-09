@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 07, 2024 at 01:50 AM
+-- Generation Time: Oct 10, 2024 at 01:45 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -57,7 +57,7 @@ INSERT INTO `athletes` (`athlete_id`, `athlete_name`, `country_id`, `gender`, `s
 (46, 'ARENAS Lorena', 87, 'Female', 'Athletics', '1993-09-17', 162, 0, 'Spanish', 0, 0, 0, 0, 0),
 (47, 'RUEDA SANTOS Lizeth', 85, 'Female', 'Triathlon', '1994-03-07', 0, 0, 'Spanish', 0, 0, 0, 0, 0),
 (48, 'BRUNO Fratus', 39, 'Male', 'Swimming', '1989-06-30', 188, 80, 'Brazilian', 0, 1, 0, 0, 1),
-(49, 'KATIE Ledecky', 20, 'Female', 'Swimming', '1997-03-17', 183, 70, 'Caucasian', 0, 7, 3, 3, 13),
+(49, 'KATIE Ledecky', 20, 'Female', 'Swimming', '1997-03-17', 183, 70, 'Caucasian', 0, 2, 1, 1, 4),
 (50, 'NADINE Debois', 31, 'Female', 'Athletics', '2001-08-15', 176, 68, 'French Canadian', 0, 0, 0, 0, 0),
 (51, 'FELIPE Aguilar', 76, 'Male', 'Golf', '1974-11-07', 178, 75, 'Chilean', 0, 0, 0, 0, 0),
 (52, 'YULIMAR Rojas', 106, 'Female', 'Athletics', '1995-10-21', 192, 72, 'Afro-Venezuelan', 0, 1, 1, 0, 2),
@@ -115,6 +115,23 @@ CREATE TABLE `athletes_coaches` (
   `athlete_id` int(11) NOT NULL,
   `coach_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `athletes_coaches`
+--
+
+INSERT INTO `athletes_coaches` (`athlete_id`, `coach_id`) VALUES
+(104, 10),
+(105, 9),
+(106, 11),
+(107, 11),
+(108, 11),
+(109, 11),
+(110, 11),
+(111, 11),
+(112, 11),
+(113, 11),
+(114, 11);
 
 -- --------------------------------------------------------
 
@@ -342,6 +359,13 @@ CREATE TABLE `results` (
   `category` varchar(64) NOT NULL,
   `date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `results`
+--
+
+INSERT INTO `results` (`athlete_id`, `event_id`, `ranking`, `result`, `record_set`, `category`, `date`) VALUES
+(49, 16, 2, 'Received a Silver medal.\r\n', 0, 'Individual', '2024-08-07');
 
 -- --------------------------------------------------------
 
