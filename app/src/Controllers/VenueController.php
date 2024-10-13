@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\VenueModel;
+use App\Services\VenuesService;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -10,7 +11,7 @@ use Slim\Exception\HttpNotFoundException;
 
 class VenueController extends BaseController
 {
-    public function __construct(private VenueModel $venue_model){}
+    public function __construct(private VenueModel $venue_model, private VenuesService $venues_service) {}
 
     public function handleGetVenues(Request $request, Response $response): Response
     {
@@ -29,22 +30,19 @@ class VenueController extends BaseController
         $venue_id = $uri_args["venue_id"];
         // Step 2) Validate the player id.
         //? Step 2.1) If bad, kill request right away
-        if (!isset($uri_args["venue_id"])) {
+        if (!isset($venue_id)) {
             //! OPTION 1) Preparing the response ourselves
             return $this->renderJson(
                 $response,
                 [
                     "status" => "error",
                     "code" => "400",
-                    "message" => "No player ID provided",
-                    "hint" => "The player ID must be formulated as follows: P-99999"
+                    "message" => "No event ID provided",
+                    "hint" => "The event ID must be formulated as follows: P-99999"
                 ],
                 StatusCodeInterface::STATUS_BAD_REQUEST
             );
         }
-        //* Prob not well put into the code
-        //$player_id_pattern = "/^P-\d{5,6}&/";
-        //$player_id = $uri_args["player_id"];
 
         //* Step 2.2) Validate the format of the player id
 
@@ -70,7 +68,7 @@ class VenueController extends BaseController
 
         // validate name
         //? if bad, kill request immediately
-        if(!isset($uri_args["venue_name"])){
+        if (!isset($uri_args["venue_name"])) {
             return $this->renderJson(
                 $response,
                 [
@@ -88,7 +86,7 @@ class VenueController extends BaseController
         $venues = $this->venue_model->getVenuesByName($venue_name);
 
         //? if venue != found
-        if($venues === false){
+        if ($venues === false) {
             throw new HttpNotFoundException(
                 $request,
                 "No matching venue name found."
@@ -100,6 +98,28 @@ class VenueController extends BaseController
         $response->getBody()->write($payload);
         return $response->withHeader("Content-Type", "application/json")->withStatus(200);
         */
+    }
 
+    public function handleCreateVenue(Request $request, Response $response): Response
+    {
+        echo "QUACK!";
+        //* Retrieve data of the new resource created from the request body
+        $new_venues = $request->getParsedBody();
+
+        //* Create venue using service
+        $result = $this->venues_service->CreateVenues($new_venues);
+        $status_code = 201;
+        if ($result->isSuccess()) {
+            //Prepare success stmt
+            $payload["success"] = true;
+        } else {
+            $status_code = 201;
+            $payload["success"] = false;
+        }
+        //$payload["message"] = $result->getMessage();
+        $payload["getData"] = $result->getData();
+        $payload["status"] = $status_code;
+
+        return $this->renderJson($response, $new_venues, $status_code);
     }
 }

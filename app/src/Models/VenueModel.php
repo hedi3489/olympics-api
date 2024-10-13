@@ -10,7 +10,7 @@ class VenueModel extends BaseModel
 
     public function __construct(PDOService $pdo)
     {
-        parent:: __construct($pdo);
+        parent::__construct($pdo);
     }
 
     public function getVenues(array $req_params): array
@@ -19,11 +19,33 @@ class VenueModel extends BaseModel
         $query_args = [];
         $sql = "SELECT * FROM $this->table_name WHERE 1";
 
-        if (isset($req_params["venues_name"])) {
-            $sql .= "  AND given_name LIKE
-            CONCAT('%', :venues_name, '%') ";
-            $query_args['venues_name'] = $req_params["venues_name"];
+        //* Filtering by name
+        if (isset($req_params["venue_name"])) {
+            $sql .= "  AND venue_name LIKE
+            CONCAT('%', :venue_name, '%') ";
+            $query_args['venue_name'] = $req_params["venue_name"];
         }
+
+        //* Filtering by Capacity Range
+        if (isset($req_params["min_capacity"])) {
+            $sql .= " AND capacity >= :min_capacity";
+            $query_args['min_capacity'] = $req_params["min_capacity"];
+        }
+        if (isset($req_params["max_capacity"])) {
+            $sql .= " AND capacity <= :max_capacity";
+            $query_args['max_capacity'] = $req_params["max_capacity"];
+        }
+
+        //* Filtering by Construction Date Range
+        if (isset($req_params["min_date_constructed"])) {
+            $sql .= " AND date_constructed >= :min_date_constructed";
+            $query_args['min_date_constructed'] = $req_params["min_date_constructed"];
+        }
+        if (isset($req_params["max_date_constructed"])) {
+            $sql .= " AND date_constructed <= :max_date_constructed";
+            $query_args['max_date_constructed'] = $req_params["max_date_constructed"];
+        }
+
         $sql .= "  LIMIT 500";
         $venues = (array) $this->fetchAll($sql, $query_args);
 
@@ -34,12 +56,13 @@ class VenueModel extends BaseModel
     {
         //SELECT * FROM $this->table_name WHERE venue_id = $venue_id
 
-        $sql = "SELECT * FROM venues WHERE venue_id = 1";
-        $venue_info = $this->fetchSingle(
+        //$sql = "SELECT * FROM venues WHERE venue_id = 2";
+        $sql = "SELECT * FROM venues WHERE venue_id = :venue_id";
+        $venue = $this->fetchSingle(
             $sql,
             ["venue_id" => $venue_id]
         );
-        return $venue_info;
+        return $venue;
     }
 
     public function getVenuesByName(string $venue_name): array
@@ -57,4 +80,10 @@ class VenueModel extends BaseModel
         return $venues;
     }
 
+    public function insertVenue(array $new_venue): mixed
+    {
+        //?
+        $this->insert($this->table_name, $new_venue);
+        return $new_venue["venue_id"];
+    }
 }
