@@ -31,10 +31,8 @@ return static function (Slim\App $app): void {
 
     //* ROUTE: GET /venues
     $app->get('/venues', [VenueController::class, 'handleGetVenues']);
-    //! ROUTE: GET /venues/{venue_id}
+    //* ROUTE: GET /venues/{venue_id}
     $app->get('/venues/{venue_id}', [VenueController::class, 'handleGetVenueById']);
-    //! ROUTE: GET /venue/{venue_name}
-    //$app->get('/venues/{venue_name}', [VenueController::class, 'handleGetVenuesByName']);
 
     //* ROUTE: GET /events
     $app->get('/events', [EventController::class, 'handleGetEvents']);
