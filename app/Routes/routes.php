@@ -23,17 +23,24 @@ return static function (Slim\App $app): void {
 
     //TODO:_GET /athlete/{athlete_id}
 
+    //TODO: ROUTE: GET /coaches
+    //$app->get( '/coaches', [CoachController::class, 'handleGetCoaches']);
+
+    //TODO: ROUTE: GET /countries
+    //$app->get( '/countries', [countryController::class, 'handleGetCountries']);
+
     //* ROUTE: GET /venues
     $app->get('/venues', [VenueController::class, 'handleGetVenues']);
-
-    //* ROUTE: GET /venues/{venue_id}
+    //! ROUTE: GET /venues/{venue_id}
     $app->get('/venues/{venue_id}', [VenueController::class, 'handleGetVenueById']);
-
-    //* ROUTE: GET /venue/{venue_name}
+    //! ROUTE: GET /venue/{venue_name}
     //$app->get('/venues/{venue_name}', [VenueController::class, 'handleGetVenuesByName']);
 
     //* ROUTE: GET /events
-    $app->get( '/events', [EventController::class, 'handleGetEvents']);
+    $app->get('/events', [EventController::class, 'handleGetEvents']);
+
+    //TODO: ROUTE: GET /results
+    //$app->get( '/results', [ResultController::class, 'handleGetResults']);
 
     //* ROUTE: GET /ping
     $app->get('/ping', function (Request $request, Response $response, $args) {
