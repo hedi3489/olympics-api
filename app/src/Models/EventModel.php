@@ -3,6 +3,10 @@
 namespace App\Models;
 
 use App\Core\PDOService;
+use App\Validation\ValidationHelper;
+use Fig\Http\Message\StatusCodeInterface;
+use Slim\Exception\HttpException;
+
 
 class EventModel extends BaseModel
 {
@@ -17,67 +21,65 @@ class EventModel extends BaseModel
      * Gets all events in the DB
      * @return array - The resulting array of events
      */
-    public function getEvents(): array
+    public function getEvents($request, array $req_params): array
     {
-        $sql = "SELECT * FROM events LIMIT 500";
-        $events = $this->fetchAll($sql);
-        return (array) $events;
+        $events = [];
+        $query_args = [];
+        $sql = "SELECT * FROM $this->table_name WHERE 1";
+
+        $events = (array) $this->paginate($sql, $query_args);
+        return $events;
+    }
+
+
+
+    /**
+     * Get method for path parameter event_id. Fetches a single row based on provided id.
+     * @param string $event_id id of the event requested.
+     * @return mixed
+     */
+    public function getEventById(string $event_id): mixed
+    {
+        $sql = "SELECT * FROM $this->table_name WHERE event_id = :event_id";
+        $event = $this->fetchSingle(
+            $sql,
+            ["event_id" => $event_id]
+        );
+        return $event;
     }
 
     /**
      * Gets all events with an event_name
      * @return array - The resulting array of events
      */
-    public function getEventsByName(array $req_params): array
+    public function getEventsByName($request, array $req_params): array
     {
         $events = [];
         $query_args = [];
         $sql = "SELECT * FROM events WHERE 1";
 
-        //* Add to the query
-        //? the given name if it's set and not empty
-        if (isset($req_params["venue_name"])) {
-            $sql .= " AND venue_name LIKE CONCAT('%', :venue_name, '%')";
-            $query_args["venue_name"] = $req_params['venue_name'];
+        //* Filtering by name
+        if (isset($req_params["event_name"])) {
+            $venue_name = $req_params["event_name"];
+            if (empty($venue_name)) {
+                throw new HttpException(
+                    $request,
+                    "No event name was provided",
+                    StatusCodeInterface::STATUS_BAD_REQUEST
+                );
+            } else if (!ValidationHelper::isAlpha($venue_name)) {
+                throw new HttpException(
+                    $request,
+                    "Invalid venue name. Only letters and spaces are allowed",
+                    StatusCodeInterface::STATUS_BAD_REQUEST
+                );
+            } else {
+                $sql .= " AND event_name LIKE CONCAT('%', :event_name, '%')";
+                $query_args["event_name"] = $req_params['event_name'];
+            }
         }
-        // Instead of using fetchAll(), we use our new more specific method paginate()
-        // $players = $this->fetchAll($sql, $query_args);
+
         $events = $this->paginate($sql, $query_args);
         return $events;
     }
-
-    //TODO How to do array | bool in php
-    /*public function getPlayerById(string $player_id): mixed
-    {
-        $sql = "SELECT * FROM {$this->table_name} WHERE player_id=:player_id";
-        $player_info = $this->fetchSingle(
-            $sql,
-            ["player_id" => $player_id]
-        );
-        return $player_info;
-    }*/
-
-    /*public function getGoalsByPlayerId(string $player_id): mixed
-    {
-        // 1) Fetch the player info
-        $player = $this->getPlayerById($player_id);
-        // 2) Fetch the list of goals, tournaments and matches
-        //* Here we use Heredoc to format
-        $goals_query = <<<SQL
-            SELECT * FROM goals g, tournaments t, matches m
-            WHERE g.tournament_id=t.tournament_id
-            AND g.match_id=m.match_id
-            AND player_id=:player_id
-        SQL;
-        $goals = $this->paginate(
-            $goals_query,
-            ["player_id" => $player_id]
-        );
-        //* 3) Produce a well structure response
-        $result = [
-            "player" => $player,
-            "goals" => $goals,
-        ];
-        return $result;
-    }*/
 }

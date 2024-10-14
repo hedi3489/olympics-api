@@ -28,15 +28,15 @@ class VenueController extends BaseController
     public function handleGetVenueById(Request $request, Response $response, array $uri_args): Response
     {
         $venue_id = $uri_args["venue_id"];
-        // Check if player id is provided.
+        // Check if venue id is provided.
         if (!isset($venue_id)) {
             return $this->renderJson(
                 $response,
                 [
                     "status" => "error",
                     "code" => "400",
-                    "message" => "No venue Id provided",
-                    "hint" => "The venue Id must be formulated as follows: 000"
+                    "message" => "No venue Id was provided",
+                    "hint" => "It must include only numbers between 0-99."
                 ],
                 StatusCodeInterface::STATUS_BAD_REQUEST
             );
@@ -49,8 +49,8 @@ class VenueController extends BaseController
                 [
                     "status" => "error",
                     "code" => "400",
-                    "message" => "Venue Id provided is ill formatted.",
-                    "hint" => "The venue Id must be formulated as follows: 000"
+                    "message" => "The venue Id provided is invalid.",
+                    "hint" => "It must include only numbers between 0-99."
                 ],
                 StatusCodeInterface::STATUS_BAD_REQUEST
             );
@@ -59,7 +59,7 @@ class VenueController extends BaseController
         if ($venue === false) {
             throw new HttpNotFoundException(
                 $request,
-                "No matching venue found in the database."
+                "No matching venue id was found in the database."
             );
         }
         return $this->renderJson($response, $venue);
