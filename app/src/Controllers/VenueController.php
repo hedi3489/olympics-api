@@ -17,7 +17,7 @@ class VenueController extends BaseController
     {
         $req_params = $request->getQueryParams();
 
-        $venues = $this->venue_model->getVenues($req_params);
+        $venues = $this->venue_model->getVenues($request, $req_params);
 
         $payload = json_encode($venues);
         $response->getBody()->write($payload);
@@ -79,12 +79,8 @@ class VenueController extends BaseController
                 StatusCodeInterface::STATUS_BAD_REQUEST
             );
         }
-
         // name provided? check validity
-
-
         $venues = $this->venue_model->getVenuesByName($venue_name);
-
         //? if venue != found
         if ($venues === false) {
             throw new HttpNotFoundException(
