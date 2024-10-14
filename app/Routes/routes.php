@@ -7,6 +7,7 @@ use App\Controllers\VenueController;
 use App\Controllers\AboutController;
 use App\Controllers\AthleteController;
 use App\Controllers\CountryController;
+use App\Controllers\ResultController;
 use App\Helpers\DateTimeHelper;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -37,8 +38,7 @@ return static function (Slim\App $app): void {
     //* ROUTE: GET /events
     $app->get('/events', [EventController::class, 'handleGetEvents']);
 
-    //TODO: ROUTE: GET /results
-    //$app->get( '/results', [ResultController::class, 'handleGetResults']);
+    $app->get( '/results', [ResultController::class, 'handleGetResults']);
 
     //* ROUTE: GET /ping
     $app->get('/ping', function (Request $request, Response $response, $args) {
