@@ -17,6 +17,11 @@ class VenueModel extends BaseModel
         parent::__construct($pdo);
     }
 
+    /**
+     * Gets all venues in the database.
+     * Get filtered venues based on valid parameters.
+     * @return array - The resulting array of venues.
+     */
     public function getVenues($request, array $req_params): array
     {
         $venues = [];
@@ -112,7 +117,6 @@ class VenueModel extends BaseModel
             );
         }
 
-        //echo "leaving validation";
         return true; // Venue name is valid and exists in the database
     }
 
