@@ -3,6 +3,13 @@
 namespace App\Models;
 
 use App\Core\PDOService;
+use Fig\Http\Message\StatusCodeInterface;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Exception\HttpBadRequestException;
+use Slim\Exception\HttpException;
+use Slim\Exception\HttpNotFoundException;
+use App\Validation\ValidationHelper;
 
 class VenueModel extends BaseModel
 {
@@ -13,7 +20,7 @@ class VenueModel extends BaseModel
         parent::__construct($pdo);
     }
 
-    public function getVenues(array $req_params): array
+    public function getVenues($request, array $req_params): array
     {
         $venues = [];
         $query_args = [];
@@ -21,43 +28,142 @@ class VenueModel extends BaseModel
 
         //* Filtering by name
         if (isset($req_params["venue_name"])) {
-            $sql .= "  AND venue_name LIKE
-            CONCAT('%', :venue_name, '%') ";
-            $query_args['venue_name'] = $req_params["venue_name"];
+            // Name validation
+            if ($this->isVenueNameValid($request, $req_params["venue_name"])) {
+                //echo "Has been Validated!!!";
+                $sql .= "  AND venue_name LIKE
+                CONCAT('%', :venue_name, '%') ";
+                $query_args['venue_name'] = $req_params["venue_name"];
+            }
         }
 
         //* Filtering by Capacity Range
         if (isset($req_params["min_capacity"])) {
-            $sql .= " AND capacity >= :min_capacity";
-            $query_args['min_capacity'] = $req_params["min_capacity"];
+            // Capacity validation
+            (int) $cap = $req_params["min_capacity"];
+            if (!ValidationHelper::isIntAndInRange($cap, 0, 100000) || $cap == NULL) {
+                throw new HttpBadRequestException(
+                    $request,
+                    "Min_capacity range value must be a number between 0 and 100000."
+                );
+            } else if (isset($req_params["max_capacity"])) {
+                $this->minMaxValidation($request, $req_params["min_capacity"], $req_params["min_capacity"], "int", "capacity");
+            } else {
+                $sql .= " AND capacity >= :min_capacity";
+                $query_args['min_capacity'] = $req_params["min_capacity"];
+            }
         }
         if (isset($req_params["max_capacity"])) {
-            $sql .= " AND capacity <= :max_capacity";
-            $query_args['max_capacity'] = $req_params["max_capacity"];
+            // Capacity validation
+            (int) $cap = $req_params["max_capacity"];
+            if (!ValidationHelper::isIntAndInRange($cap, 0, 100000) || $cap == NULL) {
+                throw new HttpBadRequestException(
+                    $request,
+                    "Max_capacity range value must be a number between 0 and 100000."
+                );
+            } else {
+                $sql .= " AND capacity <= :max_capacity";
+                $query_args['max_capacity'] = $req_params["max_capacity"];
+            }
         }
 
         //* Filtering by Construction Date Range
         if (isset($req_params["min_date_constructed"])) {
-            $sql .= " AND date_constructed >= :min_date_constructed";
-            $query_args['min_date_constructed'] = $req_params["min_date_constructed"];
+            // Validating Date
+            if ($this->isDateRangeValid($request, (string) $req_params["min_date_constructed"], "min")) {
+                if (isset($req_params["max_date_constructed"])) {
+                    $this->minMaxValidation($request, $req_params["min_date_constructed"], $req_params["max_date_constructed"], "date", "date_constructed");
+                }
+                $sql .= " AND date_constructed >= :min_date_constructed";
+                $query_args['min_date_constructed'] = $req_params["min_date_constructed"];
+            }
         }
         if (isset($req_params["max_date_constructed"])) {
-            $sql .= " AND date_constructed <= :max_date_constructed";
-            $query_args['max_date_constructed'] = $req_params["max_date_constructed"];
+            if ($this->isDateRangeValid($request, (string) $req_params["max_date_constructed"], "max")) {
+                $sql .= " AND date_constructed <= :max_date_constructed";
+                $query_args['max_date_constructed'] = $req_params["max_date_constructed"];
+            }
         }
 
+        //TODO_CLEAN_COMMENTS
         $sql .= "  LIMIT 500";
         $venues = (array) $this->fetchAll($sql, $query_args);
-
         return $venues;
     }
 
+    private function isVenueNameValid($request, $req_param): bool
+    {
+        //echo "entering validation";
+        // Check if the venue name is provided
+        if (!isset($req_param) || empty($req_param)) {
+            throw new HttpException(
+                $request,
+                "No venue name was provided.",
+                400
+            );
+        }
+        //echo "name Provided. Checking if valid";
+        $venue_name = $req_param;
+        // Validate the format: Only letters and spaces are allowed
+        if (!ValidationHelper::isAlpha($venue_name)) {
+            throw new HttpBadRequestException(
+                $request,
+                "Invalid venue name. Only letters and spaces are allowed."
+            );
+        }
+
+        //echo "leaving validation";
+        return true; // Venue name is valid and exists in the database
+    }
+    private function isDateRangeValid($request, String $date, String $minOrMax): bool
+    {
+        // Validate min date format
+        if ($date == NULL) {
+            throw new HttpBadRequestException(
+                $request,
+                "No {$minOrMax}_date_constructed was provided."
+            );
+        }
+        if (!preg_match("/^\d{4}-\d{2}-\d{2}$/", $date)) {
+            throw new HttpBadRequestException(
+                $request,
+                "Invalid {$minOrMax}_date_constructed. Format must be 'YYYY-MM-DD.'"
+            );
+        }
+        return true; // Date range filtering is valid
+    }
+    private function minMaxValidation($request, $min, $max, $type, $param_name)
+    {
+        if ($type == "int") {
+            if (!ValidationHelper::isIntAndInRange($max, 0, 100000)) {
+                throw new HttpBadRequestException(
+                    $request,
+                    "Max_capacity range value must be a number between 0 and 100000."
+                );
+            }
+            if ($min >= $max) {
+                throw new HttpBadRequestException(
+                    $request,
+                    "Minimum {$param_name} cannot be greater than maximum {$param_name}. "
+                );
+            }
+        } else if ($type == "date") {
+            if ($this->isDateRangeValid($request, $max, "max")) {
+                $min_date = new \DateTime($min);
+                $max_date = new \DateTime($max);
+
+                if ($min_date >= $max_date) {
+                    throw new HttpBadRequestException(
+                        $request,
+                        "Minimum {$param_name} cannot be greater than maximum {$param_name}."
+                    );
+                }
+            }
+        }
+    }
     public function getVenueById(string $venue_id): mixed
     {
-        //SELECT * FROM $this->table_name WHERE venue_id = $venue_id
-
-        //$sql = "SELECT * FROM venues WHERE venue_id = 2";
-        $sql = "SELECT * FROM venues WHERE venue_id = :venue_id";
+        $sql = "SELECT * FROM $this->table_name WHERE venue_id = :venue_id";
         $venue = $this->fetchSingle(
             $sql,
             ["venue_id" => $venue_id]
