@@ -3,12 +3,9 @@
 namespace App\Models;
 
 use App\Core\PDOService;
-use Fig\Http\Message\StatusCodeInterface;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpException;
-use Slim\Exception\HttpNotFoundException;
+use Fig\Http\Message\StatusCodeInterface;
 use App\Validation\ValidationHelper;
 
 class VenueModel extends BaseModel
@@ -30,7 +27,6 @@ class VenueModel extends BaseModel
         if (isset($req_params["venue_name"])) {
             // Name validation
             if ($this->isVenueNameValid($request, $req_params["venue_name"])) {
-                //echo "Has been Validated!!!";
                 $sql .= "  AND venue_name LIKE
                 CONCAT('%', :venue_name, '%') ";
                 $query_args['venue_name'] = $req_params["venue_name"];
@@ -85,26 +81,30 @@ class VenueModel extends BaseModel
             }
         }
 
-        //TODO_CLEAN_COMMENTS
-        $sql .= "  LIMIT 500";
-        $venues = (array) $this->fetchAll($sql, $query_args);
+        //$sql .= "  LIMIT 500";
+        //$venues = (array) $this->fetchAll($sql, $query_args);
+        $venues = (array) $this->paginate($sql, $query_args);
         return $venues;
     }
 
+
+    /**
+     * Checks whether a venue name format is valid.
+     * @param string $req_params an array containing the name to be validated.
+     * @return bool
+     */
     private function isVenueNameValid($request, $req_param): bool
     {
-        //echo "entering validation";
         // Check if the venue name is provided
         if (!isset($req_param) || empty($req_param)) {
             throw new HttpException(
                 $request,
                 "No venue name was provided.",
-                400
+                StatusCodeInterface::STATUS_BAD_REQUEST
             );
         }
-        //echo "name Provided. Checking if valid";
-        $venue_name = $req_param;
         // Validate the format: Only letters and spaces are allowed
+        $venue_name = $req_param;
         if (!ValidationHelper::isAlpha($venue_name)) {
             throw new HttpBadRequestException(
                 $request,
@@ -115,15 +115,23 @@ class VenueModel extends BaseModel
         //echo "leaving validation";
         return true; // Venue name is valid and exists in the database
     }
+
+    /**
+     * Checks whether a date value format is valid.
+     * @param string $date a string of the date provided on the client side.
+     * @param int $minOrMax a string value representing weather the date is min or max
+     * @return bool
+     */
     private function isDateRangeValid($request, String $date, String $minOrMax): bool
     {
-        // Validate min date format
+        // Check if date value has been provided
         if ($date == NULL) {
             throw new HttpBadRequestException(
                 $request,
                 "No {$minOrMax}_date_constructed was provided."
             );
         }
+        // Validate date format
         if (!preg_match("/^\d{4}-\d{2}-\d{2}$/", $date)) {
             throw new HttpBadRequestException(
                 $request,
@@ -132,35 +140,54 @@ class VenueModel extends BaseModel
         }
         return true; // Date range filtering is valid
     }
+
+
+    /**
+     * Checks whether a min value is smaller than max value.
+     * @param int $min the min provided values by the client side
+     * @param int $max the max provided values by the client side
+     * @param string $type the datatype of the value (int/date)
+     * @param string $param_name the parameter name that will be used in error handling
+     * @return void
+     */
     private function minMaxValidation($request, $min, $max, $type, $param_name)
     {
-        if ($type == "int") {
-            if (!ValidationHelper::isIntAndInRange($max, 0, 100000)) {
-                throw new HttpBadRequestException(
-                    $request,
-                    "Max_capacity range value must be a number between 0 and 100000."
-                );
-            }
-            if ($min >= $max) {
-                throw new HttpBadRequestException(
-                    $request,
-                    "Minimum {$param_name} cannot be greater than maximum {$param_name}. "
-                );
-            }
-        } else if ($type == "date") {
-            if ($this->isDateRangeValid($request, $max, "max")) {
-                $min_date = new \DateTime($min);
-                $max_date = new \DateTime($max);
-
-                if ($min_date >= $max_date) {
+        switch ($type) {
+            case "int":
+                if (!ValidationHelper::isIntAndInRange($max, 0, 100000)) {
                     throw new HttpBadRequestException(
                         $request,
-                        "Minimum {$param_name} cannot be greater than maximum {$param_name}."
+                        "Max_capacity range value must be a number between 0 and 100000."
                     );
                 }
-            }
+                if ($min >= $max) {
+                    throw new HttpBadRequestException(
+                        $request,
+                        "Minimum {$param_name} cannot be greater than maximum {$param_name}. "
+                    );
+                }
+                break;
+            case "date":
+                if ($this->isDateRangeValid($request, $max, "max")) {
+                    $min_date = new \DateTime($min);
+                    $max_date = new \DateTime($max);
+                    if ($min_date >= $max_date) {
+                        throw new HttpBadRequestException(
+                            $request,
+                            "Minimum {$param_name} cannot be greater than maximum {$param_name}."
+                        );
+                    }
+                }
+                break;
         }
     }
+
+
+    /**
+     * Get method for path parameter venue_id. Fetches a single row based on provided id.
+     * @param string $venue_id id of the venue requested.
+     * @return mixed
+     */
     public function getVenueById(string $venue_id): mixed
     {
         $sql = "SELECT * FROM $this->table_name WHERE venue_id = :venue_id";
