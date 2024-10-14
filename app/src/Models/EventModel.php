@@ -5,8 +5,8 @@ namespace App\Models;
 use App\Core\PDOService;
 use App\Validation\ValidationHelper;
 use Fig\Http\Message\StatusCodeInterface;
+use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpException;
-
 
 class EventModel extends BaseModel
 {
@@ -18,8 +18,8 @@ class EventModel extends BaseModel
     }
 
     /**
-     * Gets all events in the DB
-     * @return array - The resulting array of events
+     * Gets all events in the database.
+     * @return array - The resulting array of events.
      */
     public function getEvents($request, array $req_params): array
     {
@@ -27,7 +27,17 @@ class EventModel extends BaseModel
         $query_args = [];
         $sql = "SELECT * FROM $this->table_name WHERE 1";
 
-        $events = (array) $this->paginate($sql, $query_args);
+        //* Filter by name
+        if (isset($req_params["event_name"])) {
+            // Validate name
+            $event_name = $req_params["event_name"];
+            if ($this->isEventNameValid($request, $event_name,)) {
+                $sql .= "  AND event_name LIKE CONCAT('%', :event_name, '%') ";
+                $query_args['event_name'] = $req_params["event_name"];
+            }
+        }
+
+        $events = $this->paginate($sql, $query_args);
         return $events;
     }
 
@@ -58,28 +68,47 @@ class EventModel extends BaseModel
         $query_args = [];
         $sql = "SELECT * FROM events WHERE 1";
 
-        //* Filtering by name
+        //* Filter by name
         if (isset($req_params["event_name"])) {
-            $venue_name = $req_params["event_name"];
-            if (empty($venue_name)) {
-                throw new HttpException(
-                    $request,
-                    "No event name was provided",
-                    StatusCodeInterface::STATUS_BAD_REQUEST
-                );
-            } else if (!ValidationHelper::isAlpha($venue_name)) {
-                throw new HttpException(
-                    $request,
-                    "Invalid venue name. Only letters and spaces are allowed",
-                    StatusCodeInterface::STATUS_BAD_REQUEST
-                );
-            } else {
-                $sql .= " AND event_name LIKE CONCAT('%', :event_name, '%')";
-                $query_args["event_name"] = $req_params['event_name'];
+            // Validate name
+            $event_name = $req_params["event_name"];
+            if ($this->isEventNameValid($request, $event_name,)) {
+                $sql .= "  AND event_name LIKE CONCAT('%', :event_name, '%') ";
+                $query_args['event_name'] = $req_params["event_name"];
             }
         }
 
         $events = $this->paginate($sql, $query_args);
         return $events;
+    }
+
+
+    private function isEventNameValid($request, $venue_name): bool
+    {
+        // Check if the venue name is provided
+        if (empty($venue_name)) {
+            throw new HttpException(
+                $request,
+                "No event name was provided.",
+                StatusCodeInterface::STATUS_BAD_REQUEST
+            );
+        }
+        // Validate the format: Only letters and spaces are allowed
+        if (!preg_match("/^[a-zA-Z\s]+$/", $venue_name)) {
+            throw new HttpBadRequestException(
+                $request,
+                "Invalid event name. Only letters and spaces are allowed."
+            );
+        }
+        /*
+        ? Probably need to edit isAlpha in ValidationHelper for reusability
+        if (!ValidationHelper::isAlpha($venue_name)) {
+            throw new HttpBadRequestException(
+                $request,
+                "Invalid venue name. Only letters and spaces are allowed."
+            );
+        }*/
+
+        return true; // Venue name is valid and exists in the database
     }
 }

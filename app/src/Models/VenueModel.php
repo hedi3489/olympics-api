@@ -98,10 +98,10 @@ class VenueModel extends BaseModel
      * @param string $req_params an array containing the name to be validated.
      * @return bool
      */
-    private function isVenueNameValid($request, $req_param): bool
+    private function isVenueNameValid($request, $venue_name): bool
     {
         // Check if the venue name is provided
-        if (!isset($req_param) || empty($req_param)) {
+        if (empty($venue_name)) {
             throw new HttpException(
                 $request,
                 "No venue name was provided.",
@@ -109,7 +109,6 @@ class VenueModel extends BaseModel
             );
         }
         // Validate the format: Only letters and spaces are allowed
-        $venue_name = $req_param;
         if (!ValidationHelper::isAlpha($venue_name)) {
             throw new HttpBadRequestException(
                 $request,
