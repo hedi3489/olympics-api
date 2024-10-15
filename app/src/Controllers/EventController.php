@@ -28,21 +28,23 @@ class EventController extends BaseController
 
         //TODO: Content negotiation
 
-
         // Call model to fetch records
         $events = $this->event_model->getEvents($request, $req_params);
 
-        if (empty($events)) {
-            echo "empty json";
+        if (empty($events["data"])) {
+            // Throw a 404 exception if no events are found
             throw new HttpNotFoundException(
                 $request,
                 "No matching events were found in the database."
             );
         } else {
+            // Encode the events as JSON and send the response
             $payload = json_encode($events);
             $response->getBody()->write($payload);
 
-            return $response->withHeader("content-type", "application/json")->withStatus(StatusCodeInterface::STATUS_OK);
+            return $response
+                ->withHeader("Content-Type", "application/json")
+                ->withStatus(StatusCodeInterface::STATUS_OK);
         }
     }
 

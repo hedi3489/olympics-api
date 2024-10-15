@@ -86,8 +86,6 @@ class VenueModel extends BaseModel
             }
         }
 
-        //$sql .= "  LIMIT 500";
-        //$venues = (array) $this->fetchAll($sql, $query_args);
         $venues = (array) $this->paginate($sql, $query_args);
         return $venues;
     }
@@ -117,72 +115,6 @@ class VenueModel extends BaseModel
         }
 
         return true; // Venue name is valid and exists in the database
-    }
-
-    /**
-     * Checks whether a date value format is valid.
-     * @param string $date a string of the date provided on the client side.
-     * @param int $minOrMax a string value representing weather the date is min or max
-     * @return bool
-     */
-    private function isDateRangeValid($request, String $date, String $minOrMax): bool
-    {
-        // Check if date value has been provided
-        if ($date == NULL) {
-            throw new HttpBadRequestException(
-                $request,
-                "No {$minOrMax}_date_constructed was provided."
-            );
-        }
-        // Validate date format
-        if (!preg_match("/^\d{4}-\d{2}-\d{2}$/", $date)) {
-            throw new HttpBadRequestException(
-                $request,
-                "Invalid {$minOrMax}_date_constructed. Format must be 'YYYY-MM-DD.'"
-            );
-        }
-        return true; // Date range filtering is valid
-    }
-
-
-    /**
-     * Checks whether a min value is smaller than max value.
-     * @param int $min the min provided values by the client side
-     * @param int $max the max provided values by the client side
-     * @param string $type the datatype of the value (int/date)
-     * @param string $param_name the parameter name that will be used in error handling
-     * @return void
-     */
-    private function minMaxValidation($request, $min, $max, $type, $param_name)
-    {
-        switch ($type) {
-            case "int":
-                if (!ValidationHelper::isIntAndInRange($max, 0, 100000)) {
-                    throw new HttpBadRequestException(
-                        $request,
-                        "Max_capacity range value must be a number between 0 and 100000."
-                    );
-                }
-                if ($min >= $max) {
-                    throw new HttpBadRequestException(
-                        $request,
-                        "Minimum {$param_name} cannot be greater than maximum {$param_name}. "
-                    );
-                }
-                break;
-            case "date":
-                if ($this->isDateRangeValid($request, $max, "max")) {
-                    $min_date = new \DateTime($min);
-                    $max_date = new \DateTime($max);
-                    if ($min_date >= $max_date) {
-                        throw new HttpBadRequestException(
-                            $request,
-                            "Minimum {$param_name} cannot be greater than maximum {$param_name}."
-                        );
-                    }
-                }
-                break;
-        }
     }
 
 

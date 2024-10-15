@@ -37,6 +37,53 @@ class EventModel extends BaseModel
             }
         }
 
+        // Filter by date
+
+        //* Filter by paralympic
+        if (isset($req_params["is_paralympic"])) {
+            // Is_paralympic validation
+            $is_para = $req_params["is_paralympic"];
+            if ($is_para != 0 && $is_para != 1) {
+                throw new HttpBadRequestException(
+                    $request,
+                    "Value provided for is_paralympic was invalid. Value can be either 0 or 1."
+                );
+            } else {
+                $sql .= "  AND is_paralympic = :is_paralympic";
+                $query_args['is_paralympic'] = $req_params["is_paralympic"];
+            }
+        }
+
+        //* Filter by number of participants
+        if (isset($req_params["min_participants"])) {
+            // Capacity validation
+            (int) $par = $req_params["min_participants"];
+            if (!ValidationHelper::isIntAndInRange($par, 0, 1000) || $par == NULL) {
+                throw new HttpBadRequestException(
+                    $request,
+                    "Min_participants range value must be a number between 0 and 1000."
+                );
+            } else if (isset($req_params["max_participants"])) {
+                $this->minMaxValidation($request, $req_params["min_participants"], $req_params["min_participants"], "int", "participants");
+            } else {
+                $sql .= " AND capacity >= :min_participants";
+                $query_args['min_participants'] = $req_params["min_participants"];
+            }
+        }
+        if (isset($req_params["max_participants"])) {
+            // Capacity validation
+            (int) $cap = $req_params["max_participants"];
+            if (!ValidationHelper::isIntAndInRange($cap, 0, 1000) || $cap == NULL) {
+                throw new HttpBadRequestException(
+                    $request,
+                    "Max_participants range value must be a number between 0 and 1000."
+                );
+            } else {
+                $sql .= " AND capacity <= :max_participants";
+                $query_args['max_participants'] = $req_params["max_participants"];
+            }
+        }
+
         $events = $this->paginate($sql, $query_args);
         return $events;
     }

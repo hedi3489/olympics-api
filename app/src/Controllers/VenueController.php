@@ -24,13 +24,22 @@ class VenueController extends BaseController
         $page_size = $req_params["page_size"] ?? 15;
         $this->venue_model->setPaginationOptions($current_page, $page_size);
 
+
+        //TODO: Content negotiation
+
         // Call model to fetch records
         $venues = $this->venue_model->getVenues($request, $req_params);
 
-        //TODO: Content negotiation
-        $payload = json_encode($venues);
-        $response->getBody()->write($payload);
-        return $response->withHeader("Content-Type", "application/json")->withStatus(StatusCodeInterface::STATUS_OK);
+        if (empty($venues["data"])) {
+            throw new HttpNotFoundException(
+                $request,
+                "No matching venues were found in the database."
+            );
+        } else {
+            $payload = json_encode($venues);
+            $response->getBody()->write($payload);
+            return $response->withHeader("Content-Type", "application/json")->withStatus(StatusCodeInterface::STATUS_OK);
+        }
     }
 
     public function handleGetVenueById(Request $request, Response $response, array $uri_args): Response
