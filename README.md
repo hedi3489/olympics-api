@@ -1,5 +1,5 @@
 # olympics-api
-## Overview
+## Overview <a id="overview"></a>
 This API provides access to information related to the **Paris 2024 Olympics**, including:
 - Athletes
 - Coaches
@@ -8,7 +8,7 @@ This API provides access to information related to the **Paris 2024 Olympics**, 
 - Events
 - Results
 
-# Routes
+# Routes <a id="routes"></a>
 Currently implemented routes:
 ## `GET /venues`
 - Fetches all venues.
@@ -44,7 +44,7 @@ Example: https://localhost/olympics-api/events?is_paralympic=0&min_participants=
 ##
 
 
-# Validation Helper
+# Validation Helper <a id="validationhelper"></a>
 Custom methods added to the ValidationHelper class for validating request parameters:
 
 ## `isDateRangeValid($request, string $date, string $minOrMax): bool`
