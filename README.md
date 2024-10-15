@@ -24,7 +24,7 @@ Example: https://localhost/olympics-api/venues?venue_name=Stade&min_capacity=800
 
 **Path Parameters:**
 - GET /venues/{venue_id}: Fetches a specific venue by venue_id provided in the path (e.g, https://localhost/olympics-api/venues/18)
-
+##
 
 ## `GET /events`
  -Fetches all events.
@@ -37,3 +37,8 @@ Example: https://localhost/olympics-api/venues?venue_name=Stade&min_capacity=800
 - is_paralympic: Filter events based on whether they are part of the Paralympics. Acceptable values are:
   - 0: Non-Paralympic event
   - 1: Paralympic event
+Example: https://localhost/olympics-api/events?is_paralympic=0&min_participants=10&max_participants=100
+
+**Path Parameters:**
+- GET /events/{event_id}: Fetches a specific event by event_id provided in the path (e.g, https://localhost/olympics-api/events/20)
+##
