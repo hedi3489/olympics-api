@@ -37,6 +37,8 @@ return static function (Slim\App $app): void {
 
     //* ROUTE: GET /events
     $app->get('/events', [EventController::class, 'handleGetEvents']);
+    //* ROUTE: GET /events/{event_id}
+    $app->get('/events/{event_id}', [EventController::class, 'handleGetEventById']);
 
     $app->get( '/results', [ResultController::class, 'handleGetResults']);
 

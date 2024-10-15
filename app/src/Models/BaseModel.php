@@ -6,8 +6,9 @@ namespace App\Models;
 
 use App\Core\PDOService;
 use PDO;
-use Exception;
 use App\Helpers\PaginationHelper;
+use App\Validation\ValidationHelper;
+
 
 /**
  * A wrapper class for interacting with a MySQL DB using the PDO API.

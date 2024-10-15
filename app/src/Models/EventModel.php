@@ -3,6 +3,10 @@
 namespace App\Models;
 
 use App\Core\PDOService;
+use App\Validation\ValidationHelper;
+use Fig\Http\Message\StatusCodeInterface;
+use Slim\Exception\HttpBadRequestException;
+use Slim\Exception\HttpException;
 
 class EventModel extends BaseModel
 {
@@ -14,70 +18,90 @@ class EventModel extends BaseModel
     }
 
     /**
-     * Gets all events in the DB
-     * @return array - The resulting array of events
+     * Gets all events in the database.
+     * @return array - The resulting array of events.
      */
-    public function getEvents(): array
-    {
-        $sql = "SELECT * FROM events LIMIT 500";
-        $events = $this->fetchAll($sql);
-        return (array) $events;
-    }
-
-    /**
-     * Gets all events with an event_name
-     * @return array - The resulting array of events
-     */
-    public function getEventsByName(array $req_params): array
+    public function getEvents($request, array $req_params): array
     {
         $events = [];
         $query_args = [];
-        $sql = "SELECT * FROM events WHERE 1";
+        $sql = "SELECT * FROM $this->table_name WHERE 1";
 
-        //* Add to the query
-        //? the given name if it's set and not empty
-        if (isset($req_params["venue_name"])) {
-            $sql .= " AND venue_name LIKE CONCAT('%', :venue_name, '%')";
-            $query_args["venue_name"] = $req_params['venue_name'];
+        //* Filter by name
+        if (isset($req_params["event_name"])) {
+            // Validate name
+            $event_name = $req_params["event_name"];
+            if (ValidationHelper::isNameValid($request, $event_name, "event")) {
+                $sql .= "  AND event_name LIKE CONCAT('%', :event_name, '%') ";
+                $query_args['event_name'] = $req_params["event_name"];
+            }
         }
-        // Instead of using fetchAll(), we use our new more specific method paginate()
-        // $players = $this->fetchAll($sql, $query_args);
+
+        // Filter by date
+
+        //* Filter by paralympic
+        if (isset($req_params["is_paralympic"])) {
+            // Is_paralympic validation
+            $is_para = $req_params["is_paralympic"];
+            if ($is_para != 0 && $is_para != 1) {
+                throw new HttpBadRequestException(
+                    $request,
+                    "Value provided for is_paralympic was invalid. Value can be either 0 or 1."
+                );
+            } else {
+                $sql .= "  AND is_paralympic = :is_paralympic";
+                $query_args['is_paralympic'] = $req_params["is_paralympic"];
+            }
+        }
+
+        //* Filter by number of participants
+        if (isset($req_params["min_participants"])) {
+            // Capacity validation
+            (int) $par = $req_params["min_participants"];
+            if (!ValidationHelper::isIntAndInRange($par, 0, 1000) || $par == NULL) {
+                throw new HttpBadRequestException(
+                    $request,
+                    "Min_participants range value must be a number between 0 and 1000."
+                );
+            } else if (isset($req_params["max_participants"])) {
+                ValidationHelper::minMaxValidation($request, $req_params["min_participants"], $req_params["min_participants"], "int", "participants");
+            } else {
+                $sql .= " AND capacity >= :min_participants";
+                $query_args['min_participants'] = $req_params["min_participants"];
+            }
+        }
+        if (isset($req_params["max_participants"])) {
+            // Capacity validation
+            (int) $cap = $req_params["max_participants"];
+            if (!ValidationHelper::isIntAndInRange($cap, 0, 1000) || $cap == NULL) {
+                throw new HttpBadRequestException(
+                    $request,
+                    "Max_participants range value must be a number between 0 and 1000."
+                );
+            } else {
+                $sql .= " AND capacity <= :max_participants";
+                $query_args['max_participants'] = $req_params["max_participants"];
+            }
+        }
+
         $events = $this->paginate($sql, $query_args);
         return $events;
     }
 
-    //TODO How to do array | bool in php
-    /*public function getPlayerById(string $player_id): mixed
-    {
-        $sql = "SELECT * FROM {$this->table_name} WHERE player_id=:player_id";
-        $player_info = $this->fetchSingle(
-            $sql,
-            ["player_id" => $player_id]
-        );
-        return $player_info;
-    }*/
 
-    /*public function getGoalsByPlayerId(string $player_id): mixed
+
+    /**
+     * Get method for path parameter event_id. Fetches a single row based on provided id.
+     * @param string $event_id id of the event requested.
+     * @return mixed
+     */
+    public function getEventById(string $event_id): mixed
     {
-        // 1) Fetch the player info
-        $player = $this->getPlayerById($player_id);
-        // 2) Fetch the list of goals, tournaments and matches
-        //* Here we use Heredoc to format
-        $goals_query = <<<SQL
-            SELECT * FROM goals g, tournaments t, matches m
-            WHERE g.tournament_id=t.tournament_id
-            AND g.match_id=m.match_id
-            AND player_id=:player_id
-        SQL;
-        $goals = $this->paginate(
-            $goals_query,
-            ["player_id" => $player_id]
+        $sql = "SELECT * FROM $this->table_name WHERE event_id = :event_id";
+        $event = $this->fetchSingle(
+            $sql,
+            ["event_id" => $event_id]
         );
-        //* 3) Produce a well structure response
-        $result = [
-            "player" => $player,
-            "goals" => $goals,
-        ];
-        return $result;
-    }*/
+        return $event;
+    }
 }
