@@ -31,7 +31,7 @@ class VenueModel extends BaseModel
         //* Filtering by name
         if (isset($req_params["venue_name"])) {
             // Name validation
-            if ($this->isVenueNameValid($request, $req_params["venue_name"])) {
+            if (ValidationHelper::isNameValid($request, $req_params["venue_name"], "venue")) {
                 $sql .= "  AND venue_name LIKE
                 CONCAT('%', :venue_name, '%') ";
                 $query_args['venue_name'] = $req_params["venue_name"];
@@ -48,7 +48,7 @@ class VenueModel extends BaseModel
                     "Min_capacity range value must be a number between 0 and 100000."
                 );
             } else if (isset($req_params["max_capacity"])) {
-                $this->minMaxValidation($request, $req_params["min_capacity"], $req_params["min_capacity"], "int", "capacity");
+                ValidationHelper::minMaxValidation($request, $req_params["min_capacity"], $req_params["min_capacity"], "int", "capacity");
             } else {
                 $sql .= " AND capacity >= :min_capacity";
                 $query_args['min_capacity'] = $req_params["min_capacity"];
@@ -71,16 +71,16 @@ class VenueModel extends BaseModel
         //* Filtering by Construction Date Range
         if (isset($req_params["min_date_constructed"])) {
             // Validating Date
-            if ($this->isDateRangeValid($request, (string) $req_params["min_date_constructed"], "min")) {
+            if (ValidationHelper::isDateRangeValid($request, (string) $req_params["min_date_constructed"], "min")) {
                 if (isset($req_params["max_date_constructed"])) {
-                    $this->minMaxValidation($request, $req_params["min_date_constructed"], $req_params["max_date_constructed"], "date", "date_constructed");
+                    ValidationHelper::minMaxValidation($request, $req_params["min_date_constructed"], $req_params["max_date_constructed"], "date", "date_constructed");
                 }
                 $sql .= " AND date_constructed >= :min_date_constructed";
                 $query_args['min_date_constructed'] = $req_params["min_date_constructed"];
             }
         }
         if (isset($req_params["max_date_constructed"])) {
-            if ($this->isDateRangeValid($request, (string) $req_params["max_date_constructed"], "max")) {
+            if (ValidationHelper::isDateRangeValid($request, (string) $req_params["max_date_constructed"], "max")) {
                 $sql .= " AND date_constructed <= :max_date_constructed";
                 $query_args['max_date_constructed'] = $req_params["max_date_constructed"];
             }
