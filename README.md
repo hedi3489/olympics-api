@@ -42,3 +42,37 @@ Example: https://localhost/olympics-api/events?is_paralympic=0&min_participants=
 **Path Parameters:**
 - GET /events/{event_id}: Fetches a specific event by event_id provided in the path (e.g, https://localhost/olympics-api/events/20)
 ##
+
+
+# Validation Helper
+Custom methods added to the ValidationHelper class for validating request parameters:
+
+## `isDateRangeValid($request, string $date, string $minOrMax): bool`
+Checks whether a given date is valid based on the provided minOrMax constraint.
+
+ **Parameters:**
+ - $request: The HTTP request for error handling.
+ - $date: The date string in YYYY-MM-DD format.
+ - $minOrMax: Specifies whether the date is a minimum or maximum date for the error message to be displayed on the client side.
+ - Throws: A HttpBadRequestException if the date is missing or the format is invalid.
+
+
+## `minMaxValidation($request, $min, $max, $type, $param_name)`
+Validates that a minimum value is smaller than a maximum value for integer or date ranges.
+ 
+ **Parameters:**
+ - $request: The HTTP request for error handling.
+ - $min: The minimum value provided by the client.
+ - $max: Maximum value  provided by the client.
+ - $type: The datatype of the values (int or date) since each is handled different.
+ - $param_name: Name of the parameter specified by the client. Required for the error message to be displayed on the client side.
+ - Throws: A HttpBadRequestException if the validation fails.
+
+## `isNameValid($request, $name, $resource): bool`
+Check weather a name consists of letters and spaces only.
+
+**Parameters:**
+- $request: The HTTP request for error handling.
+- $name: The name to be validated (e.g, venue_name or event_name).
+- $resource: The type of resource being validated (e.g., venue or event).
+- Throws: A HttpBadRequestException if the name is missing or invalid.
