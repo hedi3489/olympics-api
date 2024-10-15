@@ -10,8 +10,6 @@ This API provides access to information related to the **Paris 2024 Olympics**, 
 
 # Routes
 Currently implemented routes:
-**Endpoint**: `/api/venues`  
-**Method**: `GET`
 **Venue Endpoints**: `GET /venues`
 - Fetches all venues.
 - Supports filtering by name, capacity range, and construction date.
@@ -26,3 +24,16 @@ Example: https://localhost/olympics-api/venues?venue_name=Stade&min_capacity=800
 
 **Path Parameters:**
 - GET /venues/{venue_id}: Fetches a specific venue by venue_id provided in the path (e.g, https://localhost/olympics-api/venues/18)
+
+
+**Event Endpoints:** `GET /events`
+ -Fetches all events.
+- Supports filtering by event name, number of participants, and whether the event is Paralympic.
+
+**Query Parameters:**
+- event_name: Filter events by name. Use partial or full names (e.g., event_name=Swimm).
+- min_participants: Specify the minimum number of participants for the event (e.g., min_participants=5).
+- max_participants: Specify the maximum number of participants for the event (e.g., max_participants=100).
+- is_paralympic: Filter events based on whether they are part of the Paralympics. Acceptable values are:
+  - 0: Non-Paralympic event
+  - 1: Paralympic event
