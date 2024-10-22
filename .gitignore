@@ -6,6 +6,7 @@ vendor/
 build/
 node_modules/
 composer.phar
+composer.bat
 
 # VisualStudioCode
 # Local History for Visual Studio Code
