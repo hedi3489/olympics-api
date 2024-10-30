@@ -84,6 +84,20 @@ class EventModel extends BaseModel
             }
         }
 
+        //* Sorting
+        $sortBy = $req_params['sort_by'] ?? 'event_name';
+        $order = $req_params['order'] ?? 'asc';
+
+        // Validate sort field and order
+        $validSortFields = ['event_name', 'event_sport', 'start_date', 'end_date', 'number_of_participants', 'is_paralympic'];
+        $validOrders = ['asc', 'desc'];
+
+        if (in_array($sortBy, $validSortFields) && in_array($order, $validOrders)) {
+            $sql .= " ORDER BY $sortBy $order"; // Append sorting to the query
+        } else {
+            throw new HttpBadRequestException($request, "Invalid sorting or ordering parameter. ");
+        }
+
         $events = $this->paginate($sql, $query_args);
         return $events;
     }
