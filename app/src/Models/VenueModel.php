@@ -87,15 +87,15 @@ class VenueModel extends BaseModel
         }
 
         //* Sorting
-        $sortBy = $req_params['sort_by'] ?? 'venue_name';
-        $order = $req_params['order'] ?? 'asc';
+        $sort_by = $req_params['sort_by'] ?? 'venue_name';
+        $order_by = $req_params['order_by'] ?? 'asc';
 
         // Validate sort field and order
-        $validSortFields = ['venue_name', 'location', 'capacity', 'type', 'date_constructed', 'address'];
-        $validOrders = ['asc', 'desc'];
+        $valid_sort_fields = ['venue_name', 'location', 'capacity', 'type', 'date_constructed', 'address'];
+        $valid_orders = ['asc', 'desc'];
 
-        if (in_array($sortBy, $validSortFields) && in_array($order, $validOrders)) {
-            $sql .= " ORDER BY $sortBy $order"; // Append sorting to the query
+        if (in_array($sort_by, $valid_sort_fields) && in_array($order_by, $valid_orders)) {
+            $sql .= " ORDER BY $sort_by $order_by"; // Append sorting to the query
         } else {
             throw new HttpBadRequestException($request, "Invalid sorting or ordering parameter. ");
         }
