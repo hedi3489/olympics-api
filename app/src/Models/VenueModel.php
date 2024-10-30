@@ -86,37 +86,23 @@ class VenueModel extends BaseModel
             }
         }
 
+        //* Sorting
+        $sortBy = $req_params['sort_by'] ?? 'venue_name';
+        $order = $req_params['order'] ?? 'asc';
+
+        // Validate sort field and order
+        $validSortFields = ['venue_name', 'location', 'capacity', 'type', 'date_constructed', 'address'];
+        $validOrders = ['asc', 'desc'];
+
+        if (in_array($sortBy, $validSortFields) && in_array($order, $validOrders)) {
+            $sql .= " ORDER BY $sortBy $order"; // Append sorting to the query
+        } else {
+            throw new HttpBadRequestException($request, "Invalid sorting or ordering parameter. ");
+        }
+
         $venues = (array) $this->paginate($sql, $query_args);
         return $venues;
     }
-
-
-    /**
-     * Checks whether a venue name format is valid.
-     * @param string $req_params an array containing the name to be validated.
-     * @return bool
-     */
-    private function isVenueNameValid($request, $venue_name): bool
-    {
-        // Check if the venue name is provided
-        if (empty($venue_name)) {
-            throw new HttpException(
-                $request,
-                "No venue name was provided.",
-                StatusCodeInterface::STATUS_BAD_REQUEST
-            );
-        }
-        // Validate the format: Only letters and spaces are allowed
-        if (!ValidationHelper::isAlpha($venue_name)) {
-            throw new HttpBadRequestException(
-                $request,
-                "Invalid venue name. Only letters and spaces are allowed."
-            );
-        }
-
-        return true; // Venue name is valid and exists in the database
-    }
-
 
     /**
      * Get method for path parameter venue_id. Fetches a single row based on provided id.

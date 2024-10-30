@@ -22,6 +22,7 @@ class VenueController extends BaseController
         // Overriding the default pagination if specified in the request.
         $current_page = $req_params["current_page"] ?? 1;
         $page_size = $req_params["page_size"] ?? 15;
+
         $this->venue_model->setPaginationOptions($current_page, $page_size);
 
 
