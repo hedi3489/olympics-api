@@ -6,6 +6,7 @@ use App\Controllers\EventController;
 use App\Controllers\VenueController;
 use App\Controllers\AboutController;
 use App\Controllers\AthleteController;
+use App\Controllers\CoachController;
 use App\Controllers\CountryController;
 use App\Controllers\ResultController;
 use App\Helpers\DateTimeHelper;
@@ -25,8 +26,8 @@ return static function (Slim\App $app): void {
 
     //TODO:_GET /athlete/{athlete_id}
 
-    //TODO: ROUTE: GET /coaches
-    //$app->get( '/coaches', [CoachController::class, 'handleGetCoaches']);
+    //* ROUTE: GET /coaches
+    $app->get( '/coaches', [CoachController::class, 'handleGetCoaches']);
 
     $app->get( '/countries', [CountryController::class, 'handleGetCountries']);
 
