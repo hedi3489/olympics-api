@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 use App\Controllers\EventController;
 use App\Controllers\VenueController;
-use App\Controllers\AboutController;
 use App\Controllers\AthleteController;
 use App\Controllers\CoachController;
 use App\Controllers\CountryController;
 use App\Controllers\ResultController;
+use App\Controllers\RootController;
 use App\Helpers\DateTimeHelper;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -19,7 +19,7 @@ return static function (Slim\App $app): void {
 
     // Routes with authentication
     //* ROUTE: GET /
-    $app->get('/', [AboutController::class, 'handleAboutWebService']);
+    $app->get('/', [RootController::class, 'handleRootWebService']);
 
     //* ROUTE: GET /athletes
     $app->get('/athletes', [AthleteController::class, 'handleGetAthletes']);

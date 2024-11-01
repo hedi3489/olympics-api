@@ -30,9 +30,7 @@ class AthleteController extends BaseController
                 "No matching athletes were found in the database."
             );
         } else {
-            $payload = json_encode($athletes);
-            $response->getBody()->write($payload);
-            return $response->withHeader("Content-Type", "application/json")->withStatus(StatusCodeInterface::STATUS_OK);
+            return $this->renderJson($response, $athletes);
         }
     }
 

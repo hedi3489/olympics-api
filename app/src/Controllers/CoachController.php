@@ -27,12 +27,10 @@ class CoachController extends BaseController
         if (empty($coaches["data"])) {
             throw new HttpNotFoundException(
                 $request,
-                "No matching athletes were found in the database."
+                "No matching coaches were found in the database."
             );
         } else {
-            $payload = json_encode($coaches);
-            $response->getBody()->write($payload);
-            return $response->withHeader("Content-Type", "application/json")->withStatus(StatusCodeInterface::STATUS_OK);
+            return $this->renderJson($response, $coaches);
         }
     }
 
