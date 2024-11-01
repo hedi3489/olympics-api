@@ -11,6 +11,12 @@ class CoachController extends BaseController
     public function __construct(private CoachModel $coach_model) {}
 
     public function handleGetCoaches(Request $request, Response $response): Response {
+        $req_params = $request->getQueryParams();
+
+        $coaches = $this->coach_model->getCoaches($req_params);
+
+        $payload = json_encode($coaches);
+        $response->getBody()->write($payload);
         return $response->withHeader("Content-Type", "application/json")->withStatus(200);
     }
 }
