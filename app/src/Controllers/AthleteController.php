@@ -25,7 +25,7 @@ class AthleteController extends BaseController
 
     public function handleGetAthleteById(Request $request, Response $response, array $uri_args): Response {
         $athlete_id = $uri_args["athlete_id"];
-        // Check if athlete_id isn't provided.
+        // Make sure athlete_id is provided.
         if (!isset($athlete_id)) {
             return $this->renderJson(
                 $response,

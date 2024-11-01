@@ -28,6 +28,8 @@ return static function (Slim\App $app): void {
 
     //* ROUTE: GET /coaches
     $app->get( '/coaches', [CoachController::class, 'handleGetCoaches']);
+    //* ROUTE: GET /coaches/{coach_id}
+    $app->get('/coaches/{coach_id}', [CoachController::class, 'handleGetCoachById']);
 
     //* ROUTE: GET /countries
     $app->get( '/countries', [CountryController::class, 'handleGetCountries']);

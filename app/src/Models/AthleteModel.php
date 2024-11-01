@@ -57,7 +57,7 @@ class AthleteModel extends BaseModel
     }
 
     /**
-     * Get method for path parameter athlete_id. Fetches a single row based on provided id.
+     * Get a single athlete record by their id in the database.
      * @param int $athlete_id - Id of the athlete requested.
      * @return mixed - The resulting populated athlete record.
      */
