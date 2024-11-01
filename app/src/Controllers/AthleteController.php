@@ -20,7 +20,7 @@ class AthleteController extends BaseController
 
         $payload = json_encode($athletes);
         $response->getBody()->write($payload);
-        return $response->withHeader("Content-Type", "application/json")->withStatus(200);
+        return $response->withHeader("Content-Type", "application/json")->withStatus(StatusCodeInterface::STATUS_OK);
     }
 
     public function handleGetAthleteById(Request $request, Response $response, array $uri_args): Response {

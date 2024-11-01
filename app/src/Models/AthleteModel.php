@@ -24,14 +24,35 @@ class AthleteModel extends BaseModel
         $query_args = [];
         $sql = "SELECT * FROM $this->table_name WHERE 1";
 
-        //* Filter by athlete_name
-        if (isset($req_params["athlete_name"])) {
-            $sql .= "  AND given_name LIKE
-            CONCAT('%', :athlete_name, '%') ";
-            $query_args['athlete_name'] = $req_params["athlete_name"];
+        //* Filtering by country_id
+        if (isset($req_params["country_id"])) {
+            $sql .= "AND :country_id LIKE
+            CONCAT('%', :country_id, '%') ";
+            $query_args["country_id"] = $req_params["country_id"];
         }
-        $athletes = (array) $this->fetchAll($sql, $query_args);
 
+        //* Filtering by gender
+        if (isset($req_params["gender"])) {
+            $sql .= "AND :gender LIKE
+            CONCAT('%', :gender, '%') ";
+            $query_args["gender"] = $req_params["gender"];
+        }
+
+        //* Filtering by ethnicity
+        if (isset($req_params["ethnicity"])) {
+            $sql .= "AND :ethnicity LIKE
+            CONCAT('%', :ethnicity, '%') ";
+            $query_args["ethnicity"] = $req_params["ethnicity"];
+        }
+
+        //* Sorting - valid fields: athlete_name | date_of_birth
+        $sort_by = $req_params["sort_by"] ?? "athlete_name";
+        $order_by = $req_params["order_by"] ?? "asc";
+
+        // Append sorting to the query
+        $sql .= " ORDER BY $sort_by $order_by";
+
+        $athletes = (array) $this->fetchAll($sql, $query_args);
         return $athletes;
     }
 
