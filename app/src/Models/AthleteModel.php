@@ -52,7 +52,7 @@ class AthleteModel extends BaseModel
         // Append sorting to the query
         $sql .= " ORDER BY $sort_by $order_by";
 
-        $athletes = (array) $this->fetchAll($sql, $query_args);
+        $athletes = (array) $this->paginate($sql, $query_args);
         return $athletes;
     }
 

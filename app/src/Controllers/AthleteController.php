@@ -12,15 +12,28 @@ class AthleteController extends BaseController
 {
     public function __construct(private AthleteModel $athlete_model) {}
 
-    public function handleGetAthletes(Request $request, Response $response): Response
-    {
+    public function handleGetAthletes(Request $request, Response $response): Response {
+        //* Retrieve the set of parameters.
         $req_params = $request->getQueryParams();
 
+        //* Override the default pagination if specified in the request.
+        $current_page = $req_params["current_page"] ?? 1;
+        $page_size = $req_params["page_size"] ?? 15;
+        $this->athlete_model->setPaginationOptions($current_page, $page_size);
+
+        //* Call to the model to get records with params
         $athletes = $this->athlete_model->getAthletes($req_params);
 
-        $payload = json_encode($athletes);
-        $response->getBody()->write($payload);
-        return $response->withHeader("Content-Type", "application/json")->withStatus(StatusCodeInterface::STATUS_OK);
+        if (empty($athletes["data"])) {
+            throw new HttpNotFoundException(
+                $request,
+                "No matching athletes were found in the database."
+            );
+        } else {
+            $payload = json_encode($athletes);
+            $response->getBody()->write($payload);
+            return $response->withHeader("Content-Type", "application/json")->withStatus(StatusCodeInterface::STATUS_OK);
+        }
     }
 
     public function handleGetAthleteById(Request $request, Response $response, array $uri_args): Response {

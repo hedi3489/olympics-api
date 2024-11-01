@@ -50,7 +50,7 @@ class CoachModel extends BaseModel
         // Append sorting to the query
         $sql .= " ORDER BY $sort_by $order_by";
 
-        $coaches = (array) $this->fetchAll($sql, $query_args);
+        $coaches = (array) $this->paginate($sql, $query_args);
         return $coaches;
     }
 
