@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Core\AppSettings;
+use Psr\Http\Message\RequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
 class RootController extends BaseController
@@ -19,7 +20,7 @@ class RootController extends BaseController
      * @param \Psr\Http\Message\ResponseInterface $response - The respective JSON encoded object.
      * @return \Psr\Http\Message\ResponseInterface - The interface indicating the return type.
      */
-    public function handleRootWebService(Response $response): Response
+    public function handleRootWebService(Request $request, Response $response): Response
     {
         $data = array(
             'api' => self::API_NAME,
