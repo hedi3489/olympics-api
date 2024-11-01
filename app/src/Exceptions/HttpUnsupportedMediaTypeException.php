@@ -2,18 +2,13 @@
 
 namespace App\Exceptions;
 
-use Slim\Exception\HttpException;
-use Psr\Http\Message\ServerRequestInterface;
+use Slim\Exception\HttpSpecializedException;
 
-class HttpUnsupportedMediaTypeException extends HttpException
+class HttpUnsupportedMediaTypeException extends HttpSpecializedException
 {
-    public function __construct(
-        ServerRequestInterface $request,
-        string $message = 'Unsupported Media Type',
-        int $code = 415
-    ) {
-        parent::__construct($request, $message, $code);
-        $this->setTitle('Unsupported Media Type');
-        $this->setDescription('The server does not support the media type transmitted in the request.');
-    }
+    protected $code = 415;
+
+    protected $message = "'Accept' header MUST be 'application/json'.";
+    protected $title = "Unsupported Media Type";
+    protected $description = "The request contained invalid inputs.";
 }
