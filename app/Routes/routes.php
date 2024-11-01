@@ -23,12 +23,13 @@ return static function (Slim\App $app): void {
 
     //* ROUTE: GET /athletes
     $app->get('/athletes', [AthleteController::class, 'handleGetAthletes']);
-
-    //TODO:_GET /athlete/{athlete_id}
+    //* ROUTE: GET /athletes/{athlete_id}
+    $app->get('/athletes/{athlete_id}', [AthleteController::class, 'handleGetAthleteById']);
 
     //* ROUTE: GET /coaches
     $app->get( '/coaches', [CoachController::class, 'handleGetCoaches']);
 
+    //* ROUTE: GET /countries
     $app->get( '/countries', [CountryController::class, 'handleGetCountries']);
 
     //* ROUTE: GET /venues
