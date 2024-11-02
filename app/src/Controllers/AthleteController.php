@@ -12,6 +12,13 @@ class AthleteController extends BaseController
 {
     public function __construct(private AthleteModel $athlete_model) {}
 
+    /**
+     * Handles formatting of all athletes by adding pagination and validation.
+     * @param \Psr\Http\Message\ServerRequestInterface $request - The requested formatting
+     * @param \Psr\Http\Message\ResponseInterface $response - Object to prepare.
+     * @throws \Slim\Exception\HttpNotFoundException - The error thrown upon bad input.
+     * @return \Psr\Http\Message\ResponseInterface - The resulting formatted and paginated JSON object.
+     */
     public function handleGetAthletes(Request $request, Response $response): Response {
         //* Retrieve the set of parameters.
         $req_params = $request->getQueryParams();
@@ -34,6 +41,14 @@ class AthleteController extends BaseController
         }
     }
 
+    /**
+     * Handles the retrieval of an athlete by their Id
+     * @param \Psr\Http\Message\ServerRequestInterface $request - The requested formatting
+     * @param \Psr\Http\Message\ResponseInterface $response - Object to populate and format.
+     * @param array $uri_args - The requested arg specification, in this case athlete_id.
+     * @throws \Slim\Exception\HttpNotFoundException - The error thrown upon record not found in database.
+     * @return \Psr\Http\Message\ResponseInterface - The resulting formatted and JSON object.
+     */
     public function handleGetAthleteById(Request $request, Response $response, array $uri_args): Response {
         $athlete_id = $uri_args["athlete_id"];
         // Make sure athlete_id is provided.
@@ -57,5 +72,9 @@ class AthleteController extends BaseController
             );
         }
         return $this->renderJson($response, $athlete);
+    }
+
+    public function handleCreateAthlete() {
+        echo "quack";
     }
 }

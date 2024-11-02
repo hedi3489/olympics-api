@@ -56,4 +56,7 @@ return static function (Slim\App $app): void {
         $response->getBody()->write(json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR));
         return $response;
     });
+
+    //* ROUTE: POST /athletes
+    $app->post('/athletes', [AthleteController::class, 'handleCreateAthlete']);
 };
