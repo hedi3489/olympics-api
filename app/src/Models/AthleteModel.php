@@ -33,8 +33,7 @@ class AthleteModel extends BaseModel
 
         //* Filtering by gender
         if (isset($req_params["gender"])) {
-            $sql .= "AND :gender LIKE
-            CONCAT('%', :gender, '%') ";
+            $sql .= "  AND gender = :gender ";
             $query_args["gender"] = $req_params["gender"];
         }
 
