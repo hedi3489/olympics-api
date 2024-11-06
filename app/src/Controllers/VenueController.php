@@ -5,10 +5,12 @@ namespace App\Controllers;
 use App\Models\VenueModel;
 use App\Services\VenuesService;
 use Fig\Http\Message\StatusCodeInterface;
+use Monolog\Logger;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpNotFoundException;
 use App\Validation\ValidationHelper;
+use Monolog\Handler\StreamHandler;
 
 class VenueController extends BaseController
 {
@@ -85,8 +87,9 @@ class VenueController extends BaseController
 
 
     //? To be used in later iterations
-    public function handleCreateVenue(Request $request, Response $response): Response
+    public function handleCreateVenue(Request $request, Response $response)//: Response
     {
+        /*
         echo "QUACK!";
         //* Retrieve data of the new resource created from the request body
         $new_venues = $request->getParsedBody();
@@ -101,10 +104,32 @@ class VenueController extends BaseController
             $status_code = 201;
             $payload["success"] = false;
         }
-        //$payload["message"] = $result->getMessage();
+        $payload["message"] = $result->getMessage();
         $payload["getData"] = $result->getData();
         $payload["status"] = $status_code;
 
-        return $this->renderJson($response, $new_venues, $status_code);
+        return $this->renderJson($response, $new_venues, $status_code);*/
+    }
+
+    public function handleLog(Request $request, Response $response): Response{
+
+        echo 'Logging process';
+        //* Instantiate Logger, passing 'channel name'
+        $logger = new Logger('channel_name');
+
+        //* Push stream handler (Monolog)
+        $logger->pushHandler(new StreamHandler(APP_LOGS_PATH . '/access.log'));
+        $log_record = "Is logging working?";
+        $ip_add = $_SERVER['REMOTE_ADDR'];
+        $log_record .= $ip_add;
+        $extra = $request->getQueryParams();
+
+        $logger->info(
+            $log_record,
+            $extra
+        );
+
+        return $response;
+
     }
 }

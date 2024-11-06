@@ -57,6 +57,9 @@ return static function (Slim\App $app): void {
         return $response;
     });
 
+    //* ROUTE: GET /log
+    $app->get('/log', [VenueController::class, 'handleLog']);
+
     //* ROUTE: POST /athletes
     $app->post('/athletes', [AthleteController::class, 'handleCreateAthlete']);
 };
