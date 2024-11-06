@@ -7,6 +7,8 @@ build/
 node_modules/
 composer.phar
 composer.bat
+composer.json
+composer.lock
 
 # VisualStudioCode
 # Local History for Visual Studio Code
