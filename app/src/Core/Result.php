@@ -61,6 +61,11 @@ class Result
         return !$this->is_success;
     }
 
+    public function getMessage(): mixed
+    {
+        return $this->message;
+    }
+
     public function getData(): mixed
     {
         return $this->data;

@@ -27,10 +27,7 @@ class VenueController extends BaseController
 
         $this->venue_model->setPaginationOptions($current_page, $page_size);
 
-
-        //TODO: Content negotiation
-
-        // Call model to fetch records
+        // Calling model to fetch records
         $venues = $this->venue_model->getVenues($request, $req_params);
 
         if (empty($venues["data"])) {
@@ -89,13 +86,12 @@ class VenueController extends BaseController
     //? To be used in later iterations
     public function handleCreateVenue(Request $request, Response $response)//: Response
     {
-        /*
         echo "QUACK!";
         //* Retrieve data of the new resource created from the request body
-        $new_venues = $request->getParsedBody();
+        $data = $request->getParsedBody();
 
         //* Create venue using service
-        $result = $this->venues_service->CreateVenues($new_venues);
+        $result = $this->venues_service->CreateVenues($request, $data);
         $status_code = 201;
         if ($result->isSuccess()) {
             //Prepare success stmt
@@ -108,7 +104,7 @@ class VenueController extends BaseController
         $payload["getData"] = $result->getData();
         $payload["status"] = $status_code;
 
-        return $this->renderJson($response, $new_venues, $status_code);*/
+        return $this->renderJson($response, $data, $status_code);
     }
 
     public function handleLog(Request $request, Response $response): Response{
