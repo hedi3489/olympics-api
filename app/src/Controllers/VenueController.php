@@ -90,7 +90,7 @@ class VenueController extends BaseController
         //* Retrieve data of the new resource created from the request body
         $data = $request->getParsedBody();
 
-        //* Create venue using service
+        //* Create venue using venues service
         $result = $this->venues_service->CreateVenues($request, $data);
         $status_code = 201;
         if ($result->isSuccess()) {
