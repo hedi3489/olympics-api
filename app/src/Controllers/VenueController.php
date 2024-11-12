@@ -86,10 +86,11 @@ class VenueController extends BaseController
     //? To be used in later iterations
     public function handleCreateVenue(Request $request, Response $response)//: Response
     {
-        echo "QUACK!";
+        echo "QUACK!\n";
         //* Retrieve data of the new resource created from the request body
         $data = $request->getParsedBody();
 
+        echo "Entering CreateVenue method...\n";
         //* Create venue using venues service
         $result = $this->venues_service->CreateVenues($request, $data);
         $status_code = 201;

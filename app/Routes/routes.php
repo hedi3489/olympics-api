@@ -32,12 +32,14 @@ return static function (Slim\App $app): void {
     $app->get('/coaches/{coach_id}', [CoachController::class, 'handleGetCoachById']);
 
     //* ROUTE: GET /countries
-    $app->get( '/countries', [CountryController::class, 'handleGetCountries']);
+    $app->get( '/countries', callable: [CountryController::class, 'handleGetCountries']);
 
     //* ROUTE: GET /venues
     $app->get('/venues', [VenueController::class, 'handleGetVenues']);
     //* ROUTE: GET /venues/{venue_id}
     $app->get('/venues/{venue_id}', [VenueController::class, 'handleGetVenueById']);
+    //* ROUTE: POST /venues
+    $app->post('/venues', [VenueController::class, 'handleCreateVenue']);
 
     //* ROUTE: GET /events
     $app->get('/events', [EventController::class, 'handleGetEvents']);
