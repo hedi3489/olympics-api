@@ -134,10 +134,16 @@ class VenueModel extends BaseModel
         return $venues;
     }
 
+    /**
+     * Method to insert a new venue into the database.
+     * @param $new_venue : new venue to be added to the database.
+     * @return string|false returns the last inserted id or false.
+     */
     public function insertVenue(array $new_venue): mixed
     {
-        //?
         $this->insert($this->table_name, $new_venue);
-        return $new_venue["venue_id"];
+        return $this->lastInsertId();
     }
+
+
 }
