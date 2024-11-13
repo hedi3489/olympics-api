@@ -118,4 +118,15 @@ class EventModel extends BaseModel
         );
         return $event;
     }
+
+    /**
+     * Method to insert a new event into the database.
+     * @param $new_event : new event to be added to the database.
+     * @return string|false returns the last inserted id or false.
+     */
+    public function insertEvent(array $new_event): mixed
+    {
+        $this->insert($this->table_name, $new_event);
+        return $this->lastInsertId();
+    }
 }
