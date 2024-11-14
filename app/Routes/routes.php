@@ -18,35 +18,39 @@ return static function (Slim\App $app): void {
     // Routes without authentication check: /login, /token
 
     // Routes with authentication
-    //* ROUTE: GET /
+    //* Route GET /
     $app->get('/', [RootController::class, 'handleRootWebService']);
 
-    //* ROUTE: GET /athletes
-    $app->get('/athletes', [AthleteController::class, 'handleGetAthletes']);
-    //* ROUTE: GET /athletes/{athlete_id}
-    $app->get('/athletes/{athlete_id}', [AthleteController::class, 'handleGetAthleteById']);
 
-    //* ROUTE: GET /coaches
+    //* Routes for athletes resource
+    $app->get('/athletes', [AthleteController::class, 'handleGetAthletes']);
+    $app->get('/athletes/{athlete_id}', [AthleteController::class, 'handleGetAthleteById']);
+    $app->post('/athletes', [AthleteController::class, 'handleCreateAthlete']);
+
+
+    //* Routes for coaches resource
     $app->get( '/coaches', [CoachController::class, 'handleGetCoaches']);
-    //* ROUTE: GET /coaches/{coach_id}
     $app->get('/coaches/{coach_id}', [CoachController::class, 'handleGetCoachById']);
 
-    //* ROUTE: GET /countries
-    $app->get( '/countries', callable: [CountryController::class, 'handleGetCountries']);
 
-    //* ROUTE: GET /venues
+    //* Routes for venues resource
     $app->get('/venues', [VenueController::class, 'handleGetVenues']);
-    //* ROUTE: GET /venues/{venue_id}
     $app->get('/venues/{venue_id}', [VenueController::class, 'handleGetVenueById']);
-    //* ROUTE: POST /venues
     $app->post('/venues', [VenueController::class, 'handleCreateVenue']);
 
-    //* ROUTE: GET /events
-    $app->get('/events', [EventController::class, 'handleGetEvents']);
-    //* ROUTE: GET /events/{event_id}
-    $app->get('/events/{event_id}', [EventController::class, 'handleGetEventById']);
 
+    //* Routes for events resource
+    $app->get('/events', [EventController::class, 'handleGetEvents']);
+    $app->get('/events/{event_id}', [EventController::class, 'handleGetEventById']);
+    $app->post('/events', [EventController::class, 'handleCreateEvent']);
+
+
+    //* Routes for results resource
     $app->get( '/results', [ResultController::class, 'handleGetResults']);
+
+
+    //* Routes for countries resource
+    $app->get( '/countries', callable: [CountryController::class, 'handleGetCountries']);
 
     //* ROUTE: GET /ping
     $app->get('/ping', function (Request $request, Response $response, $args) {
@@ -62,6 +66,4 @@ return static function (Slim\App $app): void {
     //* ROUTE: GET /log
     $app->get('/log', [VenueController::class, 'handleLog']);
 
-    //* ROUTE: POST /athletes
-    $app->post('/athletes', [AthleteController::class, 'handleCreateAthlete']);
 };

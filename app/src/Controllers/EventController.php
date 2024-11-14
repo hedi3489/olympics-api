@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\EventModel;
+use App\Services\EventsService;
 use App\Validation\ValidationHelper;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -11,7 +12,7 @@ use Slim\Exception\HttpNotFoundException;
 
 class EventController extends BaseController
 {
-    public function __construct(private EventModel $event_model)
+    public function __construct(private EventModel $event_model, private EventsService $events_service)
     {
         parent::__construct();
     }
@@ -87,5 +88,35 @@ class EventController extends BaseController
             );
         }
         return $this->renderJson($response, $event);
+    }
+
+
+
+    /**
+     * Function that handles the creation and insertion of a new venue
+     * @param Request $request
+     * @param Response $response
+     * @return void
+     */
+    public function handleCreateEvent(Request $request, Response $response): Response
+    {
+        // Retrieve data of the new resource created from the request body
+        $data = $request->getParsedBody();
+
+        // Create venue using venues service
+        $result = $this->events_service->CreateEvent($request, $data);
+        $status_code = 201;
+        if ($result->isSuccess()) {
+            //Prepare success stmt
+            $payload["success"] = true;
+        } else {
+            $status_code = 201;
+            $payload["success"] = false;
+        }
+        $payload["message"] = $result->getMessage();
+        $payload["getData"] = $result->getData();
+        $payload["status"] = $status_code;
+
+        return $this->renderJson($response, $data, $status_code);
     }
 }
