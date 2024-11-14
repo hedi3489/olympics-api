@@ -18,7 +18,6 @@ class EventsService
      * @param $data - the properties for creating a event(s) object(s).
      * @return Result - The result of the operation (success/fail).
      */
-    //TODO: Call this method in EventController
     public function CreateEvent($request, $data) : Result
     {
         //* Validate through Valitron
@@ -28,11 +27,11 @@ class EventsService
         $v->rule('required', ['event_name','event_sport', 'start_date', 'end_date', 'number_of_participants', 'is_paralympic', 'venue_id']);
         $v->rule('regex', 'event_name', '/^[a-zA-Z0-9 ]{1,30}$/')->message("Event name $rgx_error");
         $v->rule('regex', 'event_sport', '/^[a-zA-Z0-9 ]{1,30}$/')->message("Event sport $rgx_error");
-        $v->rule('integer', 'number_of_participants')->message('The number of participants must be an integer');
-        $v->rule('min','number_of_participants', 1)->message('The minimum number of participants cannot be less than 1');
-        $v->rule('max','number_of_participants', 100000)->message('The maximum number of participants cannot be more than 100000');
+        $v->rule('integer', 'number_of_participants')->message('The number of participants must be an integer.');
+        $v->rule('min','number_of_participants', 1)->message('The minimum number of participants cannot be less than 1.');
+        $v->rule('max','number_of_participants', 100000)->message('The maximum number of participants cannot be more than 100000.');
         $v->rule('date', ['start_date', 'end_date'])->message('Date format must be YYYY-MM-DD');
-        $v->rule('dateBefore', 'start_date', $data['end_date'])->message("the start date '{$data['start_date']}' cannot be after the end date '{$data['end_date']}'");
+        $v->rule('dateBefore', 'start_date', $data['end_date'])->message("the start date '{$data['start_date']}' cannot be after the end date '{$data['end_date']}'.");
         $v->rule('boolean', 'is_paralympic');
         $venue = $this->venue_model->getVenueById($data['venue_id']);
 

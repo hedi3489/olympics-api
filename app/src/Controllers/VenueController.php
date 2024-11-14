@@ -89,13 +89,13 @@ class VenueController extends BaseController
      * @param Response $response
      * @return void
      */
-    public function handleCreateVenue(Request $request, Response $response)//: Response
+    public function handleCreateVenue(Request $request, Response $response): Response
     {
         // Retrieve data of the new resource created from the request body
         $data = $request->getParsedBody();
 
         // Create venue using venues service
-        $result = $this->venues_service->CreateVenues($request, $data);
+        $result = $this->venues_service->CreateVenue($request, $data);
         $status_code = 201;
         if ($result->isSuccess()) {
             //Prepare success stmt

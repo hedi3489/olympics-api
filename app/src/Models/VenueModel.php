@@ -119,20 +119,20 @@ class VenueModel extends BaseModel
         return $venue;
     }
 
-    public function getVenuesByName(string $venue_name): array
-    {
-        $venues = [];
-        $sql = "SELECT * FROM $this->table_name WHERE 1";
-        //! Add to the query
-        //! the name if it's set and not empty
-        if ($venue_name != null || $venue_name != "") {
-            $sql .= " AND venue_name LIKE CONCAT('%', $venue_name, '%')";
-        }
-        // Instead of using fetchAll(), we use our new more specific method paginate()
-        // $venues = $this->fetchAll($sql, $query_args);
-        $venues = $this->paginate($sql, $venue_name);
-        return $venues;
-    }
+    // public function getVenuesByName(string $venue_name): array
+    // {
+    //     $venues = [];
+    //     $sql = "SELECT * FROM $this->table_name WHERE 1";
+    //     // Add to the query
+    //     // the name if it's set and not empty
+    //     if ($venue_name != null || $venue_name != "") {
+    //         $sql .= " AND venue_name LIKE CONCAT('%', $venue_name, '%')";
+    //     }
+    //     // Instead of using fetchAll(), we use our new more specific method paginate()
+    //     // $venues = $this->fetchAll($sql, $query_args);
+    //     $venues = $this->paginate($sql, $venue_name);
+    //     return $venues;
+    // }
 
     /**
      * Method to insert a new venue into the database.
