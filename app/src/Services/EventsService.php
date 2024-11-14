@@ -19,19 +19,20 @@ class EventsService
      * @return Result - The result of the operation (success/fail).
      */
     //TODO: Call this method in EventController
-    public function CreateEvents($request, $data) : Result
+    public function CreateEvent($request, $data) : Result
     {
         //* Validate through Valitron
         // Preparing validation rules for each event property
+        $rgx_error = 'must be 30 characters or fewer and can only include letters, digits, and spaces.';
         $v = new \Valitron\Validator($data);
         $v->rule('required', ['event_name','event_sport', 'start_date', 'end_date', 'number_of_participants', 'is_paralympic', 'venue_id']);
-        $v->rule('regex', 'event_name', '/^[a-zA-Z0-9]+$/')->message('Event name must contain only letters, digits, and spaces');
-        $v->rule('regex', 'event_sport', '/^[a-zA-Z0-9]+$/')->message('Event sport must contain only letters, digits, and spaces');
-        $v->rule('min','number_of_participants', 0)->message('Minimum number of participants cannot be less than 0');
-        $v->rule('max','number_of_participants', 100000)->message('Maximum number of participants cannot be more than 100000');
+        $v->rule('regex', 'event_name', '/^[a-zA-Z0-9 ]{1,30}$/')->message("Event name $rgx_error");
+        $v->rule('regex', 'event_sport', '/^[a-zA-Z0-9 ]{1,30}$/')->message("Event sport $rgx_error");
+        $v->rule('integer', 'number_of_participants')->message('The number of participants must be an integer');
+        $v->rule('min','number_of_participants', 1)->message('The minimum number of participants cannot be less than 1');
+        $v->rule('max','number_of_participants', 100000)->message('The maximum number of participants cannot be more than 100000');
         $v->rule('date', ['start_date', 'end_date'])->message('Date format must be YYYY-MM-DD');
-        $v->rule('dateBefore', 'start_date', 'end_date')->message('the start date cannot be after the end date');
-        $v->rule('dateAfter', 'end_date', 'start_date')->message('the end date cannot be before the start date');
+        $v->rule('dateBefore', 'start_date', $data['end_date'])->message("the start date '{$data['start_date']}' cannot be after the end date '{$data['end_date']}'");
         $v->rule('boolean', 'is_paralympic');
         $venue = $this->venue_model->getVenueById($data['venue_id']);
 
@@ -45,14 +46,13 @@ class EventsService
             );
         }
 
-
         // Validating existence of a venue_id FK in the database
         if($venue==NULL){
             throw new HttpBadRequestException(
                 $request,
-                "Venue id provided does not exist in the database.\n
-                Please provide an existing venue id or add a new venue first.\n
-                Venue id should be between 0-99."
+                "Venue id provided does not exist in the database.
+                Please provide an existing venue id or add a new venue first.
+                Venue id should an integer be between 0-99."
             );
         }
 
