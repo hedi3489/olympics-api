@@ -145,5 +145,16 @@ class VenueModel extends BaseModel
         return $this->lastInsertId();
     }
 
-
+    /**
+     * updates one or more records contained in the specified table.
+     *
+     * @param  string $table table name
+     * @param  array $data  an array containing the names of the field(s) to be updated along with the new value(s).
+     *                      For example, ["username"=>"frostybee", "email" =>"frostybee@me.com"]
+     * @param  array $where an array containing the filtering operations (it should consist of column names and values)
+     *                      For example, ["user_id"=> 3]
+     */
+    public function updateVenue($data, $where) : void {
+        $this->update($this->table_name, $data, $where);
+    }
 }

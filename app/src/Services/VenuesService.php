@@ -19,34 +19,11 @@ class VenuesService
     public function CreateVenue($request, $data) : Result
     {
         //* Validate through Valitron
-        // Preparing validation rules for each venue property
-        $rgx_error1 = 'must be 30 characters or fewer and can only include letters, digits, and spaces.';
-        $rgx_error2 = 'must be 300 characters or fewer and can only include letters, digits, spaces, commas and periods.';
-        $current_date = date('Y-m-d');
-        $tomorrow = date('Y-m-d', strtotime('+1 day'));
+        // Calling custom function for dynamic Valitron validation
+        $this->executeValitron($request, $data);
+        // If data is invalid, an exception will be thrown inshallah
 
-        $v = new \Valitron\Validator($data);
-        $v->rule('required', ['venue_name','address', 'capacity', 'type', 'date_constructed']);
-        $v->rule('regex', 'venue_name', '/^[a-zA-Z0-9 ]{1,30}$/')->message("Venue name $rgx_error1");
-        $v->rule('regex', 'address', '/^[a-zA-Z0-9 ]{1,30}$/')->message("Venue address $rgx_error1");
-        $v->rule('regex', 'type', '/^[a-zA-Z0-9 ]{1,30}$/')->message("Venue type $rgx_error1");
-        $v->rule('min','capacity', 1)->message('The minimum capacity cannot be less than 1.');
-        $v->rule('max','capacity', 100000)->message('The maximum capacity cannot be more than 100000.');
-        $v->rule('date', 'date_constructed')->message('The construction date format must be YYYY-MM-DD.');
-        $v->rule('dateBefore', 'date_constructed', $tomorrow)->message("the date of construction '{$data['date_constructed']}' cannot be after the the current date '$current_date'.");
-        $v->rule('regex', 'historical_significance', '/^[a-zA-Z0-9., ]{1,300}$/')->message("The historical significance text $rgx_error2");
-        $v->rule('regex', 'parking_facilities', '/^[a-zA-Z0-9., ]{1,300}$/')->message("The parking facilities text $rgx_error2");
-
-        //* Fail creation process as early as possible
-        if(!$v->validate()){
-            $errors = json_encode($v->errors());
-            throw new HttpBadRequestException(
-                $request,
-                "Invalid data: $errors"
-            );
-        }
-
-        //* If data is valid, insert new venue into the database
+        // If data is valid, insert new venue into the database
         try {
             $last_inserted_id = $this->venue_model->insertVenue($data);
 
@@ -68,5 +45,83 @@ class VenuesService
         }
     }
 
+    // TODO: Verify parameters
+    //? ToBeDebugged
+    //? Add documentation
+    public function UpdateVenue($request, $data, $venue_id) : Result
+    {
+        //* Validate through Valitron
+        // Calling custom function for dynamic Valitron validation
+        $this->executeValitron($request, $data);
+
+        // Retrieve id
+        $where = ["venue_id" => $venue_id];
+
+         // If data is valid, update venue
+         try {
+
+            $this->venue_model->updateVenue($data, $where);
+            //Return success Result with updated data
+            return Result::success("Venue updated successfully.", [
+                'id' => $venue_id,
+                'venue_name' => $data['venue_name'],
+                'address' => $data['address'],
+                'capacity' => $data['capacity'],
+                'type' => $data['type'],
+                'date_constructed' => $data['date_constructed'],
+                'historical_significance' => $data['historical_significance'],
+                'parking_facilities' => $data['parking_facilities']
+            ]);
+
+        } catch (\PDOException $e) {
+            // Handle any database errors and return a fail Result
+            return Result::fail("Database error: Unable to create venue.");
+        }
+
+    }
+
+    /**
+     * Method to write the validation rules since validation will be done in multiple functions.
+     * @param $request : used to retrieve the http method for dynamic validation rules.
+     * @param array $data : the data that will be validated.
+     * @return \Valitron\Validator returns a Valitron object.
+     */
+    private function executeValitron($request, array $data): void
+    {
+        $rgx_error1 = 'must be 30 characters or fewer and can only include letters, digits, and spaces.';
+        $rgx_error2 = 'must be 300 characters or fewer and can only include letters, digits, spaces, commas, and periods.';
+        $current_date = date('Y-m-d');
+        $tomorrow = date('Y-m-d', strtotime('+1 day'));
+        $method = strtolower($request->getMethod());
+
+
+        $v = new \Valitron\Validator($data);
+        if ($method === 'post'){
+            $v->rule('required', ['venue_name', 'address', 'capacity', 'type', 'date_constructed']);
+
+        } elseif ($method === 'put'){
+            $v->rule('required', ['venue_id', 'venue_name', 'address', 'capacity', 'type', 'date_constructed']);
+            $v->rule('min', 'venue_id', 1)->message('The venue id must be a numeric value between 1 and 99.');
+            $v->rule('max', 'venue_id', 99)->message('The venue id must be a numeric value between 1 and 99.');
+        }
+
+        $v->rule('regex', 'venue_name', '/^[a-zA-Z0-9 ]{1,30}$/')->message("Venue name $rgx_error1");
+        $v->rule('regex', 'address', '/^[a-zA-Z0-9 ]{1,30}$/')->message("Venue address $rgx_error1");
+        $v->rule('regex', 'type', '/^[a-zA-Z0-9 ]{1,30}$/')->message("Venue type $rgx_error1");
+        $v->rule('min', 'capacity', 1)->message('The minimum capacity cannot be less than 1.');
+        $v->rule('max', 'capacity', 100000)->message('The maximum capacity cannot be more than 100000.');
+        $v->rule('date', 'date_constructed')->message('The construction date format must be YYYY-MM-DD.');
+        $v->rule('dateBefore', 'date_constructed', $tomorrow)->message("The date of construction '{$data['date_constructed']}' cannot be after the current date '$current_date'.");
+        $v->rule('regex', 'historical_significance', '/^[a-zA-Z0-9., ]{1,300}$/')->message("The historical significance text $rgx_error2");
+        $v->rule('regex', 'parking_facilities', '/^[a-zA-Z0-9., ]{1,300}$/')->message("The parking facilities text $rgx_error2");
+
+        if(!$v->validate()){
+            $errors = json_encode($v->errors());
+            throw new HttpBadRequestException(
+                $request,
+                "Invalid data: $errors"
+            );
+        }
+    }
 }
 
