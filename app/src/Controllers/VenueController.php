@@ -101,8 +101,30 @@ class VenueController extends BaseController
             //Prepare success stmt
             $payload["success"] = true;
         } else {
-            $status_code = 201;
+            $status_code = 400;
             $payload["success"] = false;
+        }
+        $payload["message"] = $result->getMessage();
+        $payload["getData"] = $result->getData();
+        $payload["status"] = $status_code;
+
+        return $this->renderJson($response, $data, $status_code);
+    }
+
+    //? ToBeDebugged
+    public function handleUpdateVenue(Request $request, Response $response, array $uri_args) : Response
+    {
+        // Retrieving the venue id to be updated and the update information
+        $venue_id = $uri_args["venue_id"];
+        $data = $request->getParsedBody();
+
+        $result = $this->venues_service->UpdateVenue($request, $data, $venue_id);
+        $status_code = 204;
+        if ($result->isSuccess()){
+            $payload["success"] = true;
+        } else {
+            $status_code = 400;
+            $payload["success"] = true;
         }
         $payload["message"] = $result->getMessage();
         $payload["getData"] = $result->getData();
