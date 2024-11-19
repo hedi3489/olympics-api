@@ -37,12 +37,18 @@ return static function (Slim\App $app): void {
     $app->get('/venues', [VenueController::class, 'handleGetVenues']);
     $app->get('/venues/{venue_id}', [VenueController::class, 'handleGetVenueById']);
     $app->post('/venues', [VenueController::class, 'handleCreateVenue']);
+    //TODO: Routes to implement
+    $app->put('/venues/{venue_id}', [VenueController::class, 'handleUpdateVenue']);
+    $app->delete('/venues/{venue_id}', [VenueController::class, 'handleDeleteVenue']);
 
 
     //* Routes for events resource
     $app->get('/events', [EventController::class, 'handleGetEvents']);
     $app->get('/events/{event_id}', [EventController::class, 'handleGetEventById']);
     $app->post('/events', [EventController::class, 'handleCreateEvent']);
+    //TODO: Routes to implement
+    $app->put('/events/{event_id}', [EventController::class, 'handleUpdateEvent']);
+    $app->delete('/events/{event_id}', [EventController::class, 'handleDeleteEvent']);
 
 
     //* Routes for results resource
