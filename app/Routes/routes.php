@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Controllers\UserController;
 use App\Controllers\EventController;
 use App\Controllers\VenueController;
 use App\Controllers\AthleteController;
@@ -21,6 +22,9 @@ return static function (Slim\App $app): void {
     //* Route GET /
     $app->get('/', [RootController::class, 'handleRootWebService']);
 
+    //TODO: Route for user resources
+    $app->post('/register', [UserController::class, 'handleRegister']);
+    $app->post('/login', [UserController::class, 'handleGenerateToken']);
 
     //* Routes for athletes resource
     $app->get('/athletes', [AthleteController::class, 'handleGetAthletes']);
