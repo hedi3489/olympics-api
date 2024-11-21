@@ -24,22 +24,19 @@ class CoachModel extends BaseModel
 
         //* Filtering by gender
         if (isset($req_params["gender"])) {
-            $sql .= "AND :gender LIKE
-            CONCAT('%', :gender, '%') ";
+            $sql .= " AND gender = :gender";
             $query_args["gender"] = $req_params["gender"];
         }
 
         //* Filtering by sport
         if (isset($req_params["sport"])) {
-            $sql .= "AND :sport LIKE
-            CONCAT('%', :sport, '%') ";
+            $sql .= " AND sport = :sport";
             $query_args["sport"] = $req_params["sport"];
         }
 
         //* Filter by been_in_olympics
         if (isset($req_params["been_in_olympics"])) {
-            $sql .= " AND been_in_olympics LIKE
-                CONCAT('%', :been_in_olympics, '%')";
+            $sql .= " AND been_in_olympics = :been_in_olympics";
             $query_args["been_in_olympics"] = $req_params["been_in_olympics"];
         }
 
