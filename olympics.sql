@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 10, 2024 at 01:45 AM
+-- Generation Time: Nov 22, 2024 at 06:49 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -21,27 +21,23 @@ SET time_zone = "+00:00";
 -- Database: `olympics-api`
 --
 
-DROP DATABASE IF EXISTS `olympics-api`;
-CREATE DATABASE `olympics-api` DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-USE `olympics-api`;
-
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `athletes`
 --
-DROP TABLE IF EXISTS `athletes`;
+
 CREATE TABLE `athletes` (
   `athlete_id` int(11) NOT NULL,
   `athlete_name` varchar(64) NOT NULL,
   `country_id` int(11) NOT NULL,
   `gender` varchar(64) NOT NULL,
   `sport` varchar(64) NOT NULL,
-  `date_of_birth` date NOT NULL,
+  `date_of_birth` date DEFAULT NULL,
   `height` int(4) NOT NULL,
   `weight` int(4) NOT NULL,
   `ethnicity` varchar(64) NOT NULL,
-  `is_paralymic` tinyint(1) NOT NULL,
+  `is_paralympic` tinyint(1) NOT NULL,
   `gold_medals` int(4) NOT NULL,
   `silver_medals` int(4) NOT NULL,
   `bronze_medals` int(4) NOT NULL,
@@ -52,7 +48,7 @@ CREATE TABLE `athletes` (
 -- Dumping data for table `athletes`
 --
 
-INSERT INTO `athletes` (`athlete_id`, `athlete_name`, `country_id`, `gender`, `sport`, `date_of_birth`, `height`, `weight`, `ethnicity`, `is_paralymic`, `gold_medals`, `silver_medals`, `bronze_medals`, `total_medals`) VALUES
+INSERT INTO `athletes` (`athlete_id`, `athlete_name`, `country_id`, `gender`, `sport`, `date_of_birth`, `height`, `weight`, `ethnicity`, `is_paralympic`, `gold_medals`, `silver_medals`, `bronze_medals`, `total_medals`) VALUES
 (41, 'ALEKSANYAN Artur', 86, 'Male', 'Wrestling', '1991-10-21', 0, 0, 'Armenian', 0, 0, 0, 0, 0),
 (42, 'AMOYAN Malkhas', 86, 'Male', 'Wrestling', '1999-01-22', 0, 0, 'Armenian', 0, 0, 0, 0, 0),
 (43, 'GALSTYAN Slavik', 86, 'Male', 'Wrestling', '1996-12-21', 0, 0, 'Armenian', 0, 0, 0, 0, 0),
@@ -114,7 +110,7 @@ INSERT INTO `athletes` (`athlete_id`, `athlete_name`, `country_id`, `gender`, `s
 --
 -- Table structure for table `athletes_coaches`
 --
-DROP TABLE IF EXISTS `athletes_coaches`;
+
 CREATE TABLE `athletes_coaches` (
   `athlete_id` int(11) NOT NULL,
   `coach_id` int(11) NOT NULL
@@ -142,7 +138,7 @@ INSERT INTO `athletes_coaches` (`athlete_id`, `coach_id`) VALUES
 --
 -- Table structure for table `coaches`
 --
-DROP TABLE IF EXISTS `coaches`;
+
 CREATE TABLE `coaches` (
   `coach_id` int(11) NOT NULL,
   `coach_name` varchar(64) NOT NULL,
@@ -157,38 +153,38 @@ CREATE TABLE `coaches` (
 --
 
 INSERT INTO `coaches` (`coach_id`, `coach_name`, `gender`, `date_of_birth`, `been_in_olympics`, `sport`) VALUES
-(1, 'Gevorg Aleksanyan', 'Male', NULL, 0, 'Wrestling'),
-(2, 'Roman Amoyan', 'Male', NULL, 0, 'Wrestling'),
-(3, 'Martin Alekhanyan', 'Male', NULL, 0, 'Wrestling'),
-(4, 'Armen Babalaryan', 'Male', NULL, 0, 'Wrestling'),
-(5, 'Habetnak Kurghinyan', 'Male', NULL, 0, 'Wrestling'),
-(6, 'Brent Vallance', 'Male', NULL, 0, 'Athletics'),
-(7, 'Luke Preston', 'Male', NULL, 0, 'Judo'),
-(8, 'Christophe Belliard', 'Male', NULL, 1, 'Athletics'),
-(9, 'Eugenio Chimal', 'Male', NULL, 1, 'Triathlon'),
-(10, 'Luis Miguel Chávez Rincón', 'Male', NULL, 0, 'Triathlon'),
-(11, 'Adriana Loftus', 'Female', NULL, 1, 'Artistic Swimming'),
-(12, 'Marc-Olivier Froger', 'Male', NULL, 0, 'Swimming'),
-(13, 'Franck Ne', 'Male', NULL, 0, 'Athletics'),
-(15, 'Manuel Verde', 'Male', NULL, 1, 'Boxing'),
-(16, 'Raul Gonzalez', 'Male', NULL, 1, 'Athletics'),
-(17, 'Jose Luis Doctor', 'Male', NULL, 1, 'Athletics'),
-(18, 'Alejandro Laberdesque', 'Male', NULL, 1, 'Athletics'),
+(1, 'Gevorg Aleksanyan', 'Male', '1981-07-04', 1, 'Wrestling'),
+(2, 'Roman Amoyan', 'Male', '1972-04-30', 0, 'Wrestling'),
+(3, 'Martin Alekhanyan', 'Male', '1970-01-01', 0, 'Wrestling'),
+(4, 'Armen Babalaryan', 'Male', '1971-08-15', 0, 'Wrestling'),
+(5, 'Habetnak Kurghinyan', 'Male', '1970-01-01', 0, 'Wrestling'),
+(6, 'Brent Vallance', 'Male', '1972-04-30', 0, 'Athletics'),
+(7, 'Luke Preston', 'Male', '1976-05-26', 0, 'Judo'),
+(8, 'Christophe Belliard', 'Male', '1959-06-10', 1, 'Athletics'),
+(9, 'Eugenio Chimal', 'Male', '1974-01-01', 1, 'Triathlon'),
+(10, 'Luis Miguel Chávez Rincón', 'Male', '1976-01-01', 0, 'Triathlon'),
+(11, 'Adriana Loftus', 'Female', '1958-05-28', 1, 'Artistic Swimming'),
+(12, 'Marc-Olivier Froger', 'Male', '1970-01-01', 0, 'Swimming'),
+(13, 'Franck Ne', 'Male', '1970-01-01', 0, 'Athletics'),
+(15, 'Manuel Verde', 'Male', '1966-11-11', 1, 'Boxing'),
+(16, 'Raul Gonzalez', 'Male', '1977-05-27', 1, 'Athletics'),
+(17, 'Jose Luis Doctor', 'Male', '1966-05-14', 1, 'Athletics'),
+(18, 'Alejandro Laberdesque', 'Male', '1970-01-01', 1, 'Athletics'),
 (19, 'Manuel Verde', 'Male', NULL, 1, 'Boxing'),
 (20, 'Raul Gonzalez', 'Male', NULL, 1, 'Athletics'),
-(21, 'Ignacio Zamudio', 'Male', NULL, 1, 'Athletics'),
+(21, 'Ignacio Zamudio', 'Male', '1971-05-15', 1, 'Athletics'),
 (22, 'Alejandro Laberdesque', 'Male', NULL, 1, 'Athletics'),
-(23, 'Fernando Infante', 'Male', NULL, 0, 'Race Walking'),
-(24, 'Jacek Kruszewski', 'Male', NULL, 0, 'Athletics'),
-(25, 'Kenny McDonald', 'Male', NULL, 0, 'Athletics'),
-(26, 'Andrew Mullen', 'Male', NULL, 0, 'Athletics');
+(23, 'Fernando Infante', 'Male', '1981-03-11', 0, 'Race Walking'),
+(24, 'Jacek Kruszewski', 'Male', '1970-01-01', 0, 'Athletics'),
+(25, 'Kenny McDonald', 'Male', '1959-01-01', 0, 'Athletics'),
+(26, 'Andrew Mullen', 'Male', '1970-01-01', 0, 'Athletics');
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `countries`
 --
-DROP TABLE IF EXISTS `countries`;
+
 CREATE TABLE `countries` (
   `country_id` int(11) NOT NULL,
   `country_name` varchar(64) NOT NULL,
@@ -302,7 +298,7 @@ INSERT INTO `countries` (`country_id`, `country_name`, `country_code`, `gold_med
 --
 -- Table structure for table `events`
 --
-DROP TABLE IF EXISTS `events`;
+
 CREATE TABLE `events` (
   `event_id` int(11) NOT NULL,
   `event_name` varchar(128) NOT NULL,
@@ -353,7 +349,7 @@ INSERT INTO `events` (`event_id`, `event_name`, `event_sport`, `start_date`, `en
 --
 -- Table structure for table `results`
 --
-DROP TABLE IF EXISTS `results`;
+
 CREATE TABLE `results` (
   `athlete_id` int(11) NOT NULL,
   `event_id` int(11) NOT NULL,
@@ -376,7 +372,7 @@ INSERT INTO `results` (`athlete_id`, `event_id`, `ranking`, `result`, `record_se
 --
 -- Table structure for table `venues`
 --
-DROP TABLE IF EXISTS `venues`;
+
 CREATE TABLE `venues` (
   `venue_id` int(11) NOT NULL,
   `venue_name` varchar(128) NOT NULL,
@@ -384,8 +380,8 @@ CREATE TABLE `venues` (
   `capacity` varchar(128) NOT NULL,
   `type` varchar(64) NOT NULL,
   `date_constructed` date NOT NULL,
-  `historical_significance` text NOT NULL,
-  `parking_facilities` text NOT NULL
+  `historical_significance` text DEFAULT NULL,
+  `parking_facilities` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
