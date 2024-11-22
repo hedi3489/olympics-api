@@ -31,7 +31,7 @@ class ContentNegotiationMiddleware implements MiddlewareInterface
 
         // If no supported format is found, return a 415 Unsupported Media Type response
         if (!$supported) {
-            throw new HttpUnsupportedMediaTypeException($request, "Unsupported media type requested.");
+            throw new HttpUnsupportedMediaTypeException($request);
         }
 
         // If supported, proceed with the request

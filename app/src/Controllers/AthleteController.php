@@ -86,7 +86,7 @@ class AthleteController extends BaseController
         // Retrieve data of the new resource to be created from the request body
         $data = $request->getParsedBody();
 
-        if (isset($data)) {
+        if (isset($data) && !empty($data)) {
             //Create athlete using athletes service
             $result = $this->athletes_service->CreateAthlete($request, $data);
             $payload = [];

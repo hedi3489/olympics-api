@@ -65,7 +65,6 @@ class AthletesService
         $neg_num_error = " must be more than 1.";
         $method = strtolower($request->getMethod());
 
-
         $v = new \Valitron\Validator($data);
         if ($method === 'post'){
             $v->rule('required', ['athlete_name', 'country_id', 'gender', 'sport', 'height', 'weight', 'ethnicity', 'is_paralympic', 'gold_medals', 'silver_medals', 'bronze_medals', 'total_medals']);
