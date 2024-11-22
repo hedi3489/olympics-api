@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 20, 2024 at 07:12 PM
+-- Generation Time: Nov 22, 2024 at 06:49 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -33,11 +33,11 @@ CREATE TABLE `athletes` (
   `country_id` int(11) NOT NULL,
   `gender` varchar(64) NOT NULL,
   `sport` varchar(64) NOT NULL,
-  `date_of_birth` date NOT NULL,
+  `date_of_birth` date DEFAULT NULL,
   `height` int(4) NOT NULL,
   `weight` int(4) NOT NULL,
   `ethnicity` varchar(64) NOT NULL,
-  `is_paralymic` tinyint(1) NOT NULL,
+  `is_paralympic` tinyint(1) NOT NULL,
   `gold_medals` int(4) NOT NULL,
   `silver_medals` int(4) NOT NULL,
   `bronze_medals` int(4) NOT NULL,
@@ -48,7 +48,7 @@ CREATE TABLE `athletes` (
 -- Dumping data for table `athletes`
 --
 
-INSERT INTO `athletes` (`athlete_id`, `athlete_name`, `country_id`, `gender`, `sport`, `date_of_birth`, `height`, `weight`, `ethnicity`, `is_paralymic`, `gold_medals`, `silver_medals`, `bronze_medals`, `total_medals`) VALUES
+INSERT INTO `athletes` (`athlete_id`, `athlete_name`, `country_id`, `gender`, `sport`, `date_of_birth`, `height`, `weight`, `ethnicity`, `is_paralympic`, `gold_medals`, `silver_medals`, `bronze_medals`, `total_medals`) VALUES
 (41, 'ALEKSANYAN Artur', 86, 'Male', 'Wrestling', '1991-10-21', 0, 0, 'Armenian', 0, 0, 0, 0, 0),
 (42, 'AMOYAN Malkhas', 86, 'Male', 'Wrestling', '1999-01-22', 0, 0, 'Armenian', 0, 0, 0, 0, 0),
 (43, 'GALSTYAN Slavik', 86, 'Male', 'Wrestling', '1996-12-21', 0, 0, 'Armenian', 0, 0, 0, 0, 0),
@@ -380,8 +380,8 @@ CREATE TABLE `venues` (
   `capacity` varchar(128) NOT NULL,
   `type` varchar(64) NOT NULL,
   `date_constructed` date NOT NULL,
-  `historical_significance` text NOT NULL,
-  `parking_facilities` text NOT NULL
+  `historical_significance` text DEFAULT NULL,
+  `parking_facilities` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --

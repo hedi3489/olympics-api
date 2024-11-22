@@ -67,4 +67,15 @@ class AthleteModel extends BaseModel
         );
         return $athlete;
     }
+
+    /**
+     * Inserts a new athlete into the database.
+     * @param array $new_athlete | The athlete object to create.
+     * @return mixed The last inserted id.
+     */
+    public function insertAthlete(array $new_athlete): mixed
+    {
+        $this->insert($this->table_name, $new_athlete);
+        return $this->lastInsertId();
+    }
 }
