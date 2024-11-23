@@ -8,7 +8,8 @@ class CoachModel extends BaseModel
 {
     private string $table_name = "coaches";
 
-    public function __construct(PDOService $pdo) {
+    public function __construct(PDOService $pdo)
+    {
         parent::__construct($pdo);
     }
 
@@ -17,7 +18,8 @@ class CoachModel extends BaseModel
      * @param array $req_params - The parameters from the request.
      * @return array - The resulting array of coaches.
      */
-    public function getCoaches(array $req_params): array {
+    public function getCoaches(array $req_params): array
+    {
         $coaches = [];
         $query_args = [];
         $sql = "SELECT * FROM coaches WHERE 1";
@@ -64,5 +66,16 @@ class CoachModel extends BaseModel
             ["coach_id" => $coach_id]
         );
         return $coach;
+    }
+
+    /**
+     * Inserts a new coach into the database.
+     * @param array $new_coach | The coach object to create.
+     * @return mixed The last inserted id.
+     */
+    public function insertCoach(array $new_coach): mixed
+    {
+        $this->insert($this->table_name, $new_coach);
+        return $this->lastInsertId();
     }
 }

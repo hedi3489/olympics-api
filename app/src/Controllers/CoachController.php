@@ -2,7 +2,9 @@
 
 namespace App\Controllers;
 
+use App\Exceptions\HttpNoDataProvidedException;
 use App\Models\CoachModel;
+use App\Services\CoachesService;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -10,9 +12,10 @@ use Slim\Exception\HttpNotFoundException;
 
 class CoachController extends BaseController
 {
-    public function __construct(private CoachModel $coach_model) {}
+    public function __construct(private CoachModel $coach_model, private CoachesService $coaches_service) {}
 
-    public function handleGetCoaches(Request $request, Response $response): Response {
+    public function handleGetCoaches(Request $request, Response $response): Response
+    {
         //* Retrieve the set of parameters.
         $req_params = $request->getQueryParams();
 
@@ -34,7 +37,8 @@ class CoachController extends BaseController
         }
     }
 
-    public function handleGetCoachById(Request $request, Response $response, array $uri_args): Response {
+    public function handleGetCoachById(Request $request, Response $response, array $uri_args): Response
+    {
         $coach_id = $uri_args["coach_id"];
         // Make sure coach_id is provided.
         if (!isset($coach_id)) {
@@ -57,5 +61,34 @@ class CoachController extends BaseController
             );
         }
         return $this->renderJson($response, $coach);
+    }
+
+    public function handleCreateCoach(Request $request, Response $response): Response
+    {
+        // Retrieve data of the new resource to be created from the request body
+        $data = $request->getParsedBody();
+
+        if (isset($data) && !empty($data)) {
+            //Create athlete using athletes service
+            $result = $this->coaches_service->CreateCoach($request, $data);
+            $payload = [];
+            //TODO Could implement the STATUS_CODE constants interface
+            if ($result->isSuccess()) {
+                //Prepare a successful response
+                $payload["success"] = true;
+                $payload["status"] = 201;
+                $payload["data"] = $result->getData();
+            } else {
+                //Prepare a failed response
+                $payload["success"] = false;
+                $payload["status"] = 400;
+                $payload["errors"] = $result->getErrors();
+            }
+        } else {
+            //! If no data was provided, throw an error
+            throw new HttpNoDataProvidedException($request);
+        }
+
+        return $this->renderJson($response, $payload, $payload["status"]);
     }
 }

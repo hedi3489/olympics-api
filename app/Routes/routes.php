@@ -33,8 +33,9 @@ return static function (Slim\App $app): void {
 
 
     //* Routes for coaches resource
-    $app->get( '/coaches', [CoachController::class, 'handleGetCoaches']);
+    $app->get('/coaches', [CoachController::class, 'handleGetCoaches']);
     $app->get('/coaches/{coach_id}', [CoachController::class, 'handleGetCoachById']);
+    $app->post('/coaches', [CoachController::class, 'handleCreateCoach']);
 
 
     //* Routes for venues resource
@@ -56,11 +57,11 @@ return static function (Slim\App $app): void {
 
 
     //* Routes for results resource
-    $app->get( '/results', [ResultController::class, 'handleGetResults']);
+    $app->get('/results', [ResultController::class, 'handleGetResults']);
 
 
     //* Routes for countries resource
-    $app->get( '/countries', callable: [CountryController::class, 'handleGetCountries']);
+    $app->get('/countries', callable: [CountryController::class, 'handleGetCountries']);
 
     //* ROUTE: GET /ping
     $app->get('/ping', function (Request $request, Response $response, $args) {
@@ -75,5 +76,4 @@ return static function (Slim\App $app): void {
 
     //* ROUTE: GET /log
     $app->get('/log', [VenueController::class, 'handleLog']);
-
 };

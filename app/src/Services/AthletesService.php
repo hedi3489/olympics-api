@@ -78,7 +78,7 @@ class AthletesService
         $v->rule('min', 'height', 1)->message("The height $neg_num_error");
         $v->rule('min', 'weight', 1)->message("The weight $neg_num_error");
         $v->rule('regex', 'ethnicity', '/^[a-zA-Z ]{1,60}$/')->message("The ethnicity $rgx_error2");
-        $v->rule('boolean', 'is_paralympic')->message("The value determining if a player is a paralympian must be a boolean.");
+        $v->rule('in', 'is_paralympic', [0, 1])->message("The value determining if a player is a paralympian must be 0 or 1.");
         $v->rule('numeric', 'gold_medals')->message("The gold medals amount $not_num_error");
         $v->rule('numeric', 'silver_medals')->message("The silver medals amount $not_num_error");
         $v->rule('numeric', 'bronze_medals')->message("The bronze medals amount $not_num_error");

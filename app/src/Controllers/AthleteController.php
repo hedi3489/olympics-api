@@ -21,7 +21,8 @@ class AthleteController extends BaseController
      * @throws \Slim\Exception\HttpNotFoundException - The error thrown upon bad input.
      * @return \Psr\Http\Message\ResponseInterface - The resulting formatted and paginated JSON object.
      */
-    public function handleGetAthletes(Request $request, Response $response): Response {
+    public function handleGetAthletes(Request $request, Response $response): Response
+    {
         //* Retrieve the set of parameters.
         $req_params = $request->getQueryParams();
 
@@ -51,7 +52,8 @@ class AthleteController extends BaseController
      * @throws \Slim\Exception\HttpNotFoundException - The error thrown upon record not found in database.
      * @return \Psr\Http\Message\ResponseInterface - The resulting formatted and JSON object.
      */
-    public function handleGetAthleteById(Request $request, Response $response, array $uri_args): Response {
+    public function handleGetAthleteById(Request $request, Response $response, array $uri_args): Response
+    {
         $athlete_id = $uri_args["athlete_id"];
         // Make sure athlete_id is provided.
         if (!isset($athlete_id)) {
@@ -82,7 +84,8 @@ class AthleteController extends BaseController
      * @param \Psr\Http\Message\ResponseInterface $response | Response interface helper
      * @return \Psr\Http\Message\ResponseInterface The appropriate json object.
      */
-    public function handleCreateAthlete(Request $request, Response $response): Response {
+    public function handleCreateAthlete(Request $request, Response $response): Response
+    {
         // Retrieve data of the new resource to be created from the request body
         $data = $request->getParsedBody();
 
