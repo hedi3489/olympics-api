@@ -63,7 +63,7 @@ class VenuesService
             $this->venue_model->updateVenue($data, $where);
             //Return success Result with updated data
             return Result::success("Venue updated successfully.", [
-                'id' => $venue_id,
+                'id' => $where,
                 'venue_name' => $data['venue_name'],
                 'address' => $data['address'],
                 'capacity' => $data['capacity'],
@@ -92,18 +92,16 @@ class VenuesService
         $rgx_error2 = 'must be 300 characters or fewer and can only include letters, digits, spaces, commas, and periods.';
         $current_date = date('Y-m-d');
         $tomorrow = date('Y-m-d', strtotime('+1 day'));
-        $method = strtolower($request->getMethod());
+        // $method = strtolower($request->getMethod());
 
 
         $v = new \Valitron\Validator($data);
-        if ($method === 'post'){
-            $v->rule('required', ['venue_name', 'address', 'capacity', 'type', 'date_constructed']);
+        // if ($method === 'post'){
+        //     $v->rule('required', ['venue_name', 'address', 'capacity', 'type', 'date_constructed']);
 
-        } elseif ($method === 'put'){
-            $v->rule('required', ['venue_id', 'venue_name', 'address', 'capacity', 'type', 'date_constructed']);
-            $v->rule('min', 'venue_id', 1)->message('The venue id must be a numeric value between 1 and 99.');
-            $v->rule('max', 'venue_id', 99)->message('The venue id must be a numeric value between 1 and 99.');
-        }
+        // } elseif ($method === 'put'){
+        //     $v->rule('required', ['venue_name', 'address', 'capacity', 'type', 'date_constructed']);
+        // }
 
         $v->rule('regex', 'venue_name', '/^[a-zA-Z0-9 ]{1,30}$/')->message("Venue name $rgx_error1");
         $v->rule('regex', 'address', '/^[a-zA-Z0-9 ]{1,30}$/')->message("Venue address $rgx_error1");

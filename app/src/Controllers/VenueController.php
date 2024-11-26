@@ -128,7 +128,7 @@ class VenueController extends BaseController
             $payload["success"] = true;
         } else {
             $status_code = 400;
-            $payload["success"] = true;
+            $payload["success"] = false;
         }
         $payload["message"] = $result->getMessage();
         $payload["getData"] = $result->getData();
