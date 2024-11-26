@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Exceptions\HttpNoDataProvidedException;
 use App\Models\VenueModel;
 use App\Services\VenuesService;
 use Fig\Http\Message\StatusCodeInterface;
@@ -93,6 +94,9 @@ class VenueController extends BaseController
     {
         // Retrieve data of the new resource created from the request body
         $data = $request->getParsedBody();
+        if(!isset($data) || empty($data)){
+            throw new HttpNoDataProvidedException($request);
+        }
 
         // Create venue using venues service
         $result = $this->venues_service->CreateVenue($request, $data);

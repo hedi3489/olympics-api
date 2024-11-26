@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Exceptions\HttpNoDataProvidedException;
 use App\Models\EventModel;
 use App\Services\EventsService;
 use App\Validation\ValidationHelper;
@@ -102,6 +103,9 @@ class EventController extends BaseController
     {
         // Retrieve data of the new resource created from the request body
         $data = $request->getParsedBody();
+        if(!isset($data) || empty($data)){
+            throw new HttpNoDataProvidedException($request);
+        }
 
         // Create venue using venues service
         $result = $this->events_service->CreateEvent($request, $data);
