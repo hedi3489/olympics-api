@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Core\PDOService;
+use PDO;
 
 class AthleteModel extends BaseModel
 {
@@ -53,19 +54,13 @@ class AthleteModel extends BaseModel
         return $athletes;
     }
 
-    /**
-     * Get a single athlete record by their id in the database.
-     * @param int $athlete_id - Id of the athlete requested.
-     * @return mixed - The resulting populated athlete record.
-     */
-    public function getAthleteById(int $athlete_id): mixed
+    public function getAthleteById(int $athlete_id): array
     {
         $sql = "SELECT * FROM $this->table_name WHERE athlete_id = :athlete_id";
-        $athlete = $this->fetchSingle(
-            $sql,
-            ["athlete_id" => $athlete_id]
-        );
-        return $athlete;
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['athlete_id' => $athlete_id]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result;
     }
 
     /**
