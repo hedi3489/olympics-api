@@ -129,3 +129,156 @@ Either parameter can be used independently.
   "sport": "Landlord"
 }
 ```
+
+
+## Examples of correct URIs/Inputs for /venues
+
+### GET Operations
+
+/venues  
+/venues/{venue_id}
+
+#### Pagination
+
+- int ```current_page``` (default 1)
+- int ```page_size``` (default 15)
+
+Either parameter can be used independently.
+
+/venues?current_page=3&page_size=9
+
+#### Filtering
+
+- string ```venue_name``` (default filtering)
+- int ```min_capacity```
+- int ```max_capacity```
+- date ```min_date_constructed```
+- date ```max_date_constructed```
+
+Either parameter can be used independently.
+
+*`NOTE: Some combinations may not yield any results.`*
+
+/venues?sort_by=address&max_date_constructed=1900-01-01
+
+#### Sorting
+
+- string ```venue_name``` (default)
+- string ```location```
+- string ```address```
+- string ```type```
+- int ```capacity```
+- Date ```date_constructed```
+
+- string ```order_by``` (default `asc`)
+
+/athletes?sort_by=athlete_name&order_by=asc (default)  
+/venues?sort_by=capacity&order_by=desc 
+/venues?order_by=desc&type=multiuse&min_capacity=80000
+/venues?sort_by=address&max_date_constructed=2010-01-01
+/venues?sort_by=address&max_date_constructed=1900-01-01&page_size=3
+/venues?order_by=desc&min_date_constructed=2000-01-01&min_capacity=50000
+
+## POST /venues
+
+```json
+{
+  "venue_name": "Thriller Bark",
+  "address": "Bermuda",
+  "capacity": "20000",
+  "type": "Stinky",
+  "date_constructed": "2024-11-12",
+  "historical_significance": "home to countless zombies.",
+  "parking_facilities": "no parking facilities."
+}
+```
+
+## PUT /venues/13
+
+```json
+{
+  "venue_name": "Undead Burg",
+  "address": "Lordran",
+  "capacity": "6363",
+  "type": "Super Stinky",
+  "date_constructed": "1800-10-20",
+  "historical_significance": "home to countless undead.",
+  "parking_facilities": "Check the sewers. Beware of rats."
+}
+```
+
+## Examples of correct URIs/Inputs for /events
+
+### GET Operations
+
+/events
+/events/{event_id}
+
+#### Pagination
+
+- int ```current_page``` (default 1)
+- int ```page_size``` (default 15)
+
+Either parameter can be used independently.
+
+/venues?current_page=3&page_size=9
+
+#### Filtering
+
+- string ```venue_name``` (default filtering)
+- int ```min_capacity```
+- int ```max_capacity```
+- date ```min_date_constructed```
+- date ```max_date_constructed```
+
+Either parameter can be used independently.
+
+*`NOTE: Some combinations may not yield any results.`*
+
+/venues?sort_by=address&max_date_constructed=1900-01-01
+
+#### Sorting
+
+- string ```venue_name``` (default)
+- string ```location```
+- string ```address```
+- string ```type```
+- int ```capacity```
+- Date ```date_constructed```
+
+- string ```order_by``` (default `asc`)
+
+/athletes?sort_by=athlete_name&order_by=asc (default)  
+/venues?sort_by=capacity&order_by=desc 
+/venues?order_by=desc&type=multiuse&min_capacity=80000
+/venues?sort_by=address&max_date_constructed=2010-01-01
+/venues?sort_by=address&max_date_constructed=1900-01-01&page_size=3
+/venues?order_by=desc&min_date_constructed=2000-01-01&min_capacity=50000
+
+## POST /venues
+
+```json
+{
+  "event_name": "2v2 Rocket League",
+  "event_sport": 5,
+  "start_date": "2024-07-25",
+  "end_date": "2024-08-09",
+  "number_of_participants": 4,
+  "is_paralympic": 1,
+  "venue_id": 5
+}
+```
+
+## PUT /venues/13
+
+```json
+{
+  "event_name": "3x3 Basketball",
+  "event_sport": 5,
+  "start_date": "2024-07-25",
+  "end_date": "2024-08-09",
+  "number_of_participants": 24,
+  "is_paralympic": 0,
+  "venue_id": 3
+}
+```
