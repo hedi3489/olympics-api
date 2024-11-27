@@ -13,7 +13,7 @@ class CoachesService
     /**
      * Creates new coach to insert into the database.
      * @param $request - the http request object for exception handling.
-     * @param $data - the properties for creating an athlete object.
+     * @param $data - the properties for creating a coach object.
      * @return Result - The result of the operation (success/fail).
      */
     public function CreateCoach($request, $data): Result
@@ -38,14 +38,14 @@ class CoachesService
             ]);
         } catch (\PDOException $e) {
             // Handle any database errors and return a fail Result
-            return Result::fail("Database error: Unable to create athlete.");
+            return Result::fail("Database error: Unable to create coach.");
         }
     }
 
     /**
      * Method to write the validation rules since validation will be done in multiple functions.
      * @param $request | used to retrieve the http method for dynamic validation rules.
-     * @param array $data | The athlete that will be validated.
+     * @param array $data | The coach that will be validated.
      * @return \Valitron\Validator returns a Valitron object.
      */
     private function executeValitron($request, array $data): void
