@@ -42,7 +42,7 @@ class AthleteModel extends BaseModel
             $query_args["ethnicity"] = $req_params["ethnicity"];
         }
 
-        //* Sorting - valid fields: athlete_name | date_of_birth
+        //* Sorting - valid fields: athlete_name | date_of_birth -> IS OK FOR OTHER SORTING OR NO? Cause rn it just inputs it so it can be more than those. Does sorting need to have a double check?
         $sort_by = $req_params["sort_by"] ?? "athlete_name";
         $order_by = $req_params["order_by"] ?? "asc";
 

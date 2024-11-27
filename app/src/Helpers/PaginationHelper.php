@@ -43,7 +43,7 @@ class PaginationHelper
      * @param int $page_size   the number of records to fit in one page.
      * @param int $total_count the total number of records in a result set to be paginated.
      */
-    public function __construct(int $page_number = 1, int $page_size = 10, int $total_count = 0)
+    public function __construct(int $page_number = 1, int $page_size = 15, int $total_count = 0)
     {
         $this->current_page = $page_number;
         $this->records_per_page = $page_size;
