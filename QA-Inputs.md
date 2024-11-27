@@ -225,11 +225,10 @@ Either parameter can be used independently.
 
 #### Filtering
 
-- string ```venue_name``` (default filtering)
-- int ```min_capacity```
-- int ```max_capacity```
-- date ```min_date_constructed```
-- date ```max_date_constructed```
+- string ```event_name``` (default filtering)
+- int ```is_paralympic```
+- Date ```min_participants```
+- Date ```max_participants```
 
 Either parameter can be used independently.
 
@@ -239,7 +238,10 @@ Either parameter can be used independently.
 
 #### Sorting
 
-- string ```venue_name``` (default)
+'event_name', 'event_sport', 'start_date', 'end_date', 'number_of_participants', 'is_paralympic'
+
+- string ```event_name``` (default)
+- int ```event_sport```
 - string ```location```
 - string ```address```
 - string ```type```
@@ -269,16 +271,16 @@ Either parameter can be used independently.
 }
 ```
 
-## PUT /venues/13
+## PUT /events/8
 
 ```json
 {
-  "event_name": "3x3 Basketball",
-  "event_sport": 5,
+  "event_name": "Brawlhalla",
+  "event_sport": 4,
   "start_date": "2024-07-25",
   "end_date": "2024-08-09",
-  "number_of_participants": 24,
-  "is_paralympic": 0,
-  "venue_id": 3
+  "number_of_participants": 4,
+  "is_paralympic": 1,
+  "venue_id": 1
 }
 ```
