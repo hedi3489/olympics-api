@@ -164,16 +164,14 @@ Either parameter can be used independently.
 #### Sorting
 
 - string ```venue_name``` (default)
-- string ```location```
 - string ```address```
 - string ```type```
 - int ```capacity```
 - Date ```date_constructed```
 
 - string ```order_by``` (default `asc`)
-
-/athletes?sort_by=athlete_name&order_by=asc (default)  
-/venues?sort_by=capacity&order_by=desc 
+ 
+/venues?sort_by=capacity&order_by=desc
 /venues?order_by=desc&type=multiuse&min_capacity=80000
 /venues?sort_by=address&max_date_constructed=2010-01-01
 /venues?sort_by=address&max_date_constructed=1900-01-01&page_size=3
@@ -234,7 +232,7 @@ Either parameter can be used independently.
 
 *`NOTE: Some combinations may not yield any results.`*
 
-/venues?sort_by=address&max_date_constructed=1900-01-01
+/events?sort_by=address&max_date_constructed=1900-01-01
 
 #### Sorting
 
@@ -242,22 +240,18 @@ Either parameter can be used independently.
 
 - string ```event_name``` (default)
 - int ```event_sport```
-- string ```location```
-- string ```address```
-- string ```type```
-- int ```capacity```
-- Date ```date_constructed```
+- int ```number_of_participants```
+- int ```is_paralympic```
+- Date ```start_date```
+- Date ```end_date```
 
 - string ```order_by``` (default `asc`)
 
-/athletes?sort_by=athlete_name&order_by=asc (default)  
-/venues?sort_by=capacity&order_by=desc 
-/venues?order_by=desc&type=multiuse&min_capacity=80000
-/venues?sort_by=address&max_date_constructed=2010-01-01
-/venues?sort_by=address&max_date_constructed=1900-01-01&page_size=3
-/venues?order_by=desc&min_date_constructed=2000-01-01&min_capacity=50000
+/events?order_by=asc&event_name=Event
+/events?order_by=asc&page_size=5&is_paralympic=1
+/events?order_by=asc&page_size=5&is_paralympic=0&sort-by=number_of_participants
 
-## POST /venues
+## POST /events
 
 ```json
 {
