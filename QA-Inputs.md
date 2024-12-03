@@ -64,10 +64,10 @@ Either parameter can be used independently.
 ```json
 {
   "athlete_name": "MR BEAAAAST",
-  "country_id": 1,
+  "country_id": 85,
   "gender": "Male",
   "sport": "Homeless",
-  "date_of_birth": "2010-12-31",
+  "date_of_birth": "2020-12-31",
   "height": 10,
   "weight": 2,
   "ethnicity": "Beast",

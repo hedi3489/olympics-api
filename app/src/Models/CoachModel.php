@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use App\Core\PDOService;
+use App\Exceptions\HttpBadFilterException;
+use App\Validation\ValidationHelper;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 class CoachModel extends BaseModel
 {
@@ -18,7 +21,7 @@ class CoachModel extends BaseModel
      * @param array $req_params - The parameters from the request.
      * @return array - The resulting array of coaches.
      */
-    public function getCoaches(array $req_params): array
+    public function getCoaches(array $req_params, Request $request): array
     {
         $coaches = [];
         $query_args = [];
@@ -26,12 +29,24 @@ class CoachModel extends BaseModel
 
         //* Filtering by gender
         if (isset($req_params["gender"])) {
-            $sql .= " AND gender = :gender";
-            $query_args["gender"] = $req_params["gender"];
+            //* We want to throw a custom bad filter extension if not alphabetic
+            if (ValidationHelper::isAlpha($req_params["gender"])) {
+                $sql .= " AND gender = :gender";
+                $query_args["gender"] = $req_params["gender"];
+            } else {
+                throw new HttpBadFilterException($request);
+            }
         }
 
         //* Filtering by sport
         if (isset($req_params["sport"])) {
+            //* We want to throw a custom bad filter extension if not alphabetic or space
+            if (ValidationHelper::isNameValid($request, $req_params["sport"], "coach sport")) {
+                $sql .= " AND sport = :sport";
+                $query_args["sport"] = $req_params["sport"];
+            } else {
+                throw new HttpBadFilterException($request);
+            }
             $sql .= " AND sport = :sport";
             $query_args["sport"] = $req_params["sport"];
         }

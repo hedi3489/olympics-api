@@ -16,7 +16,7 @@ class AthletesService
      * @param $data - the properties for creating an athlete object.
      * @return Result - The result of the operation (success/fail).
      */
-    public function CreateAthlete($request, $data) : Result
+    public function CreateAthlete($request, $data): Result
     {
         //* Validate through Valitron
         // Calling custom function for dynamic Valitron validation
@@ -44,10 +44,9 @@ class AthletesService
                 'bronze_medals' => $data['bronze_medals'],
                 'total_medals' => $data['total_medals']
             ]);
-
         } catch (\PDOException $e) {
             // Handle any database errors and return a fail Result
-            return Result::fail("Database error: Unable to create athlete.");
+            return Result::fail("Database error: Unable to create athlete. Make sure all fields exist and that foreign keys exist in referenced tables.");
         }
     }
 
@@ -66,7 +65,7 @@ class AthletesService
         $method = strtolower($request->getMethod());
 
         $v = new \Valitron\Validator($data);
-        if ($method === 'post'){
+        if ($method === 'post') {
             $v->rule('required', ['athlete_name', 'country_id', 'gender', 'sport', 'height', 'weight', 'ethnicity', 'is_paralympic', 'gold_medals', 'silver_medals', 'bronze_medals', 'total_medals']);
         }
 
@@ -84,7 +83,7 @@ class AthletesService
         $v->rule('numeric', 'bronze_medals')->message("The bronze medals amount $not_num_error");
         $v->rule('numeric', 'total_medals')->message("The total medals amount $not_num_error");
 
-        if(!$v->validate()){
+        if (!$v->validate()) {
             $errors = json_encode($v->errors());
             throw new HttpBadRequestException(
                 $request,
