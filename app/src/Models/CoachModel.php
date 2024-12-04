@@ -53,8 +53,14 @@ class CoachModel extends BaseModel
 
         //* Filter by been_in_olympics
         if (isset($req_params["been_in_olympics"])) {
-            $sql .= " AND been_in_olympics = :been_in_olympics";
-            $query_args["been_in_olympics"] = $req_params["been_in_olympics"];
+            //* We want to throw a custom bad filter extension if not 0 or 1
+            //TODO This currently breaks if 0
+            if (ValidationHelper::isIntAndInRange($req_params["been_in_olympics"], 0, 1)) {
+                $sql .= " AND been_in_olympics = :been_in_olympics";
+                $query_args["been_in_olympics"] = $req_params["been_in_olympics"];
+            } else {
+                throw new HttpBadFilterException($request);
+            }
         }
 
         //* Sorting - valid fields: coach_name | date_of_birth
