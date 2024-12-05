@@ -20,7 +20,7 @@ abstract class BaseModel
     /**
      * holds a handle to a database connection.
      */
-    private ?PDO $db = null;
+    public ?PDO $db = null;
 
     /**
      * The index of the current page.
