@@ -58,6 +58,9 @@ return static function (Slim\App $app): void {
 
     //* Routes for results resource
     $app->get('/results', [ResultController::class, 'handleGetResults']);
+    $app->get('/results/{result_id}', [ResultController::class, 'handleGetResultById']);
+    $app->post('/results', [ResultController::class, 'handleCreateResult']);
+    $app->patch('/results/{result_id}', [ResultController::class, 'handleUpdateResult']);
 
 
     //* Routes for countries resource

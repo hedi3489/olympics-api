@@ -38,8 +38,8 @@ class CustomErrorHandler extends ErrorHandler
             'code' => $statusCode,
             'type' => $this->getClassName($exception),
             'message' => $exception->getMessage(),
-            'title' => $exception->getTitle(),
-            'description' => $exception->getDescription()
+            //'title' => $exception->getTitle(),
+            //'description' => $exception->getDescription()
 
         ];
 
