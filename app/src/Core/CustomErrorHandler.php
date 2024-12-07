@@ -4,6 +4,7 @@ namespace App\Core;
 
 use Psr\Http\Message\ResponseInterface;
 use Slim\Exception\HttpException;
+use Slim\Exception\HttpSpecializedException;
 use Slim\Handlers\ErrorHandler;
 use Throwable;
 
@@ -25,12 +26,18 @@ class CustomErrorHandler extends ErrorHandler
     {
         $statusCode = 400;
         $exception = $this->exception;
-
+        $title = "";
+        $description = "";
         // Customize response, e.g., returning JSON format for API
         $statusCode = $exception instanceof HttpException ? $exception->getCode() : 500;
         if ($exception instanceof HttpException) {
             $this->logErrorDetails();
         }
+        if ($exception instanceof HttpSpecializedException) {
+            $title = $exception->getTitle();
+            $description = $exception->getDescription();
+        }
+
 
         // Create structured response payload.
         $data = [
@@ -38,8 +45,8 @@ class CustomErrorHandler extends ErrorHandler
             'code' => $statusCode,
             'type' => $this->getClassName($exception),
             'message' => $exception->getMessage(),
-            'title' => $exception->getTitle(),
-            'description' => $exception->getDescription()
+            'title' => $title,
+            'description' => $description
 
         ];
 
