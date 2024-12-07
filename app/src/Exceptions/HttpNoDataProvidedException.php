@@ -2,9 +2,7 @@
 
 namespace App\Exceptions;
 
-use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpSpecializedException;
-use Throwable;
 
 class HttpNoDataProvidedException extends HttpSpecializedException
 {

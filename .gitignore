@@ -67,3 +67,5 @@ $RECYCLE.BIN/
 
 app/src/Controllers/TestController.php
 app/src/Models/TestModel.php
+
+temp_notes.txt

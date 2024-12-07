@@ -32,7 +32,7 @@ class CoachesService
                 'coach_id' => $last_inserted_id,
                 'coach_name' => $data['coach_name'],
                 'gender' => $data['gender'],
-                'date_of_birth' => $data['date_of_birth'],
+                'date_of_birth' => $data['date_of_birth'] ?? null, // nullable because not always available
                 'been_in_olympics' => $data['been_in_olympics'],
                 'sport' => $data['sport'],
             ]);
@@ -60,6 +60,7 @@ class CoachesService
 
         $v->rule('regex', 'coach_name', '/^[a-zA-Z ]{1,30}$/')->message("Coach name $rgx_error1");
         $v->rule('in', 'gender', ['Male', 'Female'])->message("The gender must be Male or Female.");
+        //TODO Currently if date is invalid it still inserts but with all 0s
         $v->rule('date', 'date_of_birth')->message("The date of birth must be in a valid date format.");
         $v->rule('in', 'been_in_olympics', [0, 1])->message("The value determining if a coach is an olympian must be 0 or 1.");
         $v->rule('regex', 'sport', '/^[a-zA-Z ]{1,30}$/')->message("The sport $rgx_error1");

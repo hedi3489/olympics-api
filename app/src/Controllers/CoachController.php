@@ -25,7 +25,7 @@ class CoachController extends BaseController
         $this->coach_model->setPaginationOptions($current_page, $page_size);
 
         //* Call to the model to get records with params
-        $coaches = $this->coach_model->getCoaches($req_params);
+        $coaches = $this->coach_model->getCoaches($req_params, $request);
 
         if (empty($coaches["data"])) {
             throw new HttpNotFoundException(

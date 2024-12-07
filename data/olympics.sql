@@ -20,13 +20,16 @@ SET time_zone = "+00:00";
 --
 -- Database: `olympics-api`
 --
+DROP DATABASE IF EXISTS `olympics-api`;
+CREATE DATABASE `olympics-api` DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+USE `olympics-api`;
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `athletes`
 --
-
+DROP TABLE IF EXISTS `athletes`;
 CREATE TABLE `athletes` (
   `athlete_id` int(11) NOT NULL,
   `athlete_name` varchar(64) NOT NULL,
@@ -110,7 +113,7 @@ INSERT INTO `athletes` (`athlete_id`, `athlete_name`, `country_id`, `gender`, `s
 --
 -- Table structure for table `athletes_coaches`
 --
-
+DROP TABLE IF EXISTS `athletes_coaches`;
 CREATE TABLE `athletes_coaches` (
   `athlete_id` int(11) NOT NULL,
   `coach_id` int(11) NOT NULL
@@ -138,7 +141,7 @@ INSERT INTO `athletes_coaches` (`athlete_id`, `coach_id`) VALUES
 --
 -- Table structure for table `coaches`
 --
-
+DROP TABLE IF EXISTS `coaches`;
 CREATE TABLE `coaches` (
   `coach_id` int(11) NOT NULL,
   `coach_name` varchar(64) NOT NULL,
@@ -184,7 +187,7 @@ INSERT INTO `coaches` (`coach_id`, `coach_name`, `gender`, `date_of_birth`, `bee
 --
 -- Table structure for table `countries`
 --
-
+DROP TABLE IF EXISTS `countries`;
 CREATE TABLE `countries` (
   `country_id` int(11) NOT NULL,
   `country_name` varchar(64) NOT NULL,
@@ -298,7 +301,7 @@ INSERT INTO `countries` (`country_id`, `country_name`, `country_code`, `gold_med
 --
 -- Table structure for table `events`
 --
-
+DROP TABLE IF EXISTS `events`;
 CREATE TABLE `events` (
   `event_id` int(11) NOT NULL,
   `event_name` varchar(128) NOT NULL,
@@ -349,7 +352,7 @@ INSERT INTO `events` (`event_id`, `event_name`, `event_sport`, `start_date`, `en
 --
 -- Table structure for table `results`
 --
-
+DROP TABLE IF EXISTS `results`;
 CREATE TABLE `results` (
   `athlete_id` int(11) NOT NULL,
   `event_id` int(11) NOT NULL,
@@ -372,7 +375,7 @@ INSERT INTO `results` (`athlete_id`, `event_id`, `ranking`, `result`, `record_se
 --
 -- Table structure for table `venues`
 --
-
+DROP TABLE IF EXISTS `venues`;
 CREATE TABLE `venues` (
   `venue_id` int(11) NOT NULL,
   `venue_name` varchar(128) NOT NULL,

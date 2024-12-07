@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use App\Core\PDOService;
+use App\Exceptions\HttpBadFilterException;
+use App\Validation\ValidationHelper;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 class AthleteModel extends BaseModel
 {
@@ -18,7 +21,7 @@ class AthleteModel extends BaseModel
      * @param array $req_params - The parameters from the request.
      * @return array - The resulting array of athletes.
      */
-    public function getAthletes(array $req_params): array
+    public function getAthletes(array $req_params, Request $request): array
     {
         $athletes = [];
         $query_args = [];
@@ -26,23 +29,38 @@ class AthleteModel extends BaseModel
 
         //* Filtering by country_id
         if (isset($req_params["country_id"])) {
-            $sql .= " AND country_id = :country_id";
-            $query_args["country_id"] = $req_params["country_id"];
+            //* We want to throw a custom bad filter extension if not numeric
+            if (ValidationHelper::isInt($req_params["country_id"])) {
+                $sql .= " AND country_id = :country_id";
+                $query_args["country_id"] = $req_params["country_id"];
+            } else {
+                throw new HttpBadFilterException($request);
+            }
         }
 
         //* Filtering by gender
         if (isset($req_params["gender"])) {
-            $sql .= " AND gender = :gender";
-            $query_args["gender"] = $req_params["gender"];
+            //* We want to throw a custom bad filter extension if not alphabetic
+            if (ValidationHelper::isAlpha($req_params["gender"])) {
+                $sql .= " AND gender = :gender";
+                $query_args["gender"] = $req_params["gender"];
+            } else {
+                throw new HttpBadFilterException($request);
+            }
         }
 
         //* Filtering by ethnicity
         if (isset($req_params["ethnicity"])) {
-            $sql .= " AND ethnicity = :ethnicity";
-            $query_args["ethnicity"] = $req_params["ethnicity"];
+            //* We want to throw a custom bad filter extension if not alphabetic
+            if (ValidationHelper::isAlpha($req_params["ethnicity"])) {
+                $sql .= " AND ethnicity = :ethnicity";
+                $query_args["ethnicity"] = $req_params["ethnicity"];
+            } else {
+                throw new HttpBadFilterException($request);
+            }
         }
 
-        //* Sorting - valid fields: athlete_name | date_of_birth -> IS OK FOR OTHER SORTING OR NO? Cause rn it just inputs it so it can be more than those. Does sorting need to have a double check?
+        //* Sorting - valid fields: athlete_name | date_of_birth | others as well...
         $sort_by = $req_params["sort_by"] ?? "athlete_name";
         $order_by = $req_params["order_by"] ?? "asc";
 

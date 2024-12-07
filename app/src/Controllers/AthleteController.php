@@ -32,7 +32,8 @@ class AthleteController extends BaseController
         $this->athlete_model->setPaginationOptions($current_page, $page_size);
 
         //* Call to the model to get records with params
-        $athletes = $this->athlete_model->getAthletes($req_params);
+        //! PROBABLY BAD PRACTICE SECURITY WISE. Will have to do tough because limited time.
+        $athletes = $this->athlete_model->getAthletes($req_params, $request);
 
         if (empty($athletes["data"])) {
             throw new HttpNotFoundException(
