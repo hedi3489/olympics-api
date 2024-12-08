@@ -141,7 +141,11 @@ class VenueController extends BaseController
     public function handleDeleteVenue(Request $request, Response $response, array $uri_args) : Response
     {
         $venue_id = $uri_args["venue_id"];
-        $data = $request->getParsedBody();
+        echo "$venue_id passing...";
+
+        $data = ['venue_id' => $uri_args["venue_id"]];
+        // dd($data);
+
         $result = $this->venues_service->DeleteVenue($venue_id);
 
         $status_code = 204;

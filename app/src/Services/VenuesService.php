@@ -82,12 +82,14 @@ class VenuesService
 
     // TODO: implement delete operation
     public function DeleteVenue($venue_id) : Result {
+
         if($venue_id){
             $data = ['venue_id' => $venue_id];
             $this->venue_model->deleteVenue($data);
             return Result::success("Venue $venue_id Successfully deleted", $data);
         }else{
             //! Throw exception
+            echo "Exception!!";
         }
     }
 
@@ -99,30 +101,34 @@ class VenuesService
      */
     private function executeValitron($request, array $data): void
     {
+        // Preparing variables for validation
         $rgx_error1 = 'must be 30 characters or fewer and can only include letters, digits, and spaces.';
         $rgx_error2 = 'must be 300 characters or fewer and can only include letters, digits, spaces, commas, and periods.';
         $current_date = date('Y-m-d');
         $tomorrow = date('Y-m-d', strtotime('+1 day'));
-        // $method = strtolower($request->getMethod());
+        $method = strtolower($request->getMethod());
 
 
         $v = new \Valitron\Validator($data);
-        // if ($method === 'post'){
-        //     $v->rule('required', ['venue_name', 'address', 'capacity', 'type', 'date_constructed']);
+        if ($method === 'post'){
+            $v->rule('required', ['venue_name', 'address', 'capacity', 'type', 'date_constructed']);
 
-        // } elseif ($method === 'put'){
-        //     $v->rule('required', ['venue_name', 'address', 'capacity', 'type', 'date_constructed']);
-        // }
+        } elseif ($method === 'put' || $method === 'delete'){
+            $v->rule('required', ['venue_id','venue_name', 'address', 'capacity', 'type', 'date_constructed']);
+            $v->rule('integer', 'venue_id');
 
-        $v->rule('regex', 'venue_name', '/^[a-zA-Z0-9 ]{1,30}$/')->message("Venue name $rgx_error1");
-        $v->rule('regex', 'address', '/^[a-zA-Z0-9 ]{1,30}$/')->message("Venue address $rgx_error1");
-        $v->rule('regex', 'type', '/^[a-zA-Z0-9 ]{1,30}$/')->message("Venue type $rgx_error1");
-        $v->rule('min', 'capacity', 1)->message('The minimum capacity cannot be less than 1.');
-        $v->rule('max', 'capacity', 100000)->message('The maximum capacity cannot be more than 100000.');
-        $v->rule('date', 'date_constructed')->message('The construction date format must be YYYY-MM-DD.');
-        $v->rule('dateBefore', 'date_constructed', $tomorrow)->message("The date of construction '{$data['date_constructed']}' cannot be after the current date '$current_date'.");
-        $v->rule('regex', 'historical_significance', '/^[a-zA-Z0-9., ]{1,300}$/')->message("The historical significance text $rgx_error2");
-        $v->rule('regex', 'parking_facilities', '/^[a-zA-Z0-9., ]{1,300}$/')->message("The parking facilities text $rgx_error2");
+        }
+        if ($method === 'post' || $method === 'put'){
+            $v->rule('regex', 'venue_name', '/^[a-zA-Z0-9 ]{1,30}$/')->message("Venue name $rgx_error1");
+            $v->rule('regex', 'address', '/^[a-zA-Z0-9 ]{1,30}$/')->message("Venue address $rgx_error1");
+            $v->rule('regex', 'type', '/^[a-zA-Z0-9 ]{1,30}$/')->message("Venue type $rgx_error1");
+            $v->rule('min', 'capacity', 1)->message('The minimum capacity cannot be less than 1.');
+            $v->rule('max', 'capacity', 100000)->message('The maximum capacity cannot be more than 100000.');
+            $v->rule('date', 'date_constructed')->message('The construction date format must be YYYY-MM-DD.');
+            $v->rule('dateBefore', 'date_constructed', $tomorrow)->message("The date of construction '{$data['date_constructed']}' cannot be after the current date '$current_date'.");
+            $v->rule('regex', 'historical_significance', '/^[a-zA-Z0-9., ]{1,300}$/')->message("The historical significance text $rgx_error2");
+            $v->rule('regex', 'parking_facilities', '/^[a-zA-Z0-9., ]{1,300}$/')->message("The parking facilities text $rgx_error2");
+        }
 
         if(!$v->validate()){
             $errors = json_encode($v->errors());
