@@ -93,8 +93,7 @@ class AthleteModel extends BaseModel
      */
     public function insertAthlete(array $new_athlete_data): mixed
     {
-        $this->insert($this->table_name, $new_athlete_data);
-        return $this->lastInsertId();
+        return $this->insert($this->table_name, $new_athlete_data);
     }
 
     public function updateAthlete(array $athlete_data, $athlete_id): mixed

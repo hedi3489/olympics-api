@@ -135,7 +135,7 @@ class AthleteController extends BaseController
             if ($result->isSuccess()) {
                 //Prepare a successful response
                 $payload["success"] = true;
-                $payload["status"] = 201;
+                $payload["status"] = 200;
                 $payload["data"] = $result->getData();
             } else {
                 //Prepare a failed response

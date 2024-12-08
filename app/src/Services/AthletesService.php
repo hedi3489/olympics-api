@@ -68,23 +68,24 @@ class AthletesService
         // If data is valid, update existing athlete from the database
         try {
             $this->athlete_model->updateAthlete($data, $athlete_id);
+            $previous_data = $this->athlete_model->getAthleteById($athlete_id['athlete_id']);
 
             // Return success Result with updated data
             return Result::success("Athlete updated successfully!", [
                 'athlete_id' => $athlete_id, // predefined since we're updating
-                'athlete_name' => $data['athlete_name'],
-                'country_id' => $data['country_id'],
-                'gender' => $data['gender'],
-                'sport' => $data['sport'],
-                'date_of_birth' => $data['date_of_birth'],
-                'height' => $data['height'],
-                'weight' => $data['weight'],
-                'ethnicity' => $data['ethnicity'],
-                'is_paralympic' => $data['is_paralympic'],
-                'gold_medals' => $data['gold_medals'],
-                'silver_medals' => $data['silver_medals'],
-                'bronze_medals' => $data['bronze_medals'],
-                'total_medals' => $data['total_medals']
+                'athlete_name' => $data['athlete_name'] ?? $previous_data['athlete_name'],
+                'country_id' => $data['country_id'] ?? $previous_data['country_id'],
+                'gender' => $data['gender'] ?? $previous_data['gender'],
+                'sport' => $data['sport'] ?? $previous_data['sport'],
+                'date_of_birth' => $data['date_of_birth'] ?? $previous_data['date_of_birth'],
+                'height' => $data['height'] ?? $previous_data['height'],
+                'weight' => $data['weight'] ?? $previous_data['weight'],
+                'ethnicity' => $data['ethnicity'] ?? $previous_data['ethnicity'],
+                'is_paralympic' => $data['is_paralympic'] ?? $previous_data['is_paralympic'],
+                'gold_medals' => $data['gold_medals'] ?? $previous_data['gold_medals'],
+                'silver_medals' => $data['silver_medals'] ?? $previous_data['silver_medals'],
+                'bronze_medals' => $data['bronze_medals'] ?? $previous_data['bronze_medals'],
+                'total_medals' => $data['total_medals'] ?? $previous_data['total_medals']
             ]);
         } catch (\PDOException $e) {
             // Handle any database errors and return a fail Result
@@ -107,9 +108,10 @@ class AthletesService
         $method = strtolower($request->getMethod());
 
         $v = new \Valitron\Validator($data);
-        // No requirements for put, since we check for no data in controller
         if ($method === 'post') {
             $v->rule('required', ['athlete_name', 'country_id', 'gender', 'sport', 'height', 'weight', 'ethnicity', 'is_paralympic', 'gold_medals', 'silver_medals', 'bronze_medals', 'total_medals']);
+        } elseif ($method === "put") {
+            $v->rule('optional', ['athlete_name', 'country_id', 'gender', 'sport', 'date_of_birth', 'height', 'weight', 'ethnicity', 'is_paralympic', 'gold_medals', 'silver_medals', 'bronze_medals', 'total_medals']);
         }
 
         $v->rule('regex', 'athlete_name', '/^[a-zA-Z ]{1,30}$/')->message("Athlete name $rgx_error1");
@@ -129,10 +131,10 @@ class AthletesService
         if (!$v->validate()) {
             //TODO: fix formatting with renderJson, probably in controller
             $errors = json_encode($v->errors());
-            // throw new HttpBadRequestException(
-            //     $request,
-            //     "Invalid data: $errors"
-            // );
+            throw new HttpBadRequestException(
+                $request,
+                "Invalid data: $errors"
+            );
         }
     }
 }
