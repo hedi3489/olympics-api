@@ -80,6 +80,17 @@ class VenuesService
 
     }
 
+    // TODO: implement delete operation
+    public function DeleteVenue($venue_id) : Result {
+        if($venue_id){
+            $data = ['venue_id' => $venue_id];
+            $this->venue_model->deleteVenue($data);
+            return Result::success("Venue $venue_id Successfully deleted", $data);
+        }else{
+            //! Throw exception
+        }
+    }
+
     /**
      * Method to write the validation rules since validation will be done in multiple functions.
      * @param $request : used to retrieve the http method for dynamic validation rules.

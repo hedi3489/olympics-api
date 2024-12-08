@@ -157,4 +157,8 @@ class VenueModel extends BaseModel
     public function updateVenue($data, $where) : void {
         $this->update($this->table_name, $data, $where);
     }
+    public function deleteVenue($data) : void {
+        $this->delete($this->table_name, $data);
+    }
+
 }
