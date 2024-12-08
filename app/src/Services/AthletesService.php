@@ -16,7 +16,7 @@ class AthletesService
      * @param $data - the properties for creating an athlete object.
      * @return Result - The result of the operation (success/fail).
      */
-    public function CreateAthlete($request, $data): Result
+    public function createAthlete($request, $data): Result
     {
         //* Validate through Valitron
         // Calling custom function for dynamic Valitron validation
@@ -34,6 +34,48 @@ class AthletesService
                 'country_id' => $data['country_id'],
                 'gender' => $data['gender'],
                 'sport' => $data['sport'],
+                'date_of_birth' => $data['date_of_birth'] ?? null, // nullable because not always available
+                'height' => $data['height'],
+                'weight' => $data['weight'],
+                'ethnicity' => $data['ethnicity'],
+                'is_paralympic' => $data['is_paralympic'],
+                'gold_medals' => $data['gold_medals'],
+                'silver_medals' => $data['silver_medals'],
+                'bronze_medals' => $data['bronze_medals'],
+                'total_medals' => $data['total_medals']
+            ]);
+        } catch (\PDOException $e) {
+            // Handle any database errors and return a fail Result
+            return Result::fail("Database error: Unable to create athlete. Make sure all fields exist and that foreign keys' values exist in referenced tables.");
+        }
+    }
+
+    /**
+     * Updates existing athlete information from the database.
+     * @param mixed $request - The http request object for exception handling.
+     * @param mixed $data - The properties for updating an athlete object.
+     * @param mixed $athlete_id - The id of the athlete to be updated.
+     * @return \App\Core\Result - The result of the operation (success/fail).
+     */
+    public function UpdateAthlete($request, $data, $athlete_id): Result
+    {
+        //* Validate through Valitron
+        // Calling custom function for dynamic Valitron validation
+        $this->executeValitron($request, $data);
+
+        $athlete_id = ["athlete_id" => $athlete_id];
+
+        // If data is valid, update existing athlete from the database
+        try {
+            $this->athlete_model->updateAthlete($data, $athlete_id);
+
+            // Return success Result with updated data
+            return Result::success("Athlete updated successfully!", [
+                'athlete_id' => $athlete_id, // predefined since we're updating
+                'athlete_name' => $data['athlete_name'],
+                'country_id' => $data['country_id'],
+                'gender' => $data['gender'],
+                'sport' => $data['sport'],
                 'date_of_birth' => $data['date_of_birth'],
                 'height' => $data['height'],
                 'weight' => $data['weight'],
@@ -46,7 +88,7 @@ class AthletesService
             ]);
         } catch (\PDOException $e) {
             // Handle any database errors and return a fail Result
-            return Result::fail("Database error: Unable to create athlete. Make sure all fields exist and that foreign keys exist in referenced tables.");
+            return Result::fail("Database error: Unable to update athlete. Make sure all specified fields exist and that foreign keys' values exist in referenced tables.");
         }
     }
 
@@ -65,6 +107,7 @@ class AthletesService
         $method = strtolower($request->getMethod());
 
         $v = new \Valitron\Validator($data);
+        // No requirements for put, since we check for no data in controller
         if ($method === 'post') {
             $v->rule('required', ['athlete_name', 'country_id', 'gender', 'sport', 'height', 'weight', 'ethnicity', 'is_paralympic', 'gold_medals', 'silver_medals', 'bronze_medals', 'total_medals']);
         }
@@ -84,11 +127,12 @@ class AthletesService
         $v->rule('numeric', 'total_medals')->message("The total medals amount $not_num_error");
 
         if (!$v->validate()) {
+            //TODO: fix formatting with renderJson, probably in controller
             $errors = json_encode($v->errors());
-            throw new HttpBadRequestException(
-                $request,
-                "Invalid data: $errors"
-            );
+            // throw new HttpBadRequestException(
+            //     $request,
+            //     "Invalid data: $errors"
+            // );
         }
     }
 }

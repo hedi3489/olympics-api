@@ -92,7 +92,44 @@ class AthleteController extends BaseController
 
         if (isset($data) && !empty($data)) {
             //Create athlete using athletes service
-            $result = $this->athletes_service->CreateAthlete($request, $data);
+            $result = $this->athletes_service->createAthlete($request, $data);
+            $payload = [];
+            //TODO Could implement the STATUS_CODE constants interface
+            if ($result->isSuccess()) {
+                //Prepare a successful response
+                $payload["success"] = true;
+                $payload["status"] = 201;
+                $payload["data"] = $result->getData();
+            } else {
+                //Prepare a failed response
+                $payload["success"] = false;
+                $payload["status"] = 400;
+                $payload["errors"] = $result->getErrors();
+            }
+        } else {
+            //! If no data was provided, throw an error
+            throw new HttpNoDataProvidedException($request);
+        }
+
+        return $this->renderJson($response, $payload, $payload["status"]);
+    }
+
+    /**
+     * Handles the update of an existing athlete.
+     * @param \Psr\Http\Message\ServerRequestInterface $request | The submitted athlete object.
+     * @param \Psr\Http\Message\ResponseInterface $response | Response interface helper
+     * @return \Psr\Http\Message\ResponseInterface The appropriate json object.
+     */
+    public function handleUpdateAthleteById(Request $request, Response $response, array $uri_args): Response
+    {
+        // Retrieve data of the resource to be updated from the uri
+        // and the information to be updated from the request body
+        $athlete_id = $uri_args["athlete_id"];
+        $data = $request->getParsedBody();
+
+        if (isset($data) && !empty($data)) {
+            //Update athlete using athletes service
+            $result = $this->athletes_service->updateAthlete($request, $data, $athlete_id);
             $payload = [];
             //TODO Could implement the STATUS_CODE constants interface
             if ($result->isSuccess()) {

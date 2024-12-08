@@ -30,6 +30,7 @@ return static function (Slim\App $app): void {
     $app->get('/athletes', [AthleteController::class, 'handleGetAthletes']);
     $app->get('/athletes/{athlete_id}', [AthleteController::class, 'handleGetAthleteById']);
     $app->post('/athletes', [AthleteController::class, 'handleCreateAthlete']);
+    $app->put('/athletes/{athlete_id}', [AthleteController::class, 'handleUpdateAthleteById']);
 
 
     //* Routes for coaches resource
