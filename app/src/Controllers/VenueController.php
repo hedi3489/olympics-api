@@ -138,25 +138,25 @@ class VenueController extends BaseController
     }
 
     // TODO:
-    // public function handleDeleteVenue(Request $request, Response $response, array $uri_args) : Response
-    // {
-    //     $venue_id = $uri_args["venue_id"];
-    //     $data = $request->getParsedBody();
-    //     $result = $this->venues_service->DeleteVenue($venue_id);
+    public function handleDeleteVenue(Request $request, Response $response, array $uri_args) : Response
+    {
+        $venue_id = $uri_args["venue_id"];
+        $data = $request->getParsedBody();
+        $result = $this->venues_service->DeleteVenue($venue_id);
 
-    //     $status_code = 204;
-    //     if ($result->isSuccess()){
-    //         $payload["success"] = true;
-    //     } else {
-    //         $status_code = 400;
-    //         $payload["success"] = false;
-    //     }
-    //     $payload["message"] = $result->getMessage();
-    //     $payload["getData"] = $result->getData();
-    //     $payload["status"] = $status_code;
+        $status_code = 204;
+        if ($result->isSuccess()){
+            $payload["success"] = true;
+        } else {
+            $status_code = 400;
+            $payload["success"] = false;
+        }
+        $payload["message"] = $result->getMessage();
+        $payload["getData"] = $result->getData();
+        $payload["status"] = $status_code;
 
-    //     return $this->renderJson($response, $data, $status_code);
-    // }
+        return $this->renderJson($response, $data, $status_code);
+    }
 
     public function handleLog(Request $request, Response $response): Response{
 
