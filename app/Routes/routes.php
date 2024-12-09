@@ -30,14 +30,14 @@ return static function (Slim\App $app): void {
     $app->get('/athletes', [AthleteController::class, 'handleGetAthletes']);
     $app->get('/athletes/{athlete_id}', [AthleteController::class, 'handleGetAthleteById']);
     $app->post('/athletes', [AthleteController::class, 'handleCreateAthlete']);
-    $app->put('/athletes/{athlete_id}', [AthleteController::class, 'handleUpdateAthleteById']);
+    $app->put('/athletes', [AthleteController::class, 'handleUpdateAthlete']);
 
 
     //* Routes for coaches resource
     $app->get('/coaches', [CoachController::class, 'handleGetCoaches']);
     $app->get('/coaches/{coach_id}', [CoachController::class, 'handleGetCoachById']);
     $app->post('/coaches', [CoachController::class, 'handleCreateCoach']);
-    $app->put('/coaches/{coach_id}', [CoachController::class, 'handleUpdateCoachById']);
+    $app->put('/coaches', [CoachController::class, 'handleUpdateCoach']);
 
 
     //* Routes for venues resource

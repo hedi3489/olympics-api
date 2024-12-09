@@ -46,31 +46,29 @@ class CoachesService
      * Updates existing coach information from the database.
      * @param mixed $request - The http request object for exception handling.
      * @param mixed $data - The properties for updating an coach object.
-     * @param mixed $coach_id - The id of the coach to be updated.
      * @return \App\Core\Result - The result of the operation (success/fail).
      */
-    public function updateCoach($request, $data, $coach_id): Result
+    public function updateCoach($request, $data): Result
     {
         //* Validate through Valitron
         // Calling custom function for dynamic Valitron validation
         $this->executeValitron($request, $data);
 
-        $where = ["coach_id" => $coach_id];
+        $where = ["coach_id" => $data['coach_id']];
+        $previous_data = $this->coach_model->getCoachById($data['coach_id']);
+        $data = [
+            'coach_name' => $data['coach_name'] ?? $previous_data['coach_name'],
+            'gender' => $data['gender'] ?? $previous_data['gender'],
+            'date_of_birth' => $data['date_of_birth'] ?? $previous_data['date_of_birth'],
+            'been_in_olympics' => $data['been_in_olympics'] ?? $previous_data['been_in_olympics'],
+            'sport' => $data['sport'] ?? $previous_data['sport'],
+        ];
 
         // If data is valid, update existing coach from the database
         try {
             $this->coach_model->updateCoach($data, $where);
-            $previous_data = $this->coach_model->getCoachById($coach_id);
-
             // Return success Result with updated data
-            return Result::success("Coach updated successfully!", [
-                'coach_id' => $coach_id, // predefined since we're updating
-                'coach_name' => $data['coach_name'] ?? $previous_data['coach_name'],
-                'gender' => $data['gender'] ?? $previous_data['gender'],
-                'date_of_birth' => $data['date_of_birth'] ?? $previous_data['date_of_birth'],
-                'been_in_olympics' => $data['been_in_olympics'] ?? $previous_data['been_in_olympics'],
-                'sport' => $data['sport'] ?? $previous_data['sport'],
-            ]);
+            return Result::success("Coach {$where['coach_id']} updated successfully!", $data);
         } catch (\PDOException $e) {
             // Handle any database errors and return a fail Result
             return Result::fail("Database error: Unable to create coach.");
@@ -92,6 +90,7 @@ class CoachesService
         if ($method === 'post') {
             $v->rule('required', ['coach_name', 'gender', 'been_in_olympics', 'sport']);
         } elseif ($method === "put") {
+            $v->rule('required', ['coach_id']);
             $v->rule('optional', ['coach_name', 'gender', 'date_of_birth', 'been_in_olympics', 'sport']);
         }
 
