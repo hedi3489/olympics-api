@@ -6,9 +6,9 @@ use App\Core\Result;
 use App\Models\VenueModel;
 use Slim\Exception\HttpBadRequestException;
 
-class VenuesService
+class VenuesService extends BaseService
 {
-    public function __construct(private VenueModel $venue_model, ) {}
+    public function __construct(private VenueModel $venue_model) {}
 
     /**
      * Creates new venues to insert into the database.
@@ -43,7 +43,12 @@ class VenuesService
         }
     }
 
-    //? Add documentation
+    /**
+     * Updates an existing venue in the database.
+     * @param $request - the http request object for exception handling.
+     * @param $data - the properties for updating a venue row.
+     * @return Result - The result of the operation (success/fail).
+     */
     public function updateVenue($request, $data) : Result
     {
         // Calling custom function for dynamic Valitron validation
@@ -57,7 +62,6 @@ class VenuesService
 
         // Define the update:
         $data = [
-            // "venue_id" => $data['venue_id'],
             'venue_name' => $data['venue_name'] ?? $previous_data['venue_name'],
             'address' => $data['address'] ?? $previous_data['address'],
             'capacity' => $data['capacity'] ?? $previous_data['capacity'],
@@ -66,22 +70,27 @@ class VenuesService
             'historical_significance' => $data['historical_significance'] ?? $previous_data['historical_significance'],
             'parking_facilities' => $data['parking_facilities'] ?? $previous_data['parking_facilities']
         ];
-        // dd($data);
 
         // If data is valid, update venue
          try {
-
+            // Calling the insert method
             $this->venue_model->updateVenue($data, $where);
             //Return success Result with updated data
-            return Result::success("Venue number {$where['venue_id']} updated successfully.", $data);
+            return Result::success(
+                "Venue number {$where['venue_id']} updated successfully.", $data);
 
         } catch (\PDOException $e) {
             // Handle any database errors and return a fail Result
             return Result::fail("Database error: Unable to update venue.");
         }
-
     }
 
+    /**
+     * Deletes an existing venue in the database.
+     * @param $request - the http request object for exception handling.
+     * @param $data - associative array containing 'venue_id'.
+     * @return Result - The result of the operation (success/fail).
+     */
     public function deleteVenue($request, $data) : Result
     {
         // Calling custom function for dynamic Valitron validation
@@ -92,21 +101,19 @@ class VenuesService
 
         // Verify if venue exists
         $venue = $this->venue_model->getVenueById($where['venue_id']);
-
         // If no exist, fail
         if(!$venue){
             return Result::fail("Venue {$where['venue_id']} doesn't exist.");
         }else{
             $this->venue_model->deleteVenue($data);
-            $id = $data['venue_id'];
-            return Result::success("Venue $id Successfully deleted", $data);
+            return Result::success("Venue {$data['venue_id']} Successfully deleted", $data);
         }
     }
 
     /**
      * Method to write the validation rules since validation will be done in multiple functions.
-     * @param $request : used to retrieve the http method for dynamic validation rules.
-     * @param array $data : the data that will be validated.
+     * @param $request : used to retrieve the http method for dynamic validation rules & exception handling.
+     * @param array $data : the data that to be validated.
      * @return \Valitron\Validator returns a Valitron object.
      */
     private function executeValitron($request, array $data): void
@@ -117,15 +124,16 @@ class VenuesService
         $current_date = date('Y-m-d');
         $tomorrow = date('Y-m-d', strtotime('+1 day'));
         $method = strtolower($request->getMethod());
-        // dd($method);
 
         $v = new \Valitron\Validator($data);
-        if($method === 'post' /*|| $method === 'put'*/){
+        if($method === 'post'){
             $v->rule('required', ['venue_name', 'address', 'capacity', 'type', 'date_constructed']);
+            $this->runValitron($request, $v);
         }
         if ($method === 'put' || $method === 'delete'){
             $v->rule('required', ['venue_id']);
             $v->rule('integer', 'venue_id');
+            $this->runValitron($request, $v);
         }
         if($method === 'put'){
             $v->rule('optional', ['venue_name', 'address', 'capacity', 'type', 'date_constructed']);
@@ -141,15 +149,7 @@ class VenuesService
             $v->rule('regex', 'historical_significance', '/^[a-zA-Z0-9., ]{1,300}$/')->message("The historical significance text $rgx_error2");
             $v->rule('regex', 'parking_facilities', '/^[a-zA-Z0-9., ]{1,300}$/')->message("The parking facilities text $rgx_error2");
         }
-
-        if(!$v->validate()){
-            $errors = json_encode($v->errors());
-            // return $errors;
-            throw new HttpBadRequestException(
-                $request,
-                "Invalid data: $errors"
-            );
-        }
+        $this->runValitron($request, $v);
     }
 }
 

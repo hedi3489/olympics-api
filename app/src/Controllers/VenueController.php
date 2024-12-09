@@ -119,12 +119,9 @@ class VenueController extends BaseController
     public function handleUpdateVenue(Request $request, Response $response) : Response
     {
         // Retrieving the venue id to be updated and the update information
-        // $venue_id = $uri_args["venue_id"];
         $data = $request->getParsedBody();
-        // $venue_id = $data['venue_id'];
 
         $result = $this->venues_service->updateVenue($request, $data);
-        // dd($result);
 
         $status_code = 201;
         if ($result->isSuccess()){
