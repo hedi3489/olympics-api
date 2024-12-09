@@ -169,8 +169,11 @@ class EventsService extends BaseService
             $this->runValitron($request, $v);
         }
         if($method === 'put'){
-            $v->rule('required', ['start_date', 'end_date']);
-            $this->runValitron($request, $v);
+            if((isset($data['start_date']) && !isset($data['end_date'])) || (isset($data['end_date']) && !isset($data['start_date']))){
+                $v->rule('required', ['start_date', 'end_date'])->message("To update start_date and or end_date, please provide both.");
+                $this->runValitron($request, $v);
+            }
+
         }
         if ($method === 'post' || $method === 'put'){
             $v->rule('regex', 'event_name', '/^[a-zA-Z0-9 ]{1,30}$/')->message("Event name $rgx_error");
@@ -181,11 +184,12 @@ class EventsService extends BaseService
             $v->rule('integer', 'venue_id')->message('The venue_id must be a positive integer.');
             $v->rule('min','venue_id', 1)->message('The venue_id cannot be less than 1.');
             $v->rule('boolean', 'is_paralympic');
-            $v->rule('date', ['start_date', 'end_date'])->message('Date format must be YYYY-MM-DD');
-            $v->rule('dateBefore', 'start_date', $data['end_date'])->message("the start date '{$data['start_date']}' cannot be after the end date '{$data['end_date']}'.");
-            $v->rule('dateBefore', 'start_date', $tomorrow)->message("The start_date '{$data['start_date']}' cannot be after the current date '$current_date'.");
-            $v->rule('dateBefore', 'end_date', $tomorrow)->message("The end_date '{$data['end_date']}' cannot be after the current date '$current_date'.");
-
+            if(isset($data['start_date']) && isset($data['end_date'])){
+                $v->rule('date', ['start_date', 'end_date'])->message('Date format must be YYYY-MM-DD');
+                $v->rule('dateBefore', 'start_date', $data['end_date'])->message("the start date '{$data['start_date']}' cannot be after the end date '{$data['end_date']}'.");
+                $v->rule('dateBefore', 'start_date', $tomorrow)->message("The start_date '{$data['start_date']}' cannot be after the current date '$current_date'.");
+                $v->rule('dateBefore', 'end_date', $tomorrow)->message("The end_date '{$data['end_date']}' cannot be after the current date '$current_date'.");
+            }
         }
 
         $this->runValitron($request, $v);
