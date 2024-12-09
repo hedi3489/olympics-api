@@ -120,7 +120,7 @@ class EventModel extends BaseModel
     }
 
     /**
-     * Method to insert a new event into the database.
+     * Inserts a new event into the database.
      * @param $new_event : new event to be added to the database.
      * @return string|false returns the last inserted id or false.
      */
@@ -128,5 +128,24 @@ class EventModel extends BaseModel
     {
         $this->insert($this->table_name, $new_event);
         return $this->lastInsertId();
+    }
+
+    /**
+     * Updates one or more records contained in the specified table.
+     * @param array $data : array containing values to update existing row
+     * @param array $where : associative array for the where clause ['event_id' => $event_id]
+     * @return void
+     */
+    public function updateEvent($data, $where) : void {
+        $this->update($this->table_name, $data, $where);
+    }
+
+    /**
+     * Deletes one or more records contained in the specified table.
+     * @param mixed $where : associative array for the where clause ['event_id' => $event_id]
+     * @return void
+     */
+    public function deleteEvent($where) : void {
+        $this->delete($this->table_name, $where);
     }
 }

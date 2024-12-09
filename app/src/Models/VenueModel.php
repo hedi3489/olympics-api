@@ -132,7 +132,7 @@ class VenueModel extends BaseModel
     /**
      * Updates one or more records contained in the specified table.
      * @param array $data : array containing values to update existing row
-     * @param array $where : associative array for the where clause ['username' => $data['username']]
+     * @param array $where : associative array for the where clause ['venue_id' => $venue_id]
      * @return void
      */
     public function updateVenue($data, $where) : void {
@@ -141,7 +141,7 @@ class VenueModel extends BaseModel
 
     /**
      * Deletes one or more records contained in the specified table.
-     * @param mixed $where : associative array for the where clause ['username' => $data['username']]
+     * @param mixed $where : associative array for the where clause [venue_id => $venue_id]
      * @return void
      */
     public function deleteVenue($where) : void {
