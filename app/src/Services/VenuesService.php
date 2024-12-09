@@ -14,9 +14,9 @@ class VenuesService extends BaseService
      * Creates new venues to insert into the database.
      * @param $request - the http request object for exception handling.
      * @param $data - the properties for creating a venue(s) object(s).
-     * @return Result - The result of the operation (success/fail).
+     * @return \App\Core\Result - The result of the operation (success/fail).
      */
-    public function CreateVenue($request, $data) : Result
+    public function createVenue($request, $data) : Result
     {
         // Calling custom function for dynamic Valitron validation
         $this->executeValitron($request, $data);
@@ -24,7 +24,6 @@ class VenuesService extends BaseService
         // If data is valid, insert new venue into the database
         try {
             $last_inserted_id = $this->venue_model->insertVenue($data);
-
             // Return success Result with inserted row id
             return Result::success("Venue created successfully.", [
                 'id' => $last_inserted_id,
@@ -47,7 +46,7 @@ class VenuesService extends BaseService
      * Updates an existing venue in the database.
      * @param $request - the http request object for exception handling.
      * @param $data - the properties for updating a venue row.
-     * @return Result - The result of the operation (success/fail).
+     * @return \App\Core\Result - The result of the operation (success/fail).
      */
     public function updateVenue($request, $data) : Result
     {
@@ -89,7 +88,7 @@ class VenuesService extends BaseService
      * Deletes an existing venue in the database.
      * @param $request - the http request object for exception handling.
      * @param $data - associative array containing 'venue_id'.
-     * @return Result - The result of the operation (success/fail).
+     * @return \App\Core\Result - The result of the operation (success/fail).
      */
     public function deleteVenue($request, $data) : Result
     {
