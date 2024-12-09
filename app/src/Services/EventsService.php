@@ -12,7 +12,6 @@ class EventsService extends BaseService
 {
     public function __construct(private VenueModel $venue_model, private EventModel $event_model) {}
 
-
     /**
      * Creates new events to insert into the database.
      * @param $request - the http request object for exception handling.
@@ -26,7 +25,7 @@ class EventsService extends BaseService
 
         // Validating existence of a venue_id FK in the database
         $venue = $this->venue_model->getVenueById($data['venue_id']);
-        if($venue==NULL){
+        if(!$venue){
             throw new HttpNotFoundException(
                 $request,
                 "Venue id provided does not exist in the database.
@@ -69,7 +68,7 @@ class EventsService extends BaseService
         $where = ["event_id" => $data['event_id']];
         // Getting event before updating it
         $previous_data = $this->event_model->getEventById($where['event_id']);
-        if($previous_data==NULL){
+        if(!$previous_data){
             throw new HttpNotFoundException(
                 $request,
                 "Event id provided does not exist in the database.
@@ -79,13 +78,13 @@ class EventsService extends BaseService
         }
         // Verifying if venue_id FK is in database
         $venue = $this->venue_model->getVenueById($data['venue_id']);
-        if($venue==NULL){
+        if(!$venue){
             throw new HttpNotFoundException(
                 request: $request,
                 message:"Venue id provided does not exist in the database. Please provide an existing venue id or add a new venue first. Venue id should a positive integer."
             );
+            // return Result::fail("Venue {$where['venue_id']} doesn't exist.");
         }
-
         // Define the update:
         $data = [
             'event_name' => $data['event_name'] ?? $previous_data['event_name'],
@@ -96,7 +95,6 @@ class EventsService extends BaseService
             'is_paralympic' => $data['is_paralympic'] ?? $previous_data['is_paralympic'],
             'venue_id' => $data['venue_id'] ?? $previous_data['venue_id']
         ];
-
         // If data is valid, update venue
          try {
             // Calling the insert method
@@ -104,7 +102,6 @@ class EventsService extends BaseService
             //Return success Result with updated data
             return Result::success(
                 "Event {$where['event_id']} updated successfully.", $data);
-
         } catch (\PDOException $e) {
             // Handle any database errors and return a fail Result
             return Result::fail("Database error: Unable to update venue.");
@@ -112,33 +109,31 @@ class EventsService extends BaseService
     }
 
     /**
-     * Deletes an existing venue in the database.
+     * Deletes an existing event in the database.
      * @param $request - the http request object for exception handling.
-     * @param $data - associative array containing 'venue_id'.
+     * @param $data - associative array containing 'event_id'.
      * @return \App\Core\Result - The result of the operation (success/fail).
      */
     public function deleteEvent($request, $data) : Result
     {
+        // dd($data);
         // Calling custom function for dynamic Valitron validation
         $this->executeValitron($request, $data);
 
-        // Retrieve venue id for where clause
-        $where = ["venue_id" => $data['venue_id']];
-
+        // Retrieve event id for where clause
+        $where = ["event_id" => $data['event_id']];
+        // dd($where['event_id']);
         // Verify if venue exists
-        $venue = $this->venue_model->getVenueById($where['venue_id']);
+        $venue = $this->event_model->getEventById($where['event_id']);
+        // dd($venue);
         // If no exist, fail
         if(!$venue){
-            return Result::fail("Venue {$where['venue_id']} doesn't exist.");
+            return Result::fail("Event {$where['event_id']} doesn't exist.");
         }else{
-            $this->venue_model->deleteVenue($data);
-            return Result::success("Venue {$data['venue_id']} Successfully deleted", $data);
+            $this->event_model->deleteEvent($where);
+            return Result::success("Event {$where['event_id']} Successfully deleted", $data);
         }
     }
-
-
-
-
 
     /**
      * Method to write the validation rules since validation will be done in multiple functions.
@@ -173,7 +168,6 @@ class EventsService extends BaseService
                 $v->rule('required', ['start_date', 'end_date'])->message("To update start_date and or end_date, please provide both.");
                 $this->runValitron($request, $v);
             }
-
         }
         if ($method === 'post' || $method === 'put'){
             $v->rule('regex', 'event_name', '/^[a-zA-Z0-9 ]{1,30}$/')->message("Event name $rgx_error");
