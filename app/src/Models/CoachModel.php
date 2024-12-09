@@ -96,7 +96,17 @@ class CoachModel extends BaseModel
      */
     public function insertCoach(array $new_coach): mixed
     {
-        $this->insert($this->table_name, $new_coach);
-        return $this->lastInsertId();
+        return $this->insert($this->table_name, $new_coach);
+    }
+
+    /**
+     * Updates an existing coach in the database.
+     * @param array $coach_data | The coach data to update.
+     * @param array $where | Array containing the coach objects' id to update.
+     * @return mixed The row count, but functionally ends up being the updated data.
+     */
+    public function updateCoach(array $coach_data, $where): mixed
+    {
+        return $this->update($this->table_name, $coach_data, $where);
     }
 }

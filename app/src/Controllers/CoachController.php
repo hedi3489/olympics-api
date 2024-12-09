@@ -91,4 +91,41 @@ class CoachController extends BaseController
 
         return $this->renderJson($response, $payload, $payload["status"]);
     }
+
+    /**
+     * Handles the update of an existing coach.
+     * @param \Psr\Http\Message\ServerRequestInterface $request | The submitted coach object.
+     * @param \Psr\Http\Message\ResponseInterface $response | Response interface helper
+     * @return \Psr\Http\Message\ResponseInterface The appropriate json object.
+     */
+    public function handleUpdateCoachById(Request $request, Response $response, array $uri_args): Response
+    {
+        // Retrieve data of the resource to be updated from the uri
+        // and the information to be updated from the request body
+        $coach_id = $uri_args["coach_id"];
+        $data = $request->getParsedBody();
+
+        if (isset($data) && !empty($data)) {
+            //Update coach using coaches service
+            $result = $this->coaches_service->updateCoach($request, $data, $coach_id);
+            $payload = [];
+            //TODO Could implement the STATUS_CODE constants interface
+            if ($result->isSuccess()) {
+                //Prepare a successful response
+                $payload["success"] = true;
+                $payload["status"] = 200;
+                $payload["data"] = $result->getData();
+            } else {
+                //Prepare a failed response
+                $payload["success"] = false;
+                $payload["status"] = 400;
+                $payload["errors"] = $result->getErrors();
+            }
+        } else {
+            //! If no data was provided, throw an error
+            throw new HttpNoDataProvidedException($request);
+        }
+
+        return $this->renderJson($response, $payload, $payload["status"]);
+    }
 }
