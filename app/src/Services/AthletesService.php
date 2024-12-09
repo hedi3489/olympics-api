@@ -57,18 +57,18 @@ class AthletesService
      * @param mixed $athlete_id - The id of the athlete to be updated.
      * @return \App\Core\Result - The result of the operation (success/fail).
      */
-    public function UpdateAthlete($request, $data, $athlete_id): Result
+    public function updateAthlete($request, $data, $athlete_id): Result
     {
         //* Validate through Valitron
         // Calling custom function for dynamic Valitron validation
         $this->executeValitron($request, $data);
 
-        $athlete_id = ["athlete_id" => $athlete_id];
+        $where = ["athlete_id" => $athlete_id];
 
         // If data is valid, update existing athlete from the database
         try {
-            $this->athlete_model->updateAthlete($data, $athlete_id);
-            $previous_data = $this->athlete_model->getAthleteById($athlete_id['athlete_id']);
+            $this->athlete_model->updateAthlete($data, $where);
+            $previous_data = $this->athlete_model->getAthleteById($athlete_id);
 
             // Return success Result with updated data
             return Result::success("Athlete updated successfully!", [

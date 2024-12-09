@@ -96,8 +96,14 @@ class AthleteModel extends BaseModel
         return $this->insert($this->table_name, $new_athlete_data);
     }
 
-    public function updateAthlete(array $athlete_data, $athlete_id): mixed
+    /**
+     * Updates an existing athlete in the database.
+     * @param array $athlete_data | The athlete data to update.
+     * @param array $where | Array containing the athlete objects' id to update.
+     * @return mixed The row count, but functionally ends up being the updated data.
+     */
+    public function updateAthlete(array $athlete_data, $where): mixed
     {
-        return $this->update($this->table_name, $athlete_data, $athlete_id);
+        return $this->update($this->table_name, $athlete_data, $where);
     }
 }

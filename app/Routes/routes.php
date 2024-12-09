@@ -37,6 +37,7 @@ return static function (Slim\App $app): void {
     $app->get('/coaches', [CoachController::class, 'handleGetCoaches']);
     $app->get('/coaches/{coach_id}', [CoachController::class, 'handleGetCoachById']);
     $app->post('/coaches', [CoachController::class, 'handleCreateCoach']);
+    $app->put('/coaches/{coach_id}', [CoachController::class, 'handleUpdateCoachById']);
 
 
     //* Routes for venues resource
