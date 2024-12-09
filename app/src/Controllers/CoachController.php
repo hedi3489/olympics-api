@@ -98,16 +98,14 @@ class CoachController extends BaseController
      * @param \Psr\Http\Message\ResponseInterface $response | Response interface helper
      * @return \Psr\Http\Message\ResponseInterface The appropriate json object.
      */
-    public function handleUpdateCoachById(Request $request, Response $response, array $uri_args): Response
+    public function handleUpdateCoach(Request $request, Response $response): Response
     {
-        // Retrieve data of the resource to be updated from the uri
-        // and the information to be updated from the request body
-        $coach_id = $uri_args["coach_id"];
+        // Information to be updated from the request body
         $data = $request->getParsedBody();
 
         if (isset($data) && !empty($data)) {
             //Update coach using coaches service
-            $result = $this->coaches_service->updateCoach($request, $data, $coach_id);
+            $result = $this->coaches_service->updateCoach($request, $data);
             $payload = [];
             //TODO Could implement the STATUS_CODE constants interface
             if ($result->isSuccess()) {

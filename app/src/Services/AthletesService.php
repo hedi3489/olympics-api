@@ -54,39 +54,38 @@ class AthletesService
      * Updates existing athlete information from the database.
      * @param mixed $request - The http request object for exception handling.
      * @param mixed $data - The properties for updating an athlete object.
-     * @param mixed $athlete_id - The id of the athlete to be updated.
      * @return \App\Core\Result - The result of the operation (success/fail).
      */
-    public function updateAthlete($request, $data, $athlete_id): Result
+    public function updateAthlete($request, $data): Result
     {
         //* Validate through Valitron
         // Calling custom function for dynamic Valitron validation
         $this->executeValitron($request, $data);
 
-        $where = ["athlete_id" => $athlete_id];
+        $where = ["athlete_id" => $data['athlete_id']];
+        $previous_data = $this->athlete_model->getAthleteById($data['athlete_id']);
+        $data = [
+            'athlete_name' => $data['athlete_name'] ?? $previous_data['athlete_name'],
+            'country_id' => $data['country_id'] ?? $previous_data['country_id'],
+            'gender' => $data['gender'] ?? $previous_data['gender'],
+            'sport' => $data['sport'] ?? $previous_data['sport'],
+            'date_of_birth' => $data['date_of_birth'] ?? $previous_data['date_of_birth'],
+            'height' => $data['height'] ?? $previous_data['height'],
+            'weight' => $data['weight'] ?? $previous_data['weight'],
+            'ethnicity' => $data['ethnicity'] ?? $previous_data['ethnicity'],
+            'is_paralympic' => $data['is_paralympic'] ?? $previous_data['is_paralympic'],
+            'gold_medals' => $data['gold_medals'] ?? $previous_data['gold_medals'],
+            'silver_medals' => $data['silver_medals'] ?? $previous_data['silver_medals'],
+            'bronze_medals' => $data['bronze_medals'] ?? $previous_data['bronze_medals'],
+            'total_medals' => $data['total_medals'] ?? $previous_data['total_medals']
+        ];
 
         // If data is valid, update existing athlete from the database
         try {
             $this->athlete_model->updateAthlete($data, $where);
-            $previous_data = $this->athlete_model->getAthleteById($athlete_id);
 
             // Return success Result with updated data
-            return Result::success("Athlete updated successfully!", [
-                'athlete_id' => $athlete_id, // predefined since we're updating
-                'athlete_name' => $data['athlete_name'] ?? $previous_data['athlete_name'],
-                'country_id' => $data['country_id'] ?? $previous_data['country_id'],
-                'gender' => $data['gender'] ?? $previous_data['gender'],
-                'sport' => $data['sport'] ?? $previous_data['sport'],
-                'date_of_birth' => $data['date_of_birth'] ?? $previous_data['date_of_birth'],
-                'height' => $data['height'] ?? $previous_data['height'],
-                'weight' => $data['weight'] ?? $previous_data['weight'],
-                'ethnicity' => $data['ethnicity'] ?? $previous_data['ethnicity'],
-                'is_paralympic' => $data['is_paralympic'] ?? $previous_data['is_paralympic'],
-                'gold_medals' => $data['gold_medals'] ?? $previous_data['gold_medals'],
-                'silver_medals' => $data['silver_medals'] ?? $previous_data['silver_medals'],
-                'bronze_medals' => $data['bronze_medals'] ?? $previous_data['bronze_medals'],
-                'total_medals' => $data['total_medals'] ?? $previous_data['total_medals']
-            ]);
+            return Result::success("Athlete updated successfully!", $data);
         } catch (\PDOException $e) {
             // Handle any database errors and return a fail Result
             return Result::fail("Database error: Unable to update athlete. Make sure all specified fields exist and that foreign keys' values exist in referenced tables.");
