@@ -148,4 +148,39 @@ class AthleteController extends BaseController
 
         return $this->renderJson($response, $payload, $payload["status"]);
     }
+
+    /**
+     * Handles the deletion of an existing athlete.
+     * @param \Psr\Http\Message\ServerRequestInterface $request | The submitted athlete object, contains id.
+     * @param \Psr\Http\Message\ResponseInterface $response | Response interface helper
+     * @return \Psr\Http\Message\ResponseInterface The appropriate json object.
+     */
+    public function handleDeleteAthlete(Request $request, Response $response): Response
+    {
+        // Athlete id to be deleted from the request body
+        $data = $request->getParsedBody();
+
+        if (isset($data) && !empty($data)) {
+            //Update athlete using athletes service
+            $result = $this->athletes_service->deleteAthlete($request, $data);
+            $payload = [];
+            //TODO Could implement the STATUS_CODE constants interface
+            if ($result->isSuccess()) {
+                //Prepare a successful response
+                $payload["success"] = true;
+                $payload["status"] = 200;
+                $payload["message"] = $result->getMessage();
+            } else {
+                //Prepare a failed response
+                $payload["success"] = false;
+                $payload["status"] = 400;
+                $payload["errors"] = $result->getErrors();
+            }
+        } else {
+            //! If no data was provided, throw an error
+            throw new HttpNoDataProvidedException($request);
+        }
+
+        return $this->renderJson($response, $payload, $payload["status"]);
+    }
 }

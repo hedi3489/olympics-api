@@ -106,4 +106,14 @@ class AthleteModel extends BaseModel
     {
         return $this->update($this->table_name, $athlete_data, $where);
     }
+
+    /**
+     * Deletes an athlete from the database.
+     * @param mixed $where | Array containing the athlete id.
+     * @return void
+     */
+    public function deleteAthlete($where): void
+    {
+        $this->delete($this->table_name, $where);
+    }
 }
