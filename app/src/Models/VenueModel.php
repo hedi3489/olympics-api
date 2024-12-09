@@ -130,19 +130,22 @@ class VenueModel extends BaseModel
     }
 
     /**
-     * updates one or more records contained in the specified table.
-     *
-     * @param  string $table table name
-     * @param  array $data  an array containing the names of the field(s) to be updated along with the new value(s).
-     *                      For example, ["username"=>"frostybee", "email" =>"frostybee@me.com"]
-     * @param  array $where an array containing the filtering operations (it should consist of column names and values)
-     *                      For example, ["user_id"=> 3]
+     * Updates one or more records contained in the specified table.
+     * @param array $data : array containing values to update existing row
+     * @param array $where : associative array for the where clause ['username' => $data['username']]
+     * @return void
      */
     public function updateVenue($data, $where) : void {
         $this->update($this->table_name, $data, $where);
     }
-    public function deleteVenue($data) : void {
-        $this->delete($this->table_name, $data);
+
+    /**
+     * Deletes one or more records contained in the specified table.
+     * @param mixed $where : associative array for the where clause ['username' => $data['username']]
+     * @return void
+     */
+    public function deleteVenue($where) : void {
+        $this->delete($this->table_name, $where);
     }
 
 }
