@@ -108,7 +108,7 @@ class EventController extends BaseController
         }
 
         // Create venue using venues service
-        $result = $this->events_service->CreateEvent($request, $data);
+        $result = $this->events_service->createEvent($request, $data);
         $status_code = 201;
         if ($result->isSuccess()) {
             //Prepare success stmt

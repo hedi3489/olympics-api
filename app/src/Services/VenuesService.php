@@ -124,6 +124,8 @@ class VenuesService extends BaseService
         $tomorrow = date('Y-m-d', strtotime('+1 day'));
         $method = strtolower($request->getMethod());
 
+        // Valitron does not interrupt the process when a required field is missing,
+        // unless $v->validate is run right after assigning the 'required' rule
         $v = new \Valitron\Validator($data);
         if($method === 'post'){
             $v->rule('required', ['venue_name', 'address', 'capacity', 'type', 'date_constructed']);
@@ -132,6 +134,7 @@ class VenuesService extends BaseService
         if ($method === 'put' || $method === 'delete'){
             $v->rule('required', ['venue_id']);
             $v->rule('integer', 'venue_id');
+            $v->rule('min','venue_id', 1)->message('Venue id cannot a negative integer.');
             $this->runValitron($request, $v);
         }
         if($method === 'put'){

@@ -53,8 +53,8 @@ return static function (Slim\App $app): void {
     $app->get('/events/{event_id}', [EventController::class, 'handleGetEventById']);
     $app->post('/events', [EventController::class, 'handleCreateEvent']);
     //TODO: Routes to implement
-    $app->put('/events/{event_id}', [EventController::class, 'handleUpdateEvent']);
-    $app->delete('/events/{event_id}', [EventController::class, 'handleDeleteEvent']);
+    $app->put('/events', [EventController::class, 'handleUpdateEvent']);
+    $app->delete('/events', [EventController::class, 'handleDeleteEvent']);
 
 
     //* Routes for results resource
