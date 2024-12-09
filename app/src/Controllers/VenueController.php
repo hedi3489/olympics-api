@@ -109,21 +109,24 @@ class VenueController extends BaseController
             $payload["success"] = false;
         }
         $payload["message"] = $result->getMessage();
-        $payload["getData"] = $result->getData();
+        $payload["new_venue"] = $result->getData();
         $payload["status"] = $status_code;
 
-        return $this->renderJson($response, $data, $status_code);
+        return $this->renderJson($response, $payload, $status_code);
     }
 
     //? ToBeDebugged
-    public function handleUpdateVenue(Request $request, Response $response, array $uri_args) : Response
+    public function handleUpdateVenue(Request $request, Response $response) : Response
     {
         // Retrieving the venue id to be updated and the update information
-        $venue_id = $uri_args["venue_id"];
+        // $venue_id = $uri_args["venue_id"];
         $data = $request->getParsedBody();
+        // $venue_id = $data['venue_id'];
 
-        $result = $this->venues_service->UpdateVenue($request, $data, $venue_id);
-        $status_code = 204;
+        $result = $this->venues_service->updateVenue($request, $data);
+        // dd($result);
+
+        $status_code = 201;
         if ($result->isSuccess()){
             $payload["success"] = true;
         } else {
@@ -131,24 +134,25 @@ class VenueController extends BaseController
             $payload["success"] = false;
         }
         $payload["message"] = $result->getMessage();
-        $payload["getData"] = $result->getData();
+        $payload["updated_venue"] = $result->getData();
         $payload["status"] = $status_code;
-
-        return $this->renderJson($response, $data, $status_code);
+        // dd($payload);
+        return $this->renderJson($response, $payload, $status_code);
     }
 
-    // TODO:
-    public function handleDeleteVenue(Request $request, Response $response, array $uri_args) : Response
+    public function handleDeleteVenue(Request $request, Response $response) : Response
     {
-        $venue_id = $uri_args["venue_id"];
-        echo "$venue_id passing...";
-
-        $data = ['venue_id' => $uri_args["venue_id"]];
+        // Retrieve if for where clause
+        $data = $request->getParsedBody();
+        $where = ['venue_id' => $data["venue_id"]];
         // dd($data);
 
-        $result = $this->venues_service->DeleteVenue($venue_id);
+        // Call DeleteVenue for validation and execution
+        $result = $this->venues_service->deleteVenue($request, $where);
 
-        $status_code = 204;
+
+        // Process response of deleteVenue operation
+        $status_code = 200;
         if ($result->isSuccess()){
             $payload["success"] = true;
         } else {
@@ -156,10 +160,9 @@ class VenueController extends BaseController
             $payload["success"] = false;
         }
         $payload["message"] = $result->getMessage();
-        $payload["getData"] = $result->getData();
         $payload["status"] = $status_code;
 
-        return $this->renderJson($response, $data, $status_code);
+        return $this->renderJson($response, $payload, $status_code);
     }
 
     public function handleLog(Request $request, Response $response): Response{

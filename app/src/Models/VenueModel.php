@@ -119,21 +119,6 @@ class VenueModel extends BaseModel
         return $venue;
     }
 
-    // public function getVenuesByName(string $venue_name): array
-    // {
-    //     $venues = [];
-    //     $sql = "SELECT * FROM $this->table_name WHERE 1";
-    //     // Add to the query
-    //     // the name if it's set and not empty
-    //     if ($venue_name != null || $venue_name != "") {
-    //         $sql .= " AND venue_name LIKE CONCAT('%', $venue_name, '%')";
-    //     }
-    //     // Instead of using fetchAll(), we use our new more specific method paginate()
-    //     // $venues = $this->fetchAll($sql, $query_args);
-    //     $venues = $this->paginate($sql, $venue_name);
-    //     return $venues;
-    // }
-
     /**
      * Method to insert a new venue into the database.
      * @param $new_venue : new venue to be added to the database.
@@ -141,8 +126,7 @@ class VenueModel extends BaseModel
      */
     public function insertVenue(array $new_venue): mixed
     {
-        $this->insert($this->table_name, $new_venue);
-        return $this->lastInsertId();
+        return $this->insert($this->table_name, $new_venue);
     }
 
     /**
