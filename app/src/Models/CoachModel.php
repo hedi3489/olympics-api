@@ -109,4 +109,14 @@ class CoachModel extends BaseModel
     {
         return $this->update($this->table_name, $coach_data, $where);
     }
+
+    /**
+     * Deletes a coach from the database.
+     * @param mixed $where | Array containing the coach id.
+     * @return void
+     */
+    public function deleteCoach($where): void
+    {
+        $this->delete($this->table_name, $where);
+    }
 }

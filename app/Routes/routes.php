@@ -31,6 +31,7 @@ return static function (Slim\App $app): void {
     $app->get('/athletes/{athlete_id}', [AthleteController::class, 'handleGetAthleteById']);
     $app->post('/athletes', [AthleteController::class, 'handleCreateAthlete']);
     $app->put('/athletes', [AthleteController::class, 'handleUpdateAthlete']);
+    $app->delete('/athletes', [AthleteController::class, 'handleDeleteAthlete']);
 
 
     //* Routes for coaches resource
@@ -38,6 +39,7 @@ return static function (Slim\App $app): void {
     $app->get('/coaches/{coach_id}', [CoachController::class, 'handleGetCoachById']);
     $app->post('/coaches', [CoachController::class, 'handleCreateCoach']);
     $app->put('/coaches', [CoachController::class, 'handleUpdateCoach']);
+    $app->delete('/coaches', [CoachController::class, 'handleDeleteCoach']);
 
 
     //* Routes for venues resource

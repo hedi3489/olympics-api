@@ -70,7 +70,7 @@ class CoachController extends BaseController
 
         if (isset($data) && !empty($data)) {
             //Create athlete using athletes service
-            $result = $this->coaches_service->CreateCoach($request, $data);
+            $result = $this->coaches_service->createCoach($request, $data);
             $payload = [];
             //TODO Could implement the STATUS_CODE constants interface
             if ($result->isSuccess()) {
@@ -113,6 +113,41 @@ class CoachController extends BaseController
                 $payload["success"] = true;
                 $payload["status"] = 200;
                 $payload["data"] = $result->getData();
+            } else {
+                //Prepare a failed response
+                $payload["success"] = false;
+                $payload["status"] = 400;
+                $payload["errors"] = $result->getErrors();
+            }
+        } else {
+            //! If no data was provided, throw an error
+            throw new HttpNoDataProvidedException($request);
+        }
+
+        return $this->renderJson($response, $payload, $payload["status"]);
+    }
+
+    /**
+     * Handles the deletion of an existing coach.
+     * @param \Psr\Http\Message\ServerRequestInterface $request | The submitted coach object, contains id.
+     * @param \Psr\Http\Message\ResponseInterface $response | Response interface helper
+     * @return \Psr\Http\Message\ResponseInterface The appropriate json object.
+     */
+    public function handleDeleteCoach(Request $request, Response $response): Response
+    {
+        // Coach id to be deleted from the request body
+        $data = $request->getParsedBody();
+
+        if (isset($data) && !empty($data)) {
+            //Update coach using coaches service
+            $result = $this->coaches_service->deleteCoach($request, $data);
+            $payload = [];
+            //TODO Could implement the STATUS_CODE constants interface
+            if ($result->isSuccess()) {
+                //Prepare a successful response
+                $payload["success"] = true;
+                $payload["status"] = 200;
+                $payload["message"] = $result->getMessage();
             } else {
                 //Prepare a failed response
                 $payload["success"] = false;
