@@ -27,7 +27,8 @@ class EventModel extends BaseModel
         $query_args = [];
         $sql = "SELECT * FROM $this->table_name WHERE 1";
 
-        //* Filter by name
+        //* Filtering
+        // Filter by name
         if (isset($req_params["event_name"])) {
             // Validate name
             $event_name = $req_params["event_name"];
@@ -37,9 +38,7 @@ class EventModel extends BaseModel
             }
         }
 
-        // Filter by date
-
-        //* Filter by paralympic
+        // Filter by paralympic
         if (isset($req_params["is_paralympic"])) {
             // Is_paralympic validation
             $is_para = $req_params["is_paralympic"];
@@ -54,7 +53,7 @@ class EventModel extends BaseModel
             }
         }
 
-        //* Filter by number of participants
+        // Filter by number of participants
         if (isset($req_params["min_participants"])) {
             // Capacity validation
             (int) $par = $req_params["min_participants"];
@@ -89,7 +88,7 @@ class EventModel extends BaseModel
         $order_by = $req_params['order_by'] ?? 'asc';
 
         // Validate sort field and order
-        $valid_sort_fields = ['event_name', 'event_sport', 'start_date', 'end_date', 'number_of_participants', 'is_paralympic'];
+        $valid_sort_fields = ['event_id', 'event_name', 'event_sport', 'start_date', 'end_date', 'number_of_participants', 'is_paralympic'];
         $valid_orders = ['asc', 'desc'];
 
         if (in_array($sort_by, $valid_sort_fields) && in_array($order_by, $valid_orders)) {
@@ -121,7 +120,7 @@ class EventModel extends BaseModel
 
     /**
      * Inserts a new event into the database.
-     * @param $new_event : new event to be added to the database.
+     * @param $new_event new event to be added to the database.
      * @return string|false returns the last inserted id or false.
      */
     public function insertEvent(array $new_event): string|false
@@ -132,8 +131,8 @@ class EventModel extends BaseModel
 
     /**
      * Updates one or more records contained in the specified table.
-     * @param array $data : array containing values to update existing row
-     * @param array $where : associative array for the where clause ['event_id' => $event_id]
+     * @param array $data array containing values to update existing row
+     * @param array $where associative array for the where clause ['event_id' => $event_id]
      * @return void
      */
     public function updateEvent($data, $where) : void {
@@ -142,7 +141,7 @@ class EventModel extends BaseModel
 
     /**
      * Deletes one or more records contained in the specified table.
-     * @param mixed $where : associative array for the where clause ['event_id' => $event_id]
+     * @param mixed $where associative array for the where clause ['event_id' => $event_id]
      * @return void
      */
     public function deleteEvent($where) : void {

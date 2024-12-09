@@ -121,7 +121,7 @@ class VenueModel extends BaseModel
 
     /**
      * Method to insert a new venue into the database.
-     * @param $new_venue : new venue to be added to the database.
+     * @param $new_venue new venue to be added to the database.
      * @return string|false returns the last inserted id or false.
      */
     public function insertVenue(array $new_venue): mixed
@@ -131,8 +131,8 @@ class VenueModel extends BaseModel
 
     /**
      * Updates one or more records contained in the specified table.
-     * @param array $data : array containing values to update existing row
-     * @param array $where : associative array for the where clause ['venue_id' => $venue_id]
+     * @param array $data array containing values to update existing row
+     * @param array $where associative array for the where clause ['venue_id' => $venue_id]
      * @return void
      */
     public function updateVenue($data, $where) : void {
@@ -141,7 +141,7 @@ class VenueModel extends BaseModel
 
     /**
      * Deletes one or more records contained in the specified table.
-     * @param mixed $where : associative array for the where clause [venue_id => $venue_id]
+     * @param mixed $where associative array for the where clause [venue_id => $venue_id]
      * @return void
      */
     public function deleteVenue($where) : void {

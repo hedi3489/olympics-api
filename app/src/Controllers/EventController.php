@@ -109,18 +109,80 @@ class EventController extends BaseController
 
         // Create venue using venues service
         $result = $this->events_service->createEvent($request, $data);
-        $status_code = 201;
+        $status_code = 200;
         if ($result->isSuccess()) {
             //Prepare success stmt
             $payload["success"] = true;
         } else {
-            $status_code = 201;
+            $status_code = 400;
             $payload["success"] = false;
         }
         $payload["message"] = $result->getMessage();
         $payload["getData"] = $result->getData();
         $payload["status"] = $status_code;
 
-        return $this->renderJson($response, $data, $status_code);
+        return $this->renderJson($response, $payload, $status_code);
+    }
+
+    /**
+     * Summary of handleUpdateEvent
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface $response
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function handleUpdateEvent(Request $request, Response $response) : Response
+    {
+        // Retrieving the event id to be updated and the update information
+        $data = $request->getParsedBody();
+        if(!isset($data) || empty($data)){
+            throw new HttpNoDataProvidedException($request);
+        }
+        // Calling updateVenue from service
+        $result = $this->events_service->updateEvent($request, $data);
+        // Preparing payload
+        $status_code = 200;
+        if ($result->isSuccess()){
+            $payload["success"] = true;
+        } else {
+            $status_code = 400;
+            $payload["success"] = false;
+        }
+        $payload["message"] = $result->getMessage();
+        $payload["updated_venue"] = $result->getData();
+        $payload["status"] = $status_code;
+        // dd($payload);
+        return $this->renderJson($response, $payload, $status_code);
+    }
+
+    /**
+     * Summary of handleDeleteEvent
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface $response
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function handleDeleteEvent(Request $request, Response $response) : Response
+    {
+        // Retrieve id for where clause
+        $data = $request->getParsedBody();
+        if(!isset($data) || empty($data)){
+            throw new HttpNoDataProvidedException($request);
+        }
+
+        // Call DeleteVenue for validation and execution
+        $where = ['event_id' => $data["event_id"]];
+        $result = $this->events_service->deleteEvent($request, $where);
+
+        // Process response of deleteEvent operation
+        $status_code = 200;
+        if ($result->isSuccess()){
+            $payload["success"] = true;
+        } else {
+            $status_code = 400;
+            $payload["success"] = false;
+        }
+        $payload["message"] = $result->getMessage();
+        $payload["status"] = $status_code;
+
+        return $this->renderJson($response, $payload, $status_code);
     }
 }
