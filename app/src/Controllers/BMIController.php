@@ -2,53 +2,33 @@
 
 namespace App\Controllers;
 
+use App\Core\Result;
+use App\Services\BMIService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Exception\HttpBadRequestException;
 
-class BMIController
+class BMIController extends BaseController
 {
-    public function handleGetBMI(Request $request, Response $response) : void
+    public function __construct(private BMIService $bmi_service) {}
+
+    public function handleGetBMI(Request $request, Response $response) : Response
     {
-        // Validate request body
         $data = $request->getParsedBody();
+        $result = $this->bmi_service->getBMIResults($request, $data);
 
+        $status_code = 201;
+        if ($result->isSuccess()) {
+            $payload["success"] = true;
+        } else {
+            $status_code = 400;
+            $payload["success"] = false;
+        }
+        $payload["message"] = $result->getMessage();
+        $payload["new_venue"] = $result->getData();
+        $payload["status"] = $status_code;
 
-        // Compute BMI
-        $bmi = $this->CalculateBMI($data['mass'], $data['height']);
-        $classification = $this->getClassification($bmi, $data['age'], $data['gender']);
-
-
-        // Return a response
+        return $this->renderJson($response, $payload, $status_code);
     }
 
-
-    private function CalculateBMI($mass, $height) : int {
-        return  ($mass / ($height * $height));
-    }
-
-    private function getClassification($bmi, $age, $gender) : string {
-        return "Fatass";
-    }
-
-    private function executeValitron($request, array $data): void
-    {
-
-        $v = new \Valitron\Validator($data);
-
-        $v->rule('integer', 'age')->message('Age must be an integer.');
-        $v->rule('integer', 'mass')->message('Mass must be an integer in Kg.');
-        $v->rule('integer', 'height')->message('Height must be an integer in centimeters.');
-
-        $v->rule('min', 'age', 2)->message('Age must be between 2-120 years old.'); // Years
-        $v->rule('max', 'age', 120)->message('Age must be between 2-120 years old.'); // Years
-
-        $v->rule('min', 'mass', 2)->message('Mass must be between 2-700 Kg.'); // Kg
-        $v->rule('max', 'mass', 700)->message('Mass must be between 2-700 Kg.'); // Kg
-
-        $v->rule('min', 'height', 20)->message('Height must be between 20-200 cm.'); // cm
-        $v->rule('max', 'height', 200)->message('Height must be between 20-200 cm.'); // cm
-
-
-
-    }
 }

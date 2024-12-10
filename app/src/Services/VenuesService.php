@@ -77,7 +77,6 @@ class VenuesService extends BaseService
             //Return success Result with updated data
             return Result::success(
                 "Venue number {$where['venue_id']} updated successfully.", $data);
-
         } catch (\PDOException $e) {
             // Handle any database errors and return a fail Result
             return Result::fail("Database error: Unable to update venue.");
