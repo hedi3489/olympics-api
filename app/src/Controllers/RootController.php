@@ -41,6 +41,7 @@ class RootController extends BaseController
                     'singleton uri' => "localhost/olympics-api/athletes/127",
                     'filtering options' => 'country_id, gender, ethnicity',
                     'sorting options' => 'any (validation not implemented)',
+                    'ordering & pagination' => 'Implemented',
                     'methods' => 'GET, POST, PUT, DELETE'
                 ],
                 '/coaches' => [
@@ -48,6 +49,7 @@ class RootController extends BaseController
                     'singleton uri' => "localhost/olympics-api/coaches/11",
                     'filtering options' => 'gender, sport, been_in_olympics',
                     'sorting options' => 'any (validation not implemented)',
+                    'ordering & pagination' => 'Implemented',
                     'methods' => 'GET, POST, PUT, DELETE'
                 ],
                 '/venues' => [
@@ -55,6 +57,7 @@ class RootController extends BaseController
                     'singleton uri' => "localhost/olympics-api/venues/5",
                     'filtering options' => 'venue_name, min_capacity, max_capacity, min_date_constructed, max_date_constructed',
                     'sorting options' => 'venue_id, venue_name, location, capacity, type, date_constructed, address',
+                    'ordering & pagination' => 'Implemented',
                     'methods' => 'GET, POST, PUT, DELETE'
                 ],
                 '/events' => [
@@ -62,7 +65,24 @@ class RootController extends BaseController
                     'singleton uri' => "localhost/olympics-api/events/19",
                     'filtering options' => 'venue_name, min_capacity, max_capacity, min_date_constructed, max_date_constructed',
                     'sorting options' => 'event_id, event_name, event_sport, start_date, end_date, number_of_participants, is_paralympic, venue_id',
+                    'ordering & pagination' => 'Implemented',
                     'methods' => 'GET, POST, PUT, DELETE'
+                ],
+                '/results' => [
+                    'collection uri' => "localhost/olympics-api/results",
+                    'singleton uri' => "Not implemented",
+                    'filtering options' => 'Not implemented',
+                    'sorting options' => 'Not implemented',
+                    'ordering & pagination' => 'Not implemented',
+                    'methods' => 'GET, POST(outdated)'
+                ],
+                '/countries' => [
+                    'collection uri' => "localhost/olympics-api/countries",
+                    'singleton uri' => "Not implemented",
+                    'filtering options' => 'Not implemented',
+                    'sorting options' => 'Not implemented',
+                    'ordering & pagination' => 'Not implemented',
+                    'methods' => 'GET'
                 ],
             ],
         );
