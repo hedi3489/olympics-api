@@ -7,6 +7,7 @@ use App\Controllers\EventController;
 use App\Controllers\VenueController;
 use App\Controllers\AthleteController;
 use App\Controllers\BMIController;
+use App\Controllers\BMRController;
 use App\Controllers\CoachController;
 use App\Controllers\CountryController;
 use App\Controllers\ResultController;
@@ -64,9 +65,9 @@ return static function (Slim\App $app): void {
     //* Routes for countries resource
     $app->get('/countries', callable: [CountryController::class, 'handleGetCountries']);
 
-    //* Computation
-    //* ROUTE: POST /bmi
-    $app->post('/bmi', [BMIController::class, 'handleGetBMI']);
+    //* Routes for computation
+    $app->post('/bmi', [BMIController::class, 'handleGetBMI']); //* body mass index
+    $app->post('/bmr', [BMRController::class, 'handleGetBMR']); //* basal metabolic rate (Katch-McArdle formula)
 
     //* ROUTE: GET /ping
     $app->get('/ping', function (Request $request, Response $response, $args) {
