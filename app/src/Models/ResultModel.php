@@ -23,17 +23,21 @@ class ResultModel extends BaseModel
         return (array) $results;
     }
 
+
+    // ! Temporarily disabled by Hedi !
+    // ! Needs fixing !
+    // ! db is inaccessible outside of BaseModel !
     /**
      * Inserts a new result into the database.
      * @param array $new_result
      * @return mixed The last inserted id.
      */
-    public function insertResult(array $new_result): array
+    public function insertResult(array $new_result): void //array
     {
-        $sql = 'INSERT INTO `results` (`athlete_id`, `event_id`, `ranking`, `result`, `record_set`, `category`, `date`) VALUES (:athlete_id, :event_id, :ranking, :result, :record_set, :category, :date)';
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute($new_result);
-        return $stmt->errorInfo();
+        // $sql = 'INSERT INTO `results` (`athlete_id`, `event_id`, `ranking`, `result`, `record_set`, `category`, `date`) VALUES (:athlete_id, :event_id, :ranking, :result, :record_set, :category, :date)';
+        // $stmt = $this->db->prepare($sql);
+        // $stmt->execute($new_result);
+        // return $stmt->errorInfo();
     }
 
     /**

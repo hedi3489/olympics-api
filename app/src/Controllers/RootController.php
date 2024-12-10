@@ -42,7 +42,8 @@ class RootController extends BaseController
                     'filtering options' => 'country_id, gender, ethnicity',
                     'sorting options' => 'any (validation not implemented)',
                     'ordering & pagination' => 'Implemented',
-                    'methods' => 'GET, POST, PUT, DELETE'
+                    'methods' => 'GET, POST, PUT, DELETE',
+                    'implemented by' => 'Daniel Levitin'
                 ],
                 '/coaches' => [
                     'collection uri' => "localhost/olympics-api/coaches",
@@ -50,7 +51,8 @@ class RootController extends BaseController
                     'filtering options' => 'gender, sport, been_in_olympics',
                     'sorting options' => 'any (validation not implemented)',
                     'ordering & pagination' => 'Implemented',
-                    'methods' => 'GET, POST, PUT, DELETE'
+                    'methods' => 'GET, POST, PUT, DELETE',
+                    'implemented by' => 'Daniel Levitin'
                 ],
                 '/venues' => [
                     'collection uri' => "localhost/olympics-api/venues",
@@ -58,7 +60,8 @@ class RootController extends BaseController
                     'filtering options' => 'venue_name, min_capacity, max_capacity, min_date_constructed, max_date_constructed',
                     'sorting options' => 'venue_id, venue_name, location, capacity, type, date_constructed, address',
                     'ordering & pagination' => 'Implemented',
-                    'methods' => 'GET, POST, PUT, DELETE'
+                    'methods' => 'GET, POST, PUT, DELETE',
+                    'implemented by' => 'Hedi Belhassine'
                 ],
                 '/events' => [
                     'collection uri' => "localhost/olympics-api/events",
@@ -66,7 +69,8 @@ class RootController extends BaseController
                     'filtering options' => 'venue_name, min_capacity, max_capacity, min_date_constructed, max_date_constructed',
                     'sorting options' => 'event_id, event_name, event_sport, start_date, end_date, number_of_participants, is_paralympic, venue_id',
                     'ordering & pagination' => 'Implemented',
-                    'methods' => 'GET, POST, PUT, DELETE'
+                    'methods' => 'GET, POST, PUT, DELETE',
+                    'implemented by' => 'Hedi Belhassine'
                 ],
                 '/results' => [
                     'collection uri' => "localhost/olympics-api/results",
@@ -74,7 +78,8 @@ class RootController extends BaseController
                     'filtering options' => 'Not implemented',
                     'sorting options' => 'Not implemented',
                     'ordering & pagination' => 'Not implemented',
-                    'methods' => 'GET, POST(outdated)'
+                    'methods' => 'GET, POST(outdated)',
+                    'implemented by' => 'Alexandre Cecile'
                 ],
                 '/countries' => [
                     'collection uri' => "localhost/olympics-api/countries",
@@ -82,7 +87,8 @@ class RootController extends BaseController
                     'filtering options' => 'Not implemented',
                     'sorting options' => 'Not implemented',
                     'ordering & pagination' => 'Not implemented',
-                    'methods' => 'GET'
+                    'methods' => 'GET',
+                    'implemented by' => 'Alexandre Cecile'
                 ],
             ],
         );
