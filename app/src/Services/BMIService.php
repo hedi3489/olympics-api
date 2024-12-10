@@ -34,7 +34,7 @@ class BMIService extends BaseService
     private function calculateBMI($mass, $height) : float {
         $height = (float)$height/100;
         $bmi = $mass / ($height * $height);
-        return number_format($bmi, 2);
+        return (float)number_format($bmi, 2);
     }
 
     private function getClassification($bmi, $age, $gender) : string {
