@@ -18,11 +18,10 @@ return static function (Slim\App $app): void {
 
     // Routes without authentication check: /login, /token
 
-    // Routes with authentication
     //* Route GET /
     $app->get('/', [RootController::class, 'handleRootWebService']);
 
-    //TODO: Route for user resources
+    //TODO: Route for user resources => not implemented
     $app->post('/register', [UserController::class, 'handleRegister']);
     $app->post('/login', [UserController::class, 'handleGenerateToken']);
 
@@ -54,6 +53,7 @@ return static function (Slim\App $app): void {
     $app->get('/events', [EventController::class, 'handleGetEvents']);
     $app->get('/events/{event_id}', [EventController::class, 'handleGetEventById']);
     $app->post('/events', [EventController::class, 'handleCreateEvent']);
+    //TODO: Routes to implement
     $app->put('/events', [EventController::class, 'handleUpdateEvent']);
     $app->delete('/events', [EventController::class, 'handleDeleteEvent']);
 

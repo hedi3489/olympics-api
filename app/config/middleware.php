@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Core\CustomErrorHandler;
+use App\Middleware\AAMiddleware;
 use App\Middleware\HelloMiddleware;
 use App\Middleware\ContentNegotiationMiddleware;
 use Slim\App;
@@ -11,6 +12,7 @@ return function (App $app) {
     // Add your middleware here.
     $app->addMiddleware(new HelloMiddleware);
     $app->addMiddleware(new ContentNegotiationMiddleware);
+    // $app->addMiddleware(new AAMiddleware()); // not implemented
     $app->addBodyParsingMiddleware();
     $app->addRoutingMiddleware();
 

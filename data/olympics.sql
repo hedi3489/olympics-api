@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 22, 2024 at 06:49 AM
+-- Generation Time: Dec 10, 2024 at 04:17 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -106,7 +106,12 @@ INSERT INTO `athletes` (`athlete_id`, `athlete_name`, `country_id`, `gender`, `s
 (111, 'TOSCANO Pamela', 85, 'Female', 'Artistic Swimming', '2000-01-13', 0, 0, 'Mexican', 0, 0, 0, 0, 0),
 (112, 'GONZALEZ Itzamary', 85, 'Female', 'Artistic Swimming', '2003-11-14', 0, 0, 'Mexican', 0, 0, 0, 0, 0),
 (113, 'RODRIGUEZ Samanta', 85, 'Female', 'Artistic Swimming', '1994-12-05', 0, 0, 'Mexican', 0, 0, 0, 0, 0),
-(114, 'INZUNZA Glenda', 85, 'Female', 'Alternate Athlete', '2000-03-12', 0, 0, 'Mexican', 0, 0, 0, 0, 0);
+(114, 'INZUNZA Glenda', 85, 'Female', 'Alternate Athlete', '2000-03-12', 0, 0, 'Mexican', 0, 0, 0, 0, 0),
+(115, 'Truth', 85, 'Female', 'Guide', '2020-12-31', 100, 20, 'Horizon', 0, 100, 0, 0, 100),
+(122, 'Truths', 85, 'Female', 'Guide', '2020-12-31', 100, 20, 'Horizon', 0, 100, 0, 0, 100),
+(124, 'Truther', 85, 'Female', 'Guide', '2020-12-31', 100, 20, 'Horizon', 0, 100, 0, 0, 100),
+(125, 'Yessmaam', 85, 'Female', 'Guide', '2020-12-31', 200, 20, 'Horizon', 0, 100, 0, 0, 100),
+(126, 'Hmmm', 85, 'Female', 'Guide', '2020-12-31', 100, 20, 'Horizon', 0, 100, 0, 0, 100);
 
 -- --------------------------------------------------------
 
@@ -180,7 +185,8 @@ INSERT INTO `coaches` (`coach_id`, `coach_name`, `gender`, `date_of_birth`, `bee
 (23, 'Fernando Infante', 'Male', '1981-03-11', 0, 'Race Walking'),
 (24, 'Jacek Kruszewski', 'Male', '1970-01-01', 0, 'Athletics'),
 (25, 'Kenny McDonald', 'Male', '1959-01-01', 0, 'Athletics'),
-(26, 'Andrew Mullen', 'Male', '1970-01-01', 0, 'Athletics');
+(26, 'Andrew Mullen', 'Male', '1970-01-01', 0, 'Athletics'),
+(27, 'David Mogging', 'Male', '2000-12-31', 0, 'Mogging');
 
 -- --------------------------------------------------------
 
@@ -412,6 +418,21 @@ INSERT INTO `venues` (`venue_id`, `venue_name`, `address`, `capacity`, `type`, `
 (18, 'Le Bourget', '93350 Le Bourget, France', '6000', 'Indoor/Outdoor climbing', '2024-01-01', 'This venue marks the introduction of sport climbing into the Olympic program and is part of a legacy project aimed at addressing the lack of sports facilities in the Seine-Saint-Denis department. After the Games, the facility will be available for local clubs and communities.', 'Specific details on parking facilities weren\'t highlighted in the sources, but the venue is accessible via public transport, including the RER B train and Tram T11​.');
 
 --
+-- Table structure for table `users`
+--
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
+  `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(100) NOT NULL,
+  `last_name` varchar(150) NOT NULL,
+  `email` varchar(150) NOT NULL UNIQUE,
+  `password` varchar(255) NOT NULL,
+  `role` varchar(10) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
 -- Indexes for dumped tables
 --
 
@@ -470,13 +491,13 @@ ALTER TABLE `venues`
 -- AUTO_INCREMENT for table `athletes`
 --
 ALTER TABLE `athletes`
-  MODIFY `athlete_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=115;
+  MODIFY `athlete_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=128;
 
 --
 -- AUTO_INCREMENT for table `coaches`
 --
 ALTER TABLE `coaches`
-  MODIFY `coach_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `coach_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `countries`

@@ -8,11 +8,10 @@ use Psr\Http\Message\ResponseInterface as Response;
 
 class UserController extends BaseController
 {
-    public function handleGenerateToken(Request $request, Response $response) : Response
+    public function handleGenerateToken(Request $request, Response $response): Response
     {
 
         //TODO: query DB to authenticate users
-
 
         //* authentication success
 
@@ -21,14 +20,17 @@ class UserController extends BaseController
         $issued_at = time();
         $expires_at = time() + 600; // 10 minutes
         $registered_claims = [
-            'iss' => '',
-            'aud' => '',
+            'iss' => 'http://localhost/olympics-api',
             'iat' => $issued_at,
             'exp' => $expires_at
         ];
 
-        //TODO: registered claims need to be fetched from users table
-        $private_claims = [];
+        //! This is hard-coded for now
+        $private_claims = array(
+            "user_id" => 1,
+            "email" => "fatheremail@email.com",
+            "role" => "admin",
+        );
 
         $payload = array_merge($registered_claims, $private_claims);
 
