@@ -18,7 +18,7 @@ class BMRController extends BaseController
 
         if (isset($data) && !empty($data)) {
             //Update athlete using athletes service
-            $result = $this->bmr_service->CalculateBMR($data, $data);
+            $result = $this->bmr_service->CalculateBMR($request, $data);
             $payload = [];
             //TODO Could implement the STATUS_CODE constants interface
             if ($result->isSuccess()) {
@@ -37,16 +37,6 @@ class BMRController extends BaseController
             throw new HttpNoDataProvidedException($request);
         }
 
-
-        // Compute BMI
-        $bmi = $this->CalculateBMR($data['mass'], $data['height']);
-        $classification = $this->getClassification($bmi, $data['age'], $data['gender']);
-
         return $this->renderJson($response, $payload, $payload["status"]);
-    }
-
-    private function getClassification($bmi, $age, $gender): string
-    {
-        return "Fatass";
     }
 }

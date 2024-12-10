@@ -4,6 +4,14 @@ namespace App\Services;
 
 use App\Core\Result;
 
+/**
+ * Katch-McArdle Formula:
+ *   BMR = 370 + 21.6(1 - F)W
+ *
+ *   where:
+ *   W is body weight in kg
+ *   F is body fat in percentage
+ */
 class BMRService extends BaseService
 {
     public function CalculateBMR($request, $data): Result
@@ -12,34 +20,37 @@ class BMRService extends BaseService
         // Calling custom function for dynamic Valitron validation
         $this->executeValitron($request, $data);
 
-        // If athlete exists, delete it from the database
-        if ($athlete) {
-            $this->athlete_model->deleteAthlete($data);
-            // Return success Result with updated data
-            return Result::success("Athlete {$data['athlete_id']} deleted successfully!");
-        } else {
+        // If data is valid, compute basal metabolic rate
+        try {
+            $bmr = $this->computeBMR($data['weight'], $data['body_fat']);
+            // Return success Result with computed bmr
+            return Result::success("Your basal metabolic rate is: $bmr. That means your body burns around that many calories a day by default!");
+        } catch (\PDOException $e) {
             // Handle any database errors and return a fail Result
-            return Result::fail("Database error: Unable to delete athlete. Athlete with id {$data['athlete_id']} doesn't exists.");
+            return Result::fail("Error: Unable to compute bmr.");
         }
-        //TODO
-        return ($mass / ($height * $height));
+    }
+
+    private function computeBMR($weight, $body_fat): float
+    {
+        return 370 + 21.6 * (1 - $body_fat) * $weight;
     }
 
     private function executeValitron($request, array $data): void
     {
         $v = new \Valitron\Validator($data);
 
-        $v->rule('integer', 'age')->message('Age must be an integer.');
-        $v->rule('integer', 'mass')->message('Mass must be an integer in Kg.');
-        $v->rule('integer', 'height')->message('Height must be an integer in centimeters.');
+        $v->rule('required', ['weight', 'body_fat']);
+        $this->runValitron($request, $v);
 
-        $v->rule('min', 'age', 2)->message('Age must be between 2-120 years old.'); // Years
-        $v->rule('max', 'age', 120)->message('Age must be between 2-120 years old.'); // Years
+        $v->rule('integer', 'weight')->message('Weight must be an integer in Kg.');
+        $v->rule('numeric', 'body_fat')->message('Body fat must be a number such as: (0.15)');
 
-        $v->rule('min', 'mass', 2)->message('Mass must be between 2-700 Kg.'); // Kg
-        $v->rule('max', 'mass', 700)->message('Mass must be between 2-700 Kg.'); // Kg
+        $v->rule('min', 'weight', 2)->message('Weight must be between 2-700 Kg.');
+        $v->rule('max', 'weight', 700)->message('Weight must be between 2-700 Kg.');
 
-        $v->rule('min', 'height', 20)->message('Height must be between 20-200 cm.'); // cm
-        $v->rule('max', 'height', 200)->message('Height must be between 20-200 cm.'); // cm
+        $v->rule('min', 'body_fat', 0.02)->message('Body fat must be more than 0.02');
+        $v->rule('max', 'body_fat', 0.5)->message('Body fat must be less than 0.5');
+        $this->runValitron($request, $v);
     }
 }
