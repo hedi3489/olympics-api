@@ -15,6 +15,12 @@ class BMIController extends BaseController
     public function handleGetBMI(Request $request, Response $response) : Response
     {
         $data = $request->getParsedBody();
+        if(!isset($data)){
+            throw new HttpBadRequestException(
+                $request,
+                "No body was provided"
+            );
+        }
         $result = $this->bmi_service->getBMIResults($request, $data);
 
         $status_code = 201;

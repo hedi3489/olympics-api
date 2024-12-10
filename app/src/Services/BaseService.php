@@ -18,8 +18,10 @@ class BaseService
      */
     protected static function runValitron($request, $v) : void
     {
+        // dd($v);
         if(!$v->validate()){
             $errors = json_encode($v->errors());
+            // dd($errors);
             throw new HttpBadRequestException(
                 $request,
                 "Invalid data: $errors"
