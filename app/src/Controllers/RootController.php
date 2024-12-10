@@ -102,7 +102,7 @@ class RootController extends BaseController
                 '/bmr' => [
                     'method of access' => 'POST',
                     'function' => 'calculates bmr based on provided data',
-                    'required data' => 'weight, body fat',
+                    'required data' => 'weight, body_fat',
                     'returned data' => 'bmr',
                     'implemented by' => 'Daniel Levitin',
                 ]
