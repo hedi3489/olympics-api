@@ -91,6 +91,22 @@ class RootController extends BaseController
                     'implemented by' => 'Alexandre Cecile'
                 ],
             ],
+            'computation functionality' => [
+                '/bmi' => [
+                    'method of access' => 'POST',
+                    'function' => 'calculates bmi based on provided data',
+                    'required data' => 'gender, age, height, mass',
+                    'returned data' => 'bmi, classification',
+                    'implemented by' => 'Hedi Belhassine',
+                ],
+                '/bmr' => [
+                    'method of access' => 'POST',
+                    'function' => 'calculates bmr based on provided data',
+                    'required data' => 'weight, body fat',
+                    'returned data' => 'bmr',
+                    'implemented by' => 'Daniel Levitin',
+                ]
+            ]
         );
 
         return $this->renderJson($response, $data);
