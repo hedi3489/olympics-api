@@ -28,7 +28,7 @@ class VenueModel extends BaseModel
         $query_args = [];
         $sql = "SELECT * FROM $this->table_name WHERE 1";
 
-        //* Sorting by name
+        //* Filtering by name
         if (isset($req_params["venue_name"])) {
             // Name validation
             if (ValidationHelper::isNameValid($request, $req_params["venue_name"], "venue")) {
@@ -38,7 +38,7 @@ class VenueModel extends BaseModel
             }
         }
 
-        //* Sorting by Capacity Range
+        //* Filtering by Capacity Range
         if (isset($req_params["min_capacity"])) {
             // Capacity validation
             (int) $cap = $req_params["min_capacity"];
@@ -68,7 +68,7 @@ class VenueModel extends BaseModel
             }
         }
 
-        //* Sorting by Construction Date Range
+        //* Filtering by Construction Date Range
         if (isset($req_params["min_date_constructed"])) {
             // Validating Date
             if (ValidationHelper::isDateRangeValid($request, (string) $req_params["min_date_constructed"], "min")) {
@@ -86,12 +86,12 @@ class VenueModel extends BaseModel
             }
         }
 
-        //* Ordering
+        //* Sorting & Ordering
         $sort_by = $req_params['sort_by'] ?? 'venue_name';
         $order_by = $req_params['order_by'] ?? 'asc';
 
         // Validate sort field and order
-        $valid_sort_fields = ['venue_name', 'location', 'capacity', 'type', 'date_constructed', 'address'];
+        $valid_sort_fields = ['venue_id', 'venue_name', 'location', 'capacity', 'type', 'date_constructed', 'address'];
         $valid_orders = ['asc', 'desc'];
 
         if (in_array($sort_by, $valid_sort_fields) && in_array($order_by, $valid_orders)) {

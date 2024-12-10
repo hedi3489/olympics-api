@@ -88,7 +88,8 @@ class EventModel extends BaseModel
         $order_by = $req_params['order_by'] ?? 'asc';
 
         // Validate sort field and order
-        $valid_sort_fields = ['event_id', 'event_name', 'event_sport', 'start_date', 'end_date', 'number_of_participants', 'is_paralympic'];
+        $valid_sort_fields = ['event_id', 'event_name', 'event_sport', 'start_date',
+            'end_date', 'number_of_participants', 'is_paralympic', 'venue_id'];
         $valid_orders = ['asc', 'desc'];
 
         if (in_array($sort_by, $valid_sort_fields) && in_array($order_by, $valid_orders)) {
