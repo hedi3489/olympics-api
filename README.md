@@ -11,7 +11,7 @@ The root endpoint ("/") provides a summary of the available resources, with deta
 - Ordering: `asc`, `desc`
 
 ## Available Resources
-### `/athletes`
+**`/athletes`**
 - Collection URI: `localhost/olympics-api/athletes`
 - Singleton URI: `localhost/olympics-api/athletes/{id}`
 - Methods: `GET`, `POST`, `PUT`, `DELETE`
@@ -20,7 +20,7 @@ The root endpoint ("/") provides a summary of the available resources, with deta
 - Ordering & Pagination: `Implemented`
 - Implemented by: `Daniel Levitin`
 
-### `/coaches`
+**`/coaches`**
 - Collection URI: `localhost/olympics-api/coaches`
 - Singleton URI: `localhost/olympics-api/coaches/{id}`
 - Methods: `GET`, `POST`, `PUT`, `DELETE`
@@ -29,7 +29,7 @@ The root endpoint ("/") provides a summary of the available resources, with deta
 - Ordering & Pagination: `Implemented`
 - Implemented by: `Daniel Levitin`
 
-### `/venues` 
+**`/venues`**
 - Collection URI: `localhost/olympics-api/venues`
 - Singleton URI: `localhost/olympics-api/venues/{id}`
 - Methods: `GET`, `POST`, `PUT`, `DELETE`
@@ -38,7 +38,7 @@ The root endpoint ("/") provides a summary of the available resources, with deta
 - Ordering & Pagination: `Implemented`
 - Implemented by: `Hedi Belhassine`
 
-### `/events`
+**`/events`**
 - Collection URI: `localhost/olympics-api/events`
 - Singleton URI: `localhost/olympics-api/events/{id}`
 - Methods: `GET`, `POST`, `PUT`, `DELETE`
@@ -48,7 +48,7 @@ The root endpoint ("/") provides a summary of the available resources, with deta
 - Implemented by: `Hedi Belhassine`
 
 
-## `GET Example: /venues`
+## GET Example: `/venues`
 - Fetches all venues.
 - Supports filtering by name, capacity range, and construction date.
 
